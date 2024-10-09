@@ -4,24 +4,43 @@ package cgg;
 import tools.*;
 
 public class Image implements tools.Image {
+    double[] pixelFarben;
 
-    // ---8<--- missing-implementation
-    // TODO Provides storage for the image data. For each pixel in the image
-    // three double values are needed to store the pixel components.
+    /**
+     * @param width Breite des Bildes
+     * @param height Hoehe des Bildes
+     */
     public Image(int width, int height) {
+        pixelFarben = new double[width*height*3];
     }
 
-    // TODO Stores the RGB color components for one particular pixel addressed
-    // by it's coordinates in the image.
+    /**
+     * setzt fuer einen Pixel die gegebene Farbe
+     * 
+     * @param x Koordinate x des Pixels
+     * @param y Koordinate y des Pixels
+     * @param color Farbe die gesetzt werden soll
+     */
     public void setPixel(int x, int y, Color color) {
+        pixelFarben[x*y+0] = color.r();
+        pixelFarben[x*y+1] = color.g();
+        pixelFarben[x*y+2] = color.b();
     }
 
-    // TODO Retrieves the RGB color components for one particular pixel addressed
-    // by it's coordinates in the image.
+    /**
+     * gibt den Farbwert vom gegebenen Pixel zurueck
+     * 
+     * @param x Koordinate x des Pixels
+     * @param y Koordinate y des Pixels
+     * @return Farbwert des gegebenen Pixels als Color
+     */
     public Color getPixel(int x, int y) {
-        return Color.black;
+        double r = pixelFarben[x*y+0];
+        double g = pixelFarben[x*y+1];
+        double b = pixelFarben[x*y+2];
+        Color color = new Color(r, g, b);
+        return color;
     }
-    // --->8---
 
     public void writePng(String name) {
         // TODO This call also needs to be adjusted once Image() and setPixel()
