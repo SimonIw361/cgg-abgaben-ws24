@@ -4,6 +4,8 @@ package cgg;
 import tools.*;
 
 public class Image implements tools.Image {
+    int width;
+    int height;
     double[] pixelFarben;
 
     /**
@@ -11,7 +13,9 @@ public class Image implements tools.Image {
      * @param height Hoehe des Bildes
      */
     public Image(int width, int height) {
-        pixelFarben = new double[width*height*3];
+        this.width = width;
+        this.height = height;
+        pixelFarben = new double[3*width*height];
     }
 
     /**
@@ -22,9 +26,9 @@ public class Image implements tools.Image {
      * @param color Farbe die gesetzt werden soll
      */
     public void setPixel(int x, int y, Color color) {
-        pixelFarben[x*y+0] = color.r();
-        pixelFarben[x*y+1] = color.g();
-        pixelFarben[x*y+2] = color.b();
+        pixelFarben[3*(y*width + x) +0] = color.r();
+        pixelFarben[3*(y*width + x) +1] = color.g();
+        pixelFarben[3*(y*width + x) +2] = color.b();
     }
 
     /**
@@ -35,38 +39,38 @@ public class Image implements tools.Image {
      * @return Farbwert des gegebenen Pixels als Color
      */
     public Color getPixel(int x, int y) {
-        double r = pixelFarben[x*y+0];
-        double g = pixelFarben[x*y+1];
-        double b = pixelFarben[x*y+2];
+        double r = pixelFarben[3*(y*width + x) +0];
+        double g = pixelFarben[3*(y*width + x) +1];
+        double b = pixelFarben[3*(y*width + x) +2];
         Color color = new Color(r, g, b);
         return color;
     }
 
+    /**
+     * @param name name des gespeicherten Bilds
+     */
     public void writePng(String name) {
-        // TODO This call also needs to be adjusted once Image() and setPixel()
-        // are implemented. Use
-        // ImageWriter.writePng(String name, double[] data, int width, int height) to
-        // write the image data to disk in PNG format.
+        ImageWriter.writePng(name, pixelFarben, width, height);
     }
 
+    /**
+     * @param name name des gespeicherten Bilds
+     */
     public void writeHdr(String name) {
-        // TODO This call also needs to be adjusted once Image() and setPixel()
-        // are implemented. Use
-        // ImageWriter.writePng(String name, double[] data, int width, int height) to
-        // write the image data to disk in OpenEXR format.
+        ImageWriter.writePng(name, pixelFarben, width, height);
     }
 
+    /**
+     * @return Breite des Bildes
+     */
     public int width() {
-        // TODO This is just a dummy value to make the compiler happy. This
-        // needs to be adjusted such that the actual width of the Image is
-        // returned.
-        return 0;
+        return width;
     }
 
+    /**
+     * @return Hoehe des Bildes
+     */
     public int height() {
-        // TODO This is just a dummy value to make the compiler happy. This
-        // needs to be adjusted such that the actual height of the Image is
-        // returned.
-        return 0;
+        return height;
     }
 }
