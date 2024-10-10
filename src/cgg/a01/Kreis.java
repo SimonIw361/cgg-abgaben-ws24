@@ -8,8 +8,9 @@ public class Kreis {
     private int r;
     private Color color;
 
-    public Kreis(Vec2 mittVec2, int r, Color color) {
-        this.mitteVec2 = mittVec2;
+    public Kreis(int x, int y, int r, Color color) {
+
+        this.mitteVec2 = new Vec2(x, y);
         this.r = r;
         this.color = color;
     }

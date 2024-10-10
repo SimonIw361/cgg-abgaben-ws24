@@ -1,5 +1,7 @@
 package cgg.a01;
 
+import static tools.Color.black;
+
 import java.util.ArrayList;
 //import static tools.Functions.*;
 import tools.*;
@@ -10,7 +12,8 @@ public class Kreisgruppen {
     public Kreisgruppen(int anzahlKreise) {
         kreise = new ArrayList<Kreis>();
         for(int i = 0; i < anzahlKreise; i++) {
-            kreise.add(new Kreis(new Vec2(1,1), 3, new Color(1,0,1)));
+            kreise.add(new Kreis(i, i, 3, new Color(1,0,1)));
+            //Algorithmus zur Erzeugung schreiben
         }
     }
 
@@ -21,7 +24,7 @@ public class Kreisgruppen {
                 return kreise.get(j).getColor();
             }
         }
-        return new Color(0, 0, 0);
+        return black;
     }
 
 }

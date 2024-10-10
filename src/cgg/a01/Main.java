@@ -2,8 +2,8 @@
 package cgg.a01;
 
 import cgg.Image;
-import static tools.Functions.*;
 import static tools.Color.*;
+import tools.*;
 
 public class Main {
 
@@ -12,16 +12,21 @@ public class Main {
     int height = 400;
 
     // This class instance defines the contents of the image.
-    var constant = new ConstantColor(blue);
+    var kreis = new Kreis(200,200, 100, blue);
 
     // Creates an image and iterates over all pixel positions inside the image.
     var image = new Image(width, height);
     for (int x = 0; x != width; x++)
       for (int y = 0; y != height; y++)
         // Sets the color for one particular pixel.
-        image.setPixel(x, y, constant.getColor(vec2(x, y)));
+        if(kreis.coversPoint(new Vec2(x, y))) {
+          image.setPixel(x, y, kreis.getColor());
+        }
+        else {
+          image.setPixel(x, y, black);
+        }
 
     // Write the image to disk.
-    image.writePng("a01-constant");
+    image.writePng("Kreis");
   }
 }
