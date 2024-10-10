@@ -9,7 +9,6 @@ public class Kreis {
     private Color color;
 
     public Kreis(int x, int y, int r, Color color) {
-
         this.mitteVec2 = new Vec2(x, y);
         this.r = r;
         this.color = color;
@@ -32,7 +31,17 @@ public class Kreis {
         }   
     }
 
+    /**
+     * @return Farbe des Kreises
+     */
     public Color getColor(){
         return color;
+    }
+
+    /**
+     * @return Radius des Kreises
+     */
+    public int getRadius(){
+        return r;
     }
 }
