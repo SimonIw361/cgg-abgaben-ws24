@@ -21,6 +21,6 @@ public class Main {
         image.setPixel(x,y,kreise.getColor(new Vec2(x, y)));
 
     // Write the image to disk.
-    image.writePng("Kreisgruppe");
+    image.writePng("a01-discs");
   }
 }
