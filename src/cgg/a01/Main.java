@@ -11,7 +11,7 @@ public class Main {
     int height = 400;
 
     // This class instance defines the contents of the image.
-    var kreise = new Kreisgruppe(100);
+    var kreise = new Kreisgruppe(80);
 
     // Creates an image and iterates over all pixel positions inside the image.
     var image = new Image(width, height);

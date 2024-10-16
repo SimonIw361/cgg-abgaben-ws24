@@ -14,7 +14,7 @@ public class Kreisgruppe {
     public Kreisgruppe(int anzahlKreise) {
         kreise = new ArrayList<Kreis>();
         for(int i = 0; i < anzahlKreise; i++) {
-            kreise.add(new Kreis(getRandomZahl(400), getRandomZahl(400), getRandomZahl(50), getRandomColor()));
+            kreise.add(new Kreis(getRandomZahl(400), getRandomZahl(400), getRandomZahl(40) +10, getRandomColor()));
         }
     }
 
@@ -26,7 +26,7 @@ public class Kreisgruppe {
      */
     public Color getColor(Vec2 point) {
         Color c = black; //Standardfarbe mit keinem Kreis darauf
-        int kreisradius = 5000; //groeßtmoeglichste Zahl
+        int kreisradius = 5000; //groeßtmoeglichste Zahl fuer Radius
 
         for(int j = 0; j < kreise.size(); j++) {
             if(kreise.get(j).coversPoint(point)){ //Ueberpruefung ob der Pixel im Kreis liegt
