@@ -1,8 +1,7 @@
 package cgg.a02;
 
-import static tools.Functions.*;
-
 import tools.*;
+import static tools.Functions.*;
 
 public class Ray {
     private Vec3 x0;
@@ -39,6 +38,17 @@ public class Ray {
         else{
             return false;
         }
+    }
+
+    /**
+     * gibt Ray als String zurueck
+     * 
+     * @return Ray-Objekt als String
+     */
+    @Override
+    public String toString() {
+        String info = "Ray[orign=" + x0.toString() + ", direction=" + richtung.toString() + "]";
+        return info;
     }
 
 }
