@@ -16,7 +16,7 @@ public class Ray {
         this.tMax = tMax;
     }
 
-    public Vec3 gibStrahlPunkt(int t) {
+    public Vec3 gibStrahlPunkt(double t) {
         if(!tGueltig(t)) {
             return Vec3.zero;
         }
@@ -31,13 +31,45 @@ public class Ray {
      * @param t Parameter t der ueberprueft werden soll
      * @return boolescher Wert ob t gueltig ist
      */
-    private boolean tGueltig(int t) {
+    private boolean tGueltig(double t) {
         if(t >= tMin && t < tMax) {
             return true;
         }
         else{
             return false;
         }
+    }
+
+    /**
+     * gibt Startpunkt des Strahls zurueck
+     * 
+     * @return Startpunkt des Strahls
+     */
+    public Vec3 getX0() {
+        return x0;
+    }
+
+    /**
+     * gibt Richtung des Strahls zurueck
+     * 
+     * @return die Richtung als Vec3
+     */
+    public Vec3 getRichtung() {
+        return richtung;
+    }
+
+    /**
+     * @return untere Grenze fuer t
+     */
+    public double gettMin(){
+        return tMin;
+    }
+
+    /**
+     * @return obere Grenze fuer t
+     */
+    public double gettMax(){
+        return tMax;
     }
 
     /**
