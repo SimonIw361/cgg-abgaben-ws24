@@ -16,6 +16,12 @@ public class Ray {
         this.tMax = tMax;
     }
 
+    /**
+     * berechnet Punkt der um t vom Startpunkt entfernt ist
+     * 
+     * @param t Entfernung des gesuchten Punkts vom Startpunkt 
+     * @return Punkt auf dem Strahl
+     */
     public Vec3 gibStrahlPunkt(double t) {
         if(!tGueltig(t)) {
             return Vec3.zero;
@@ -41,8 +47,6 @@ public class Ray {
     }
 
     /**
-     * gibt Startpunkt des Strahls zurueck
-     * 
      * @return Startpunkt des Strahls
      */
     public Vec3 getX0() {
@@ -50,8 +54,6 @@ public class Ray {
     }
 
     /**
-     * gibt Richtung des Strahls zurueck
-     * 
      * @return die Richtung als Vec3
      */
     public Vec3 getRichtung() {

@@ -2,7 +2,7 @@ package cgg.a02;
 
 import static tools.Functions.*;
 
-public class Main2 {
+public class MainTest {
     public static void main(String[] args) {
         testAufgabe2_3();
     }

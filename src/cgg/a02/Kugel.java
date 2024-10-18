@@ -12,20 +12,27 @@ public class Kugel {
         this.radius = radius;
     }
 
+    /**
+     * berechnet naechsten Schnittpunkt von einem Strahl mit einer Kugel
+     * 
+     * @param r Strahl der Kugel evtl trifft
+     * @return Trefferpunkt, der am naechsten ist
+     */
     public Hit intersect(Ray r) {
-        Vec3 x0c = subtract(r.getX0(), mittelpunkt);
-        double a = r.getRichtung().u() * r.getRichtung().u() + r.getRichtung().v() * r.getRichtung().v() + r.getRichtung().w() * r.getRichtung().w(); //length(r.getRichtung()) * length(r.getRichtung());
-        double b = 2 * (x0c.u() * r.getRichtung().u() + x0c.v() * r.getRichtung().v() + x0c.w() * r.getRichtung().w()); //length(multiply(2, multiply(x0c, r.getRichtung())));
-        double c = (x0c.u() * x0c.u() + x0c.v() * x0c.v() + x0c.w() * x0c.w()) - radius * radius; //length(multiply(subtract(r.getX0(), mittelpunkt),x0c)) - (radius * radius);
-        double t1 = (-b + Math.sqrt(b* b - 4 * a * c))/(2 * a);
-        double t2 = (-b - Math.sqrt(b* b - 4 * a * c))/(2 * a);
+        // nach Formel: d * t2 + 2 * (x0 -c) * d * t + (x0 -c) -r2 = 0
+        Vec3 x0c = subtract(r.getX0(), mittelpunkt); //x0 - c (beides Vektoren)
+        double a = squaredLength(r.getRichtung()); //Vektor d, alles einzeln multiplizieren und dann addieren
+        double b = 2 * coordSum(multiply(x0c, r.getRichtung())); //x0c und d einzeln multiplizieren, aus diesem Vektor dann noch mit coordSum eine Zahl machen
+        double c = squaredLength(x0c) - radius * radius; //Vektor x0c einzeln multiplizieren und dann addieren, davon r*r abziehen
+        double t1 = (-b + Math.sqrt(b* b - 4 * a * c))/(2 * a); //ABC-Formel mit +
+        double t2 = (-b - Math.sqrt(b* b - 4 * a * c))/(2 * a); //ABC-Formel mit -
 
-        Hit hit = new Hit(t1, r.gibStrahlPunkt(t1), divide(subtract(r.gibStrahlPunkt(t1), mittelpunkt),radius) , Color.black);
+        Hit hit = new Hit(t1, r.gibStrahlPunkt(t1), divide(subtract(r.gibStrahlPunkt(t1), mittelpunkt),radius) , Color.black); //Trefferpunkt fuer t1 berechnen
         Hit hit2 = new Hit(t2, r.gibStrahlPunkt(t2), divide(subtract(r.gibStrahlPunkt(t2), mittelpunkt),radius) , Color.black);
         if(b* b - 4 * a * c < 0) { //Wurzel ist negativ, keine Loesung
             return null;
         }
-        
+
         if(!in(r.gettMin(), r.gettMax(), t1) && !in(r.gettMin(), r.gettMax(), t2)) { //t1 und t2 sind außerhab des Bereiches
                 return null;
         }

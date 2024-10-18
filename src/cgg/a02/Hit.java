@@ -1,6 +1,7 @@
 package cgg.a02;
 
 import tools.*;
+import static tools.Functions.*;
 
 public class Hit {
     private double t;
@@ -11,7 +12,7 @@ public class Hit {
     public Hit(double t, Vec3 trefferPunkt, Vec3 normalenVektor, Color farbeOberflaeche) {
         this.t = t;
         this.trefferPunkt = trefferPunkt;
-        this.normalenVektor = normalenVektor;
+        this.normalenVektor = normalize(normalenVektor);
         this.farbeOberflaeche = farbeOberflaeche;
     }
 
