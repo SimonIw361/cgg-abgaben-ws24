@@ -1,6 +1,8 @@
 package cgg.a02;
 
 import tools.*;
+
+import static tools.Color.red;
 import static tools.Functions.*;
 
 public class Kugel {
@@ -27,8 +29,8 @@ public class Kugel {
         double t1 = (-b + Math.sqrt(b* b - 4 * a * c))/(2 * a); //ABC-Formel mit +
         double t2 = (-b - Math.sqrt(b* b - 4 * a * c))/(2 * a); //ABC-Formel mit -
 
-        Hit hit = new Hit(t1, r.gibStrahlPunkt(t1), divide(subtract(r.gibStrahlPunkt(t1), mittelpunkt),radius) , Color.black); //Trefferpunkt fuer t1 berechnen
-        Hit hit2 = new Hit(t2, r.gibStrahlPunkt(t2), divide(subtract(r.gibStrahlPunkt(t2), mittelpunkt),radius) , Color.black);
+        Hit hit = new Hit(t1, r.gibStrahlPunkt(t1), divide(subtract(r.gibStrahlPunkt(t1), mittelpunkt),radius) , red); //Trefferpunkt fuer t1 berechnen
+        Hit hit2 = new Hit(t2, r.gibStrahlPunkt(t2), divide(subtract(r.gibStrahlPunkt(t2), mittelpunkt),radius) , red);
         if(b* b - 4 * a * c < 0) { //Wurzel ist negativ, keine Loesung
             return null;
         }

@@ -12,13 +12,34 @@ public class Hit {
     public Hit(double t, Vec3 trefferPunkt, Vec3 normalenVektor, Color farbeOberflaeche) {
         this.t = t;
         this.trefferPunkt = trefferPunkt;
-        this.normalenVektor = normalize(normalenVektor);
+        if(normalenVektor != null) {
+            this.normalenVektor = normalize(normalenVektor);
+        }
         this.farbeOberflaeche = farbeOberflaeche;
     }
 
     /**
-     * gibt Hit als String zurueck
-     * 
+     * @return Wert fuer t
+     */
+    public double getT() {
+        return t;
+    }
+
+    /**
+     * @return Normalenvektor als Vec3
+     */
+    public Vec3 getNormalenVektor(){
+        return normalenVektor;
+    }
+
+    /**
+     * @return Farbe von dem Trefferpunkt
+     */
+    public Color getfarbeOberflaeche(){
+        return farbeOberflaeche;
+    }
+
+    /**
      * @return Hit-Objekt als String
      */
     @Override
