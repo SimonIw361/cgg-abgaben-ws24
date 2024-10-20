@@ -38,7 +38,7 @@ public class Ray {
      * @return boolescher Wert ob t gueltig ist
      */
     private boolean tGueltig(double t) {
-        if(t >= tMin && t < tMax) {
+        if(t >= tMin && t <= tMax) {
             return true;
         }
         else{
