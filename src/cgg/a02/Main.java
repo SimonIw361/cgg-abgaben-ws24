@@ -1,5 +1,7 @@
 package cgg.a02;
 
+import java.util.ArrayList;
+
 import cgg.Image;
 import tools.*;
 
@@ -11,7 +13,9 @@ public class Main {
     int height = 400;
 
     // This class instance defines the contents of the image.
-    Kugelgruppe kugeln = new Kugelgruppe(30);
+    ArrayList<Lichtquelle> licht = new ArrayList<>();
+    licht.add(new Punktlichtquelle(new Vec3(1,6,1)));
+    Kugelgruppe kugeln = new Kugelgruppe(1, licht);
 
     // Creates an image and iterates over all pixel positions inside the image.
     var image = new Image(width, height);
@@ -21,6 +25,6 @@ public class Main {
         image.setPixel(x,y,kugeln.getColor(new Vec2(x, y)));
 
     // Write the image to disk.
-    image.writePng("a02-spheres1");
+    image.writePng("a03-spheres");
   }
 }

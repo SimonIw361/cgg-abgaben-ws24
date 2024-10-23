@@ -15,7 +15,7 @@ import tools.*;
 public class Kugelgruppe implements Sampler{
     private ArrayList<Kugel> kugeln;
 
-    public Kugelgruppe(int anzahlKugel) {
+    public Kugelgruppe(int anzahlKugel, ArrayList<Lichtquelle> licht) {
         kugeln = new ArrayList<Kugel>();
         for(int i = 0; i < anzahlKugel; i++) {
             kugeln.add(new Kugel(new Vec3(getRandomZahl(80)-40,getRandomZahl(80)-40,getRandomZahl(60)-100), getRandomZahl(10) +4));
@@ -40,9 +40,9 @@ public class Kugelgruppe implements Sampler{
             }
         }
         if(treffer.getT() != 300) {
-            Vec3 n0 = treffer.getNormalenVektor();  //Farbe mit Normalenvektor von Hit
-            return new Color(n0.u(), n0.v(), n0.w());
-            //return shade(treffer); //Farbe mit angezeigter Methode
+            //Vec3 n0 = treffer.getNormalenVektor();  //Farbe mit Normalenvektor von Hit
+            //return new Color(n0.u(), n0.v(), n0.w());
+            return shade(treffer); //Farbe mit angezeigter Methode
             //return treffer.getfarbeOberflaeche();
         }
         
@@ -60,7 +60,9 @@ public class Kugelgruppe implements Sampler{
         Vec3 lightDir = normalize(vec3(1, 1, 0.7));
         Color ambient = multiply(0.1, hit.getfarbeOberflaeche());
         Color diffuse = multiply(0.9 * Math.max(0, dot(lightDir, hit.getNormalenVektor())), hit.getfarbeOberflaeche());
+        //Color spiegeln = null;
         return add(ambient, diffuse);
+        //bei diffuse Lichtquelle aendern, aus der Liste nehmen
     }
 
 
