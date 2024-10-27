@@ -33,6 +33,13 @@ public class Hit {
     }
 
     /**
+     * @return Trefferpunkt als Vec3
+     */
+    public Vec3 getTrefferPunkt(){
+        return trefferPunkt;
+    }
+
+    /**
      * @return Farbe von dem Trefferpunkt
      */
     public Color getfarbeOberflaeche(){

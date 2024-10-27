@@ -2,16 +2,17 @@ package cgg.a02;
 
 import tools.*;
 
-import static tools.Color.red;
 import static tools.Functions.*;
 
 public class Kugel {
     private Vec3 mittelpunkt;
     private double radius;
+    private Color farbe;
 
-    public Kugel(Vec3 mittelpunkt, double radius){
+    public Kugel(Vec3 mittelpunkt, double radius, Color farbe){
         this.mittelpunkt = mittelpunkt;
         this.radius = radius;
+        this.farbe = farbe;
     }
 
     /**
@@ -29,8 +30,8 @@ public class Kugel {
         double t1 = (-b + Math.sqrt(b* b - 4 * a * c))/(2 * a); //ABC-Formel mit +
         double t2 = (-b - Math.sqrt(b* b - 4 * a * c))/(2 * a); //ABC-Formel mit -
 
-        Hit hit = new Hit(t1, r.gibStrahlPunkt(t1), divide(subtract(r.gibStrahlPunkt(t1), mittelpunkt),radius) , red); //Trefferpunkt fuer t1 berechnen
-        Hit hit2 = new Hit(t2, r.gibStrahlPunkt(t2), divide(subtract(r.gibStrahlPunkt(t2), mittelpunkt),radius) , red);
+        Hit hit = new Hit(t1, r.gibStrahlPunkt(t1), divide(subtract(r.gibStrahlPunkt(t1), mittelpunkt),radius) , farbe); //Trefferpunkt fuer t1 berechnen
+        Hit hit2 = new Hit(t2, r.gibStrahlPunkt(t2), divide(subtract(r.gibStrahlPunkt(t2), mittelpunkt),radius) , farbe);
         if(b* b - 4 * a * c < 0) { //Wurzel ist negativ, keine Loesung
             return null;
         }
@@ -50,5 +51,12 @@ public class Kugel {
         else {
             return hit2;
         }
+    }
+
+    /**
+     * @return gibt die Farbe zurück
+     */
+    public Color getFarbe() {
+        return farbe;
     }
 }

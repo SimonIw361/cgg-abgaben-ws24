@@ -1,10 +1,8 @@
 package cgg.a02;
 
-import static tools.Functions.color;
-
 import tools.*;
 
-public record Richtungslichtquelle(Vec3 richtungS, Color farbe) implements Lichtquelle{
+public record Richtungslichtquelle(Vec3 richtungS, Color farbe) implements Lichtquelle {
 
     /**
      * @return Richtung zur Lichtquelle als Vec3
@@ -14,7 +12,7 @@ public record Richtungslichtquelle(Vec3 richtungS, Color farbe) implements Licht
     }
 
     public Color intensitaet(Vec3 x) {
-        return color(x); //???
+        return farbe;
     }
 
 }
