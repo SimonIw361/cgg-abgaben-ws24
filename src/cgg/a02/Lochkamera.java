@@ -21,7 +21,9 @@ public class Lochkamera {
      * @param y y Position des Abtastpunkt
      * @return Strahl von Kamera (bei 0) zum Abtastpunkt
      */
-    public Ray gibStrahl(double x, double y) {
+    public Ray gibStrahl(Vec2 point) {
+        double x = point.u();
+        double y = point.v();
         double xVec = x - (width/2);
         double yVec = y - (height/2);
         double zVec = -((width/2)/(Math.tan(winkelOeffnung/2)));

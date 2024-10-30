@@ -22,7 +22,7 @@ public class Kugel {
      * @return Trefferpunkt, der am naechsten ist
      */
     public Hit intersect(Ray r) {
-        // nach Formel: d * t2 + 2 * (x0 -c) * d * t + (x0 -c) -r2 = 0
+        // nach Formel: d * t2 + 2 * (x0 -c) * d * t + (x0 -c)2 -r2 = 0
         Vec3 x0c = subtract(r.getX0(), mittelpunkt); //x0 - c (beides Vektoren)
         double a = squaredLength(r.getRichtung()); //Vektor d, alles einzeln multiplizieren und dann addieren
         double b = 2 * coordSum(multiply(x0c, r.getRichtung())); //x0c und d einzeln multiplizieren, aus diesem Vektor dann noch mit coordSum eine Zahl machen
