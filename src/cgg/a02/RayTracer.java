@@ -49,20 +49,20 @@ public record RayTracer(Lochkamera camera, Kugelgruppe kugeln, ArrayList<Lichtqu
         Color intensitaet = black;
 
         for(int i= 0; i < lichtquelle.size(); i++) {
-            s = lichtquelle.get(i).richtungLichtquelle(hit.getTrefferPunkt()); //s Richtung zur Lichtquelle
+            s = normalize(lichtquelle.get(i).richtungLichtquelle(hit.getTrefferPunkt())); //s Richtung zur Lichtquelle
             l = lichtquelle.get(i).intensitaet(hit.getTrefferPunkt()); //l ankommende Intensitaet im Punkt
             r = add(negate(s), multiply(2 * dot(s, n), n) ); //r Spiegelung von s an n
 
-            Color ambient = black; //multiply(kd, l);
-            Color diffuse = multiply(kd, multiply(l, dot(n, s)));
+            Color ambient = multiply(multiply(kd, l), 0.1);
+            Color diffuse = clamp(multiply(kd, multiply(l, dot(n, s))));
             Color spiegelnd = black; //multiply(ks, multiply(l, Math.pow(dot(r, v), ke)));
 
-            intensitaet = add(intensitaet, diffuse, ambient, spiegelnd);
-            //System.out.println(diffuse + " " + ambient + " "+ spiegelnd);
+            intensitaet = add(intensitaet, ambient, diffuse, spiegelnd);
+            //System.out.println(ambient + " " + diffuse + " "+ spiegelnd);
             //System.out.println(diffuse + " " + hit.getTrefferPunkt());
         }
         //System.out.println(intensitaet);
-        return intensitaet;
+        return intensitaet; //macht Farbe zwische 0 und 1
     }
 
 }

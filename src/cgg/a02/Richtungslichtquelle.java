@@ -1,5 +1,6 @@
 package cgg.a02;
 
+
 import tools.*;
 
 public record Richtungslichtquelle(Vec3 richtungS, Color farbe) implements Lichtquelle {
