@@ -1,12 +1,12 @@
 package cgg.a02;
 
 import static tools.Color.black;
+import static tools.Color.white;
 
 import java.util.ArrayList;
 
-import tools.Color;
-import tools.Sampler;
-import tools.Vec2;
+import tools.*;
+import static tools.Functions.*;
 
 public record RayTracer(Lochkamera camera, Kugelgruppe kugeln, ArrayList<Lichtquelle> lichtquelle) implements Sampler {
 
@@ -24,6 +24,7 @@ public record RayTracer(Lochkamera camera, Kugelgruppe kugeln, ArrayList<Lichtqu
             return black; //Standardhintergrundfarbe bei keinem Treffer
         }
         else {
+            //System.out.println(point);
             return shade(treffer, r);
         }
     }
@@ -33,11 +34,35 @@ public record RayTracer(Lochkamera camera, Kugelgruppe kugeln, ArrayList<Lichtqu
      * berechnet Schattierung fuer gegebenen Treffer mit Phong Methode
      * 
      * @param hit der Trefferpunkt
+     * @param ray Strahl durch diesen Punkt
      * @return Farbe fuer diesen Punkt
      */
-    public static Color shade(Hit hit, Ray r) {
-        
-        return hit.getfarbeOberflaeche();
+    public Color shade(Hit hit, Ray ray) {
+        Vec3 n = hit.getNormalenVektor(); //n Normalenvektor
+        Vec3 s = null; //in Schleife initialisiert
+        Vec3 r = null; //in Schleife initialisert
+        Vec3 v = negate(ray.getRichtung()); //v Richtung zum Betrachter
+        Color l = null; //l ankommende Intensitaet im Punkt, in Schleife initialisiert
+        Color kd = hit.getfarbeOberflaeche(); //kd Reflexionskoeffizient, also die Farbe
+        Color ks = white; //ks spiegelnder Reflexionskoeffizient
+        double ke = 1000.0; //ke Exponent, wie stark die Spiegelung ist
+        Color intensitaet = black;
+
+        for(int i= 0; i < lichtquelle.size(); i++) {
+            s = lichtquelle.get(i).richtungLichtquelle(hit.getTrefferPunkt()); //s Richtung zur Lichtquelle
+            l = lichtquelle.get(i).intensitaet(hit.getTrefferPunkt()); //l ankommende Intensitaet im Punkt
+            r = add(negate(s), multiply(2 * dot(s, n), n) ); //r Spiegelung von s an n
+
+            Color ambient = black; //multiply(kd, l);
+            Color diffuse = multiply(kd, multiply(l, dot(n, s)));
+            Color spiegelnd = black; //multiply(ks, multiply(l, Math.pow(dot(r, v), ke)));
+
+            intensitaet = add(intensitaet, diffuse, ambient, spiegelnd);
+            //System.out.println(diffuse + " " + ambient + " "+ spiegelnd);
+            //System.out.println(diffuse + " " + hit.getTrefferPunkt());
+        }
+        //System.out.println(intensitaet);
+        return intensitaet;
     }
 
 }

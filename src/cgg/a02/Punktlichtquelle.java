@@ -11,13 +11,22 @@ import tools.Vec3;
 public record Punktlichtquelle(Vec3 punktLichtquelle, Color farbe) implements Lichtquelle {
 
     /**
-     * @return Richtung zur Lichtquelle als Vec3
-     */
+    * berechnet Richtung der Lichtquelle zurueck
+    * 
+    * @param x zu untersuchender Punkt
+    * @return Richtung zur Lichtquelle als Vec3
+    */
     public Vec3 richtungLichtquelle(Vec3 x) {
         Vec3 s = normalize(subtract(punktLichtquelle, x));
         return s;
     }
 
+    /**
+     * berechnet Intensitaet der Lichtquelle zurueck
+     * 
+     * @param x zu untersuchender Punkt
+     * @return Farbe des aktuellen Punktes
+     */
     public Color intensitaet(Vec3 x) {
         double zahl = length(subtract(punktLichtquelle, x));
         return divide(farbe,zahl*zahl);

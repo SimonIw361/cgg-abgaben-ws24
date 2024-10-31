@@ -16,7 +16,7 @@ public class Kugelgruppe {
      * @return Farbe des Pixels
      */
     public Hit intersect(Ray r) {
-        Hit treffer = null; //new Hit(300, null, null, gray); //nur fuer Initialisierung
+        Hit treffer = null; //nur fuer Initialisierung
 
         for(int j = 0; j < kugeln.size(); j++) {
             Hit h = kugeln.get(j).intersect(r);

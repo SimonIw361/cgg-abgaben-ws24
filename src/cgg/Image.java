@@ -24,10 +24,13 @@ public class Image implements tools.Image {
      * @param sampler Szene die beschrieben wird, muss Sampler implementieren
      */
     public void sample(Sampler sampler) {
-        for (int x = 0; x != width; x++)
-            for (int y = 0; y != height; y++)
+        for (int x = 0; x != width; x++) {
+            for (int y = 0; y != height; y++){
                 // Sets the color for one particular pixel.
                 this.setPixel(x,y,sampler.getColor(new Vec2(x, y)));
+                //System.out.println(x + " " + y); //zum Debuggen
+            }
+        }
     }
 
     /**
