@@ -41,28 +41,33 @@ public record RayTracer(Lochkamera camera, Kugelgruppe kugeln, ArrayList<Lichtqu
         Vec3 n = hit.getNormalenVektor(); //n Normalenvektor
         Vec3 s = null; //in Schleife initialisiert
         Vec3 r = null; //in Schleife initialisert
-        Vec3 v = negate(ray.getRichtung()); //v Richtung zum Betrachter
+        Vec3 v = normalize(negate(ray.getRichtung())); //v Richtung zum Betrachter
         Color l = null; //l ankommende Intensitaet im Punkt, in Schleife initialisiert
         Color kd = hit.getfarbeOberflaeche(); //kd Reflexionskoeffizient, also die Farbe
         Color ks = white; //ks spiegelnder Reflexionskoeffizient
         double ke = 1000.0; //ke Exponent, wie stark die Spiegelung ist
-        Color intensitaet = black;
+        Color intensitaet = black; //addiert ueber alle Lichtquellen
+        Color ads = black; //Summe aus ambient, diffuse und spiegelnd
 
         for(int i= 0; i < lichtquelle.size(); i++) {
             s = normalize(lichtquelle.get(i).richtungLichtquelle(hit.getTrefferPunkt())); //s Richtung zur Lichtquelle
             l = lichtquelle.get(i).intensitaet(hit.getTrefferPunkt()); //l ankommende Intensitaet im Punkt
-            r = add(negate(s), multiply(2 * dot(s, n), n) ); //r Spiegelung von s an n
+            r = normalize(add(negate(s), multiply(2 * dot(s, n), n) )); //r Spiegelung von s an n
 
             Color ambient = multiply(multiply(kd, l), 0.1);
             Color diffuse = clamp(multiply(kd, multiply(l, dot(n, s))));
-            Color spiegelnd = black; //multiply(ks, multiply(l, Math.pow(dot(r, v), ke)));
+            Color spiegelnd = black;
+            if(dot(n, s) > 0) { //wenn negativ ist weg zur Lichtquelle verdeckt (Winkel ist groesser 90)
+                spiegelnd = multiply(ks, multiply(l, Math.pow(dot(r, v), ke)));
+            }
 
-            intensitaet = add(intensitaet, ambient, diffuse, spiegelnd);
+            ads = clamp(add(ambient, diffuse, spiegelnd)); //darf nicht groesser als 1 sein
+            intensitaet = clamp(add(intensitaet, ads));
             //System.out.println(ambient + " " + diffuse + " "+ spiegelnd);
             //System.out.println(diffuse + " " + hit.getTrefferPunkt());
         }
         //System.out.println(intensitaet);
-        return intensitaet; //macht Farbe zwische 0 und 1
+        return intensitaet; //macht Farbe zwischen 0 und 1
     }
 
 }
