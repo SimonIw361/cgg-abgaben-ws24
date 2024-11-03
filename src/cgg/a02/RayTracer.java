@@ -44,30 +44,39 @@ public record RayTracer(Lochkamera camera, Kugelgruppe kugeln, ArrayList<Lichtqu
         Vec3 v = normalize(negate(ray.getRichtung())); //v Richtung zum Betrachter
         Color l = null; //l ankommende Intensitaet im Punkt, in Schleife initialisiert
         Color kd = hit.getfarbeOberflaeche(); //kd Reflexionskoeffizient, also die Farbe
-        Color ks = white; //ks spiegelnder Reflexionskoeffizient
+        Color ks = white; //hit.getfarbeOberflaeche(); //ks spiegelnder Reflexionskoeffizient, nur eigene Farbe spiegelt
         double ke = 1000.0; //ke Exponent, wie stark die Spiegelung ist
         Color intensitaet = black; //addiert ueber alle Lichtquellen
         Color ads = black; //Summe aus ambient, diffuse und spiegelnd
 
         for(int i= 0; i < lichtquelle.size(); i++) {
             s = normalize(lichtquelle.get(i).richtungLichtquelle(hit.getTrefferPunkt())); //s Richtung zur Lichtquelle
-            l = lichtquelle.get(i).intensitaet(hit.getTrefferPunkt()); //l ankommende Intensitaet im Punkt
+            l = clamp(lichtquelle.get(i).intensitaet(hit.getTrefferPunkt())); //l ankommende Intensitaet im Punkt
             r = normalize(add(negate(s), multiply(2 * dot(s, n), n) )); //r Spiegelung von s an n
 
             Color ambient = multiply(multiply(kd, l), 0.1);
             Color diffuse = clamp(multiply(kd, multiply(l, dot(n, s))));
             Color spiegelnd = black;
-            if(dot(n, s) > 0) { //wenn negativ ist weg zur Lichtquelle verdeckt (Winkel ist groesser 90)
+            if(dot(n, s) > 0 && dot(vec3(kd), vec3(l)) != 0){//&& dot(vec3(kd), s) != 0) { //wenn negativ ist weg zur Lichtquelle verdeckt (Winkel ist groesser 90)
                 spiegelnd = multiply(ks, multiply(l, Math.pow(dot(r, v), ke)));
+            }
+
+            //Schattenberechnung
+            Ray raySchatten = null;
+            if(lichtquelle.get(i) instanceof Richtungslichtquelle) {
+                raySchatten = new Ray(hit.getTrefferPunkt(), s, 0.0001, 99999);
+            }
+            else if(lichtquelle.get(i) instanceof Punktlichtquelle) {
+                raySchatten = new Ray(hit.getTrefferPunkt(), s, 0.0001, length(subtract(s, hit.getTrefferPunkt())));
+            }
+
+            if(kugeln.intersect(raySchatten) != null && !kugeln.intersect(raySchatten).getKugel().equals(hit.getKugel())) {//wenn Hit nur eigene Kugel schneidet dann nicht rein
+                continue;
             }
 
             ads = clamp(add(ambient, diffuse, spiegelnd)); //darf nicht groesser als 1 sein
             intensitaet = clamp(add(intensitaet, ads));
-            //System.out.println(ambient + " " + diffuse + " "+ spiegelnd);
-            //System.out.println(diffuse + " " + hit.getTrefferPunkt());
         }
-        //System.out.println(intensitaet);
         return intensitaet; //macht Farbe zwischen 0 und 1
     }
-
 }

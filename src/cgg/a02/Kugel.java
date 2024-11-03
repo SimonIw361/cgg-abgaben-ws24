@@ -30,14 +30,14 @@ public class Kugel {
         double t1 = (-b + Math.sqrt(b* b - 4 * a * c))/(2 * a); //ABC-Formel mit +
         double t2 = (-b - Math.sqrt(b* b - 4 * a * c))/(2 * a); //ABC-Formel mit -
 
-        Hit hit = new Hit(t1, r.gibStrahlPunkt(t1), divide(subtract(r.gibStrahlPunkt(t1), mittelpunkt),radius) , farbe); //Trefferpunkt fuer t1 berechnen
-        Hit hit2 = new Hit(t2, r.gibStrahlPunkt(t2), divide(subtract(r.gibStrahlPunkt(t2), mittelpunkt),radius) , farbe);
+        Hit hit = new Hit(t1, r.gibStrahlPunkt(t1), divide(subtract(r.gibStrahlPunkt(t1), mittelpunkt),radius) , farbe, this); //Trefferpunkt fuer t1 berechnen
+        Hit hit2 = new Hit(t2, r.gibStrahlPunkt(t2), divide(subtract(r.gibStrahlPunkt(t2), mittelpunkt),radius) , farbe, this);
         if(b* b - 4 * a * c < 0) { //Wurzel ist negativ, keine Loesung
             return null;
         }
 
         if(!in(r.gettMin(), r.gettMax(), t1) && !in(r.gettMin(), r.gettMax(), t2)) { //t1 und t2 sind außerhab des Bereiches
-                return null;
+            return null;
         }
         else if(!in(r.gettMin(), r.gettMax(), t1) && in(r.gettMin(), r.gettMax(), t2)) { //nur t1 ist außerhalb, t2 zurueckgeben
             return hit2; 
@@ -58,5 +58,21 @@ public class Kugel {
      */
     public Color getFarbe() {
         return farbe;
+    }
+
+    /**
+     * 
+     */
+    @Override
+    public boolean equals(Object obj) {
+        Kugel kug = (Kugel) obj;
+        if(this.mittelpunkt.u() == kug.mittelpunkt.u() && this.mittelpunkt.v() == kug.mittelpunkt.v() && this.mittelpunkt.w() == kug.mittelpunkt.w()) {
+            if(this.radius == kug.radius){
+                if(this.farbe.r() == kug.farbe.r() && this.farbe.g() == kug.farbe.g() && this.farbe.b() == kug.farbe.b()) {
+                    return true;
+                }
+            }
+        }
+        return false;
     }
 }

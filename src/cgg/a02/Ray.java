@@ -6,10 +6,10 @@ import static tools.Functions.*;
 public class Ray {
     private Vec3 x0;
     private Vec3 richtung;
-    private int tMin;
-    private int tMax;
+    private double tMin;
+    private double tMax;
 
-    public Ray(Vec3 x0, Vec3 richtung, int tMin, int tMax) {
+    public Ray(Vec3 x0, Vec3 richtung, double tMin, double tMax) {
         this.x0 = x0;
         this.richtung = richtung;
         this.tMin = tMin;
