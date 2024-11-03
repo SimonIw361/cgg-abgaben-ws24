@@ -61,7 +61,8 @@ public class Kugel {
     }
 
     /**
-     * 
+     * @param obj zu vergleichende Kugel
+     * @return true wenn Kugeln gleich sind
      */
     @Override
     public boolean equals(Object obj) {

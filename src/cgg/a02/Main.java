@@ -19,6 +19,7 @@ public class Main {
 
     //Licht und Kamera erstellen
     ArrayList<Lichtquelle> licht = new ArrayList<>();
+    //licht.add(new Richtungslichtquelle(vec3(10,0,6), white));
     licht.add(new Richtungslichtquelle(vec3(10,-10,5), red));
     licht.add(new Richtungslichtquelle(vec3(-10,-10,5), blue));
     licht.add(new Richtungslichtquelle(vec3(-10,-10,10), green));
@@ -31,7 +32,7 @@ public class Main {
     k.add(new Kugel(vec3(0,1001,-15), 1000, white));
     k.add(new Kugel(vec3(2.3,0,-4), 1, red));
     k.add(new Kugel(vec3(-3,0,-5), 1, blue));
-    k.add(new Kugel(vec3(0,-0.9,-2), 0.75, green));
+    k.add(new Kugel(vec3(0,-0.3,-2), 0.75, green));
 
     Kugelgruppe kugelScene = new Kugelgruppe(k); //erstellt Szene mit Kugeln
 

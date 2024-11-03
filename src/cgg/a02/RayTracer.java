@@ -70,7 +70,8 @@ public record RayTracer(Lochkamera camera, Kugelgruppe kugeln, ArrayList<Lichtqu
                 raySchatten = new Ray(hit.getTrefferPunkt(), s, 0.0001, length(subtract(s, hit.getTrefferPunkt())));
             }
 
-            if(kugeln.intersect(raySchatten) != null && !kugeln.intersect(raySchatten).getKugel().equals(hit.getKugel())) {//wenn Hit nur eigene Kugel schneidet dann nicht rein
+            if(kugeln.intersect(raySchatten) != null && !kugeln.intersect(raySchatten).getKugel().equals(hit.getKugel())) { 
+                //nur wenn es Hit gibt und dieser nicht auf der gleichen Kugel ist continue
                 continue;
             }
 
