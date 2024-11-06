@@ -6,6 +6,7 @@ import static tools.Color.red;
 import static tools.Color.white;
 import static tools.Functions.*;
 import cgg.a02.*;
+import tools.ImageTexture;
 
 import java.util.ArrayList;
 
@@ -22,9 +23,9 @@ public class Main {
     //Licht und Kamera erstellen
     ArrayList<Lichtquelle> licht = new ArrayList<>();
     //licht.add(new Richtungslichtquelle(vec3(10,0,6), white));
-    licht.add(new Richtungslichtquelle(vec3(10,-10,5), red));
-    licht.add(new Richtungslichtquelle(vec3(-10,-10,5), blue));
-    licht.add(new Richtungslichtquelle(vec3(-10,-10,10), green));
+    //licht.add(new Richtungslichtquelle(vec3(10,-10,5), white));
+    //licht.add(new Richtungslichtquelle(vec3(-10,-10,5), white));
+    licht.add(new Richtungslichtquelle(vec3(-10,-10,10), white));
     //licht.add(new Punktlichtquelle(vec3(10,-10,5), red));
     //licht.add(new Punktlichtquelle(vec3(-10,-10,5), blue));
     Lochkamera kamera = new Lochkamera(Math.PI/2, 400, 400);
@@ -32,9 +33,8 @@ public class Main {
     //Szene mit Kugeln erstellen
     ArrayList<Kugel> k = new ArrayList<>(); //auskommentiert, da Konstruktor veraendert
     k.add(new Kugel(vec3(0,1001,-15), 1000, new TexturedPhongMaterial(new ConstantColor(white), new ConstantColor(white), new ConstantColor(color(1000.0)))));
-    k.add(new Kugel(vec3(2.3,0,-4), 1, new TexturedPhongMaterial(new ConstantColor(red), new ConstantColor(white), new ConstantColor(color(1000.0)))));
-    k.add(new Kugel(vec3(-3,0,-5), 1, new TexturedPhongMaterial(new ConstantColor(blue), new ConstantColor(white), new ConstantColor(color(1000.0)))));
-    k.add(new Kugel(vec3(0,-0.3,-2), 0.75, new TexturedPhongMaterial(new ConstantColor(green), new ConstantColor(white), new ConstantColor(color(1000.0)))));
+    //k.add(new Kugel(vec3(2.3,0,-5), 1, new TexturedPhongMaterial(new ImageTexture("data/sterne.png"), new ConstantColor(white), new ConstantColor(color(1000.0)))));
+    k.add(new Kugel(vec3(0,-1.3,-4), 1.7, new TexturedPhongMaterial(new ImageTexture("data/sterne2.png"), new ConstantColor(white), new ConstantColor(color(1000.0)))));
 
     Kugelgruppe kugelScene = new Kugelgruppe(k); //erstellt Szene mit Kugeln
 
