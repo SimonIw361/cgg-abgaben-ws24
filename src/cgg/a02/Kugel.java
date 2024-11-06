@@ -32,8 +32,18 @@ public class Kugel {
         double t1 = (-b + Math.sqrt(b* b - 4 * a * c))/(2 * a); //ABC-Formel mit +
         double t2 = (-b - Math.sqrt(b* b - 4 * a * c))/(2 * a); //ABC-Formel mit -
 
-        Hit hit = new Hit(t1, r.gibStrahlPunkt(t1), divide(subtract(r.gibStrahlPunkt(t1), mittelpunkt),radius) , material, this); //Trefferpunkt fuer t1 berechnen
-        Hit hit2 = new Hit(t2, r.gibStrahlPunkt(t2), divide(subtract(r.gibStrahlPunkt(t2), mittelpunkt),radius) , material, this);
+        Vec3 punkt1 = r.gibStrahlPunkt(t1);
+        Vec3 punkt2 = r.gibStrahlPunkt(t2);
+        //uv berechnen
+        double u1 = (Math.atan(punkt1.u()/punkt1.w()) + Math.PI)/(2 * Math.PI);
+        double u2 = (Math.atan(punkt2.u()/punkt2.w()) + Math.PI)/(2 * Math.PI);
+        double v1 = (Math.PI - Math.acos(punkt1.v()/radius))/(Math.PI);
+        double v2 = (Math.PI - Math.acos(punkt2.v()/radius))/(Math.PI);
+        Vec2 uv1 = vec2(u1,v1);
+        Vec2 uv2 = vec2(u2,v2);
+
+        Hit hit = new Hit(t1, punkt1, divide(subtract(r.gibStrahlPunkt(t1), mittelpunkt),radius) , material, this, uv1); //Trefferpunkt fuer t1 berechnen
+        Hit hit2 = new Hit(t2, punkt2, divide(subtract(r.gibStrahlPunkt(t2), mittelpunkt),radius) , material, this, uv2);
         if(b* b - 4 * a * c < 0) { //Wurzel ist negativ, keine Loesung
             return null;
         }

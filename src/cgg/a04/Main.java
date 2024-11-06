@@ -1,5 +1,6 @@
 package cgg.a04;
 
+import static tools.Color.black;
 import static tools.Color.blue;
 import static tools.Color.green;
 import static tools.Color.red;
@@ -10,6 +11,7 @@ import cgg.a02.*;
 import java.util.ArrayList;
 
 import cgg.Image;
+import cgg.a01.ConstantColor;
 
 //gleicher Code wie die Main-Methode vom Package a01
 public class Main {
@@ -30,10 +32,10 @@ public class Main {
 
     //Szene mit Kugeln erstellen
     ArrayList<Kugel> k = new ArrayList<>(); //auskommentiert, da Konstruktor veraendert
-    k.add(new Kugel(vec3(0,1001,-15), 1000, new PhongMaterial(white, white, 1000.0)));
-    k.add(new Kugel(vec3(2.3,0,-4), 1, new PhongMaterial(red, white, 1000.0)));
-    k.add(new Kugel(vec3(-3,0,-5), 1, new PhongMaterial(green, white, 1000.0)));
-    k.add(new Kugel(vec3(0,-0.3,-2), 0.75, new PhongMaterial(blue, white, 1000.0)));
+    k.add(new Kugel(vec3(0,1001,-15), 1000, new TexturedPhongMaterial(new ConstantColor(white), new ConstantColor(white), new ConstantColor(color(1000.0)))));
+    k.add(new Kugel(vec3(2.3,0,-4), 1, new TexturedPhongMaterial(new ConstantColor(red), new ConstantColor(white), new ConstantColor(color(1000.0)))));
+    k.add(new Kugel(vec3(-3,0,-5), 1, new TexturedPhongMaterial(new ConstantColor(blue), new ConstantColor(white), new ConstantColor(color(1000.0)))));
+    k.add(new Kugel(vec3(0,-0.3,-2), 0.75, new TexturedPhongMaterial(new ConstantColor(green), new ConstantColor(white), new ConstantColor(color(1000.0)))));
 
     Kugelgruppe kugelScene = new Kugelgruppe(k); //erstellt Szene mit Kugeln
 

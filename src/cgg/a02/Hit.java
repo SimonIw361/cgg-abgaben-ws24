@@ -11,8 +11,9 @@ public class Hit {
     private Vec3 normalenVektor;
     private Material material;
     private Kugel kugel; //Kugel auf welcher der Trefferpunkt liegt, fuer Schattenberechnung benoetigt
+    private Vec2 uv;
 
-    public Hit(double t, Vec3 trefferPunkt, Vec3 normalenVektor, Material material, Kugel kugel) {
+    public Hit(double t, Vec3 trefferPunkt, Vec3 normalenVektor, Material material, Kugel kugel, Vec2 uv) {
         this.t = t;
         this.trefferPunkt = trefferPunkt;
         if(normalenVektor != null) {
@@ -20,6 +21,14 @@ public class Hit {
         }
         this.material = material;
         this.kugel = kugel;
+        this.uv = uv;
+    }
+
+    /**
+     * @return Vektor der die Werte u und v darstellt
+     */
+    public Vec2 getuv() {
+        return uv;
     }
 
     /**
