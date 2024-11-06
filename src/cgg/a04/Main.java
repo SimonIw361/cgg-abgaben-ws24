@@ -1,6 +1,5 @@
 package cgg.a04;
 
-import static tools.Color.black;
 import static tools.Color.blue;
 import static tools.Color.green;
 import static tools.Color.red;

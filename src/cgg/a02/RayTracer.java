@@ -71,6 +71,7 @@ public record RayTracer(Lochkamera camera, Kugelgruppe kugeln, ArrayList<Lichtqu
 
             if(kugeln.intersect(raySchatten) != null && !kugeln.intersect(raySchatten).getKugel().equals(hit.getKugel())) { 
                 //nur wenn es Hit gibt und dieser nicht auf der gleichen Kugel ist continue
+                intensitaet= add(intensitaet, ambient); //damit nicht ganz schwarz leichter Lichtanteil
                 continue;
             }
 
