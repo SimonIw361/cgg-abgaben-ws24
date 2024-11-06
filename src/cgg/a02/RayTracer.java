@@ -1,7 +1,6 @@
 package cgg.a02;
 
 import static tools.Color.black;
-import static tools.Color.white;
 
 import java.util.ArrayList;
 
@@ -43,9 +42,9 @@ public record RayTracer(Lochkamera camera, Kugelgruppe kugeln, ArrayList<Lichtqu
         Vec3 r = null; //in Schleife initialisert
         Vec3 v = normalize(negate(ray.getRichtung())); //v Richtung zum Betrachter
         Color l = null; //l ankommende Intensitaet im Punkt, in Schleife initialisiert
-        Color kd = hit.getfarbeOberflaeche(); //kd Reflexionskoeffizient, also die Farbe
-        Color ks = white; //hit.getfarbeOberflaeche(); //ks spiegelnder Reflexionskoeffizient, nur eigene Farbe spiegelt
-        double ke = 1000.0; //ke Exponent, wie stark die Spiegelung ist
+        Color kd = hit.getMaterial().baseColor(hit); //kd Reflexionskoeffizient, also die Farbe
+        Color ks = hit.getMaterial().specular(hit); //hit.getfarbeOberflaeche(); //ks spiegelnder Reflexionskoeffizient, nur eigene Farbe spiegelt
+        double ke = hit.getMaterial().shininess(hit); //ke Exponent, wie stark die Spiegelung ist
         Color intensitaet = black; //addiert ueber alle Lichtquellen
         Color ads = black; //Summe aus ambient, diffuse und spiegelnd
 

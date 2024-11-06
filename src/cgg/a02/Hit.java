@@ -3,20 +3,22 @@ package cgg.a02;
 import tools.*;
 import static tools.Functions.*;
 
+import cgg.a04.Material;
+
 public class Hit {
     private double t;
     private Vec3 trefferPunkt;
     private Vec3 normalenVektor;
-    private Color farbeOberflaeche;
+    private Material material;
     private Kugel kugel; //Kugel auf welcher der Trefferpunkt liegt, fuer Schattenberechnung benoetigt
 
-    public Hit(double t, Vec3 trefferPunkt, Vec3 normalenVektor, Color farbeOberflaeche, Kugel kugel) {
+    public Hit(double t, Vec3 trefferPunkt, Vec3 normalenVektor, Material material, Kugel kugel) {
         this.t = t;
         this.trefferPunkt = trefferPunkt;
         if(normalenVektor != null) {
             this.normalenVektor = normalize(normalenVektor);
         }
-        this.farbeOberflaeche = farbeOberflaeche;
+        this.material = material;
         this.kugel = kugel;
     }
 
@@ -44,8 +46,8 @@ public class Hit {
     /**
      * @return Farbe von dem Trefferpunkt
      */
-    public Color getfarbeOberflaeche(){
-        return farbeOberflaeche;
+    public Material getMaterial(){
+        return material;
     }
 
     /**
