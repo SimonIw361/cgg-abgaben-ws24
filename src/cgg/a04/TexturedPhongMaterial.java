@@ -1,7 +1,5 @@
 package cgg.a04;
 
-import static tools.Color.white;
-
 import cgg.a02.Hit;
 import tools.Color;
 import tools.Sampler;
