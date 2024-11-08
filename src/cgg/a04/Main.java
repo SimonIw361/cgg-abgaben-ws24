@@ -35,7 +35,8 @@ public class Main {
 
     var image = new Image(width, height);
     RayTracer rayTracer = new RayTracer(kamera, kugelScene, licht);
-    image.sample(rayTracer); //setzt Pixelfarben
+    //image.sample(rayTracer); //setzt Pixelfarben
+    image.sample(new StratifiedSampling(rayTracer));
     image.writePng("a04-image"); //erstellt Bild
   }
 }
