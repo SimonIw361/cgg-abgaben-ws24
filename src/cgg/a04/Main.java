@@ -21,8 +21,6 @@ public class Main {
     //Licht und Kamera erstellen
     ArrayList<Lichtquelle> licht = new ArrayList<>();
     licht.add(new Richtungslichtquelle(vec3(10,-10,10), white));
-    //licht.add(new Punktlichtquelle(vec3(10,-10,5), red));
-    //licht.add(new Punktlichtquelle(vec3(-10,-10,5), blue));
     Lochkamera kamera = new Lochkamera(Math.PI/2, 400, 400);
 
     //Szene mit Kugeln erstellen
@@ -35,8 +33,8 @@ public class Main {
 
     var image = new Image(width, height);
     RayTracer rayTracer = new RayTracer(kamera, kugelScene, licht);
-    //image.sample(rayTracer); //setzt Pixelfarben
-    image.sample(new StratifiedSampling(rayTracer));
+    //image.sample(rayTracer); //setzt Pixelfarben, ohne StratifiedSampling
+    image.sample(new StratifiedSampling(rayTracer)); //setzt Pixelfarben, mit StratifiedSampling
     image.writePng("a04-image"); //erstellt Bild
   }
 }

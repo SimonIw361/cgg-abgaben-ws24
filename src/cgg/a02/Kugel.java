@@ -34,18 +34,20 @@ public class Kugel {
 
         Vec3 punkt1 = r.gibStrahlPunkt(t1);
         Vec3 punkt2 = r.gibStrahlPunkt(t2);
-        //Punkte x,y und z auf der Kugel berechnen
+        //Punkte x,y und z auf der Kugel berechnen, fuer Berechnung von u und v benoetigt
         Vec3 kugelPunkt1 = subtract(punkt1, mittelpunkt);
         Vec3 kugelPunkt2 = subtract(punkt2, mittelpunkt);
-        //uv berechnen, Berechnung funktioniert noch nicht richtig???
+
+        //uv berechnen (Kugelkoordinaten zu Texturkoordinaten),
+        //jeweils fuer beide moeglichen Trefferpunkte, Auswahl von Trefferpunkt erst spaeter
+        //nach Formel: u = (arctan2((x/z) + pi))/(2pi)
         double u1 = (Math.atan2(kugelPunkt1.w(),kugelPunkt1.u()) + Math.PI)/(2 * Math.PI);
         double u2 = (Math.atan2(kugelPunkt2.w(),kugelPunkt2.u()) + Math.PI)/(2 * Math.PI);
+        //nach Formel: v = (pi - arccos(y/radius))/(pi)
         double v1 = (Math.PI - Math.acos(kugelPunkt1.v()/radius))/(Math.PI);
         double v2 = (Math.PI - Math.acos(kugelPunkt2.v()/radius))/(Math.PI);
         Vec2 uv1 = vec2(u1,v1);
         Vec2 uv2 = vec2(u2,v2);
-
-        
 
         Hit hit = new Hit(t1, punkt1, divide(subtract(r.gibStrahlPunkt(t1), mittelpunkt),radius) , material, this, uv1); //Trefferpunkt fuer t1 berechnen
         Hit hit2 = new Hit(t2, punkt2, divide(subtract(r.gibStrahlPunkt(t2), mittelpunkt),radius) , material, this, uv2);

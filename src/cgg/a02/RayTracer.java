@@ -46,7 +46,7 @@ public record RayTracer(Lochkamera camera, Kugelgruppe kugeln, ArrayList<Lichtqu
         Color ks = hit.getMaterial().specular(hit); //hit.getfarbeOberflaeche(); //ks spiegelnder Reflexionskoeffizient, nur eigene Farbe spiegelt
         double ke = hit.getMaterial().shininess(hit); //ke Exponent, wie stark die Spiegelung ist
         Color intensitaet = black; //addiert ueber alle Lichtquellen
-        Color ads = black; //Summe aus ambient, diffuse und spiegelnd
+        Color ads = black; //Summe aus ambient, diffuse und spiegelnd fuer jeweils eine Lichtquelle
 
         for(int i= 0; i < lichtquelle.size(); i++) {
             s = normalize(lichtquelle.get(i).richtungLichtquelle(hit.getTrefferPunkt())); //s Richtung zur Lichtquelle
@@ -71,7 +71,7 @@ public record RayTracer(Lochkamera camera, Kugelgruppe kugeln, ArrayList<Lichtqu
 
             if(kugeln.intersect(raySchatten) != null && !kugeln.intersect(raySchatten).getKugel().equals(hit.getKugel())) { 
                 //nur wenn es Hit gibt und dieser nicht auf der gleichen Kugel ist continue
-                intensitaet= add(intensitaet, ambient); //damit nicht ganz schwarz leichter Lichtanteil
+                intensitaet= add(intensitaet, ambient); //damit nicht ganz schwarz leichter Lichtanteil (nur ambient)
                 continue;
             }
 

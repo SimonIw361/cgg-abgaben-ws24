@@ -25,7 +25,7 @@ public class Hit {
     }
 
     /**
-     * @return Vektor der die Werte u und v darstellt
+     * @return Vektor der die Werte u und v (Texturkoordinaten) darstellt
      */
     public Vec2 getuv() {
         return uv;

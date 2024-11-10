@@ -12,20 +12,18 @@ import tools.Vec2;
 
 public record StratifiedSampling(Sampler sampler) implements Sampler {
 
-    
     public Color getColor(Vec2 p) {
         //anzahlRaster ist 25
         Color farbePixel = black;
-        double punktPlus = 1/25; // 1/anzahlRaster wenn Raster Quadratzahl ist
+        double punktPlus = 1/5; // 1/sqrt(anzahlRaster) wenn Raster Quadratzahl ist, sqrt(anzahlRaster) auch jeweils in die Schleifen schreiben fuer i und j
         for(int i = 0; i < 5; i++) {
             for(int j = 0; j < 5; j++) {
-                Vec2 punkt = vec2(p.u() + random()/5 + i * punktPlus, p.v() + random()/5 + j * punktPlus);
+                Vec2 punkt = vec2(p.u() + random()/5 + i * punktPlus, p.v() + random()/5 + j * punktPlus); //random durch 5 wegen anzahlRaster = 25
                 farbePixel = add(farbePixel, sampler.getColor(punkt));
             }
         }
-        farbePixel = divide(farbePixel, 25);
+        farbePixel = divide(farbePixel, 25); //durch anzahlRaster teilen, weil davor alle addiert wurden
         
         return farbePixel;
     }
-
 }
