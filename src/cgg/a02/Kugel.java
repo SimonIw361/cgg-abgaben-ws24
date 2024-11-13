@@ -5,8 +5,9 @@ import tools.*;
 import static tools.Functions.*;
 
 import cgg.a04.Material;
+import cgg.a05.Shape;
 
-public class Kugel {
+public class Kugel implements Shape {
     private Vec3 mittelpunkt;
     private double radius;
     private Material material;

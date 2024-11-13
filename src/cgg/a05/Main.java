@@ -31,11 +31,14 @@ public class Main {
 
     //Szene mit Kugeln erstellen
     ArrayList<Kugel> k = new ArrayList<>(); //auskommentiert, da Konstruktor veraendert
+    ArrayList<Kugel> k2 = new ArrayList<>();
     k.add(new Kugel(vec3(0,-1001,-15), 1000, new PhongMaterial(gray, white, 1000.0)));
     TexturedPhongMaterial musterKugel = new TexturedPhongMaterial(new ImageTexture("data/sterne2.png"), new ConstantColor(white), new ConstantColor(color(1000.0)));
     k.add(new Kugel(vec3(0,1.3,-4), 1.7, musterKugel));
+    k.add(new Kugel(vec3(8,1.3,-4), 1.7, musterKugel));
 
-    Kugelgruppe kugelScene = new Kugelgruppe(k); //erstellt Szene mit Kugeln
+    Mat44 transformationKugel = move(vec3(0,0,0));
+    Group kugelScene = new Group(k, transformationKugel); //erstellt Szene mit Kugeln
 
     var image = new Image(width, height);
     RayTracer rayTracer = new RayTracer(kamera, kugelScene, licht);

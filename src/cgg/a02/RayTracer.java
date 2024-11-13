@@ -4,10 +4,11 @@ import static tools.Color.black;
 
 import java.util.ArrayList;
 
+import cgg.a05.Shape;
 import tools.*;
 import static tools.Functions.*;
 
-public record RayTracer(Lochkamera camera, Kugelgruppe kugeln, ArrayList<Lichtquelle> lichtquelle) implements Sampler {
+public record RayTracer(Lochkamera camera, Shape kugeln, ArrayList<Lichtquelle> lichtquelle) implements Sampler {
 
     /**
      * gibt die Farbe fuer ein bestimmtes Pixel zurueck
