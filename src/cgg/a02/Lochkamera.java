@@ -27,7 +27,7 @@ public class Lochkamera {
         double x = point.u();
         double y = point.v();
         double xVec = x - (width/2);
-        double yVec = y - (height/2);
+        double yVec = - y - (height/2);
         double zVec = -((width/2)/(Math.tan(winkelOeffnung/2)));
         Vec3 vec3= 	new Vec3(xVec, yVec, zVec);
         Vec3 vec3transformiert = multiplyPoint(matrix, vec3); //Transformation des Punktes
