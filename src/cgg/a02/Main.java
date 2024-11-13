@@ -24,20 +24,20 @@ public class Main {
     licht.add(new Richtungslichtquelle(vec3(-10,-10,10), green));
     //licht.add(new Punktlichtquelle(vec3(10,-10,5), red));
     //licht.add(new Punktlichtquelle(vec3(-10,-10,5), blue));
-    Lochkamera kamera = new Lochkamera(Math.PI/2, 400, 400);
+    //Lochkamera kamera = new Lochkamera(Math.PI/2, 400, 400); //auskommentiert wegen Aederung der Kamera
 
     //Szene mit Kugeln erstellen
-    ArrayList<Kugel> k = new ArrayList<>(); //auskommentiert, da Konstruktor veraendert
+    //ArrayList<Kugel> k = new ArrayList<>(); //auskommentiert, da Konstruktor veraendert
     //k.add(new Kugel(vec3(0,1001,-15), 1000, white));
     //k.add(new Kugel(vec3(2.3,0,-4), 1, red));
     //k.add(new Kugel(vec3(-3,0,-5), 1, blue));
     //k.add(new Kugel(vec3(0,-0.3,-2), 0.75, green));
 
-    Kugelgruppe kugelScene = new Kugelgruppe(k); //erstellt Szene mit Kugeln
+    //Kugelgruppe kugelScene = new Kugelgruppe(k); //erstellt Szene mit Kugeln
 
     var image = new Image(width, height);
-    RayTracer rayTracer = new RayTracer(kamera, kugelScene, licht);
-    image.sample(rayTracer); //setzt Pixelfarben
+    //RayTracer rayTracer = new RayTracer(kamera, kugelScene, licht); //auskommentiert wegen Aenderung
+    //image.sample(rayTracer); //setzt Pixelfarben //auskommentiert wegen Aenderung
     image.writePng("a03-spheres"); //erstellt Bild
   }
 }

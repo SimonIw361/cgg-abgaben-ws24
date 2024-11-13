@@ -1,10 +1,14 @@
-package cgg.a04;
+package cgg.a05;
 
 import static tools.Color.gray;
 import static tools.Color.white;
 import static tools.Functions.*;
 import cgg.a02.*;
+import cgg.a04.PhongMaterial;
+import cgg.a04.StratifiedSampling;
+import cgg.a04.TexturedPhongMaterial;
 import tools.ImageTexture;
+import tools.Mat44;
 
 import java.util.ArrayList;
 
@@ -21,7 +25,9 @@ public class Main {
     //Licht und Kamera erstellen
     ArrayList<Lichtquelle> licht = new ArrayList<>();
     licht.add(new Richtungslichtquelle(vec3(10,-10,10), white));
-    //Lochkamera kamera = new Lochkamera(Math.PI/2, 400, 400); auskommentiert wegen Aenderung
+    Mat44 transformationKamera = multiply(move(vec3(0,-250,0)),rotate(vec3(1,0,0),5));
+    Lochkamera kamera = new Lochkamera(Math.PI/2, 400, 400, transformationKamera);
+    System.out.println(move(vec3(50,0,0)));
 
     //Szene mit Kugeln erstellen
     ArrayList<Kugel> k = new ArrayList<>(); //auskommentiert, da Konstruktor veraendert
@@ -29,13 +35,13 @@ public class Main {
     TexturedPhongMaterial musterKugel = new TexturedPhongMaterial(new ImageTexture("data/sterne2.png"), new ConstantColor(white), new ConstantColor(color(1000.0)));
     k.add(new Kugel(vec3(0,-1.3,-4), 1.7, musterKugel));
 
-    //Kugelgruppe kugelScene = new Kugelgruppe(k); //erstellt Szene mit Kugeln
+    Kugelgruppe kugelScene = new Kugelgruppe(k); //erstellt Szene mit Kugeln
 
     var image = new Image(width, height);
-    //RayTracer rayTracer = new RayTracer(kamera, kugelScene, licht); //auskommentiert wegen Aenderung
-    //image.sample(rayTracer); //setzt Pixelfarben, ohne StratifiedSampling //auskommentiert wegen Aenderung
-    //image.sample(new StratifiedSampling(rayTracer)); //setzt Pixelfarben, mit StratifiedSampling
-    image.writePng("a04-image"); //erstellt Bild
+    RayTracer rayTracer = new RayTracer(kamera, kugelScene, licht);
+    //image.sample(rayTracer); //setzt Pixelfarben, ohne StratifiedSampling
+    image.sample(new StratifiedSampling(rayTracer)); //setzt Pixelfarben, mit StratifiedSampling
+    image.writePng("a05-image"); //erstellt Bild
   }
 }
 

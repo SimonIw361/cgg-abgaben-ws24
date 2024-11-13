@@ -1,6 +1,6 @@
 package cgg.a02;
 
-import static tools.Functions.*;
+//import static tools.Functions.*;
 
 public class MainTest {
     public static void main(String[] args) {
@@ -9,10 +9,10 @@ public class MainTest {
 
     @SuppressWarnings("unused")
     private static void testAufgabe2_2() {
-        Lochkamera cam = new Lochkamera(Math.PI/2,10 , 10);
-        System.out.println(cam.gibStrahl(vec2(0, 0)));
-        System.out.println(cam.gibStrahl(vec2(5, 5)));
-        System.out.println(cam.gibStrahl(vec2(10, 10)));
+        //Lochkamera cam = new Lochkamera(Math.PI/2,10 , 10); //auskommentiert wegen Aenderung
+        //System.out.println(cam.gibStrahl(vec2(0, 0)));
+        //System.out.println(cam.gibStrahl(vec2(5, 5)));
+        //System.out.println(cam.gibStrahl(vec2(10, 10)));
     }
 
     private static void testAufgabe2_3() { //auskommentiert da Konstruktor geaendert
