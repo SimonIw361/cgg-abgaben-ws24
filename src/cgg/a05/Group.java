@@ -15,10 +15,15 @@ import tools.Mat44;
 public class Group implements Shape {
     private ArrayList<Kugel> elemente;
     private Mat44 transformation;
+    private Mat44 transformationInvert;
+    private Mat44 transformationInvertTransponse;
 
     public Group(ArrayList<Kugel> elemente, Mat44 transformation) {
         this.elemente = elemente;
         this.transformation = transformation;
+        //Matrizen berechnen, damit Berechnung nur einmal noetig ist
+        this.transformationInvert = invert(this.transformation);
+        this.transformationInvertTransponse = transpose(this.transformationInvert);
     }
 
     /**
@@ -29,8 +34,7 @@ public class Group implements Shape {
      */
     public Hit intersect(Ray r) {
         Hit treffer = null; //nur fuer Initialisierung
-        //Ray r2 = new Ray(multiplyPoint(transpose(invert(transformation)), r.getX0()), multiplyPoint(transpose(invert(transformation)), r.getRichtung()), r.gettMin(), r.gettMax());
-        Ray r2 = new Ray(multiplyPoint(invert(transformation), r.getX0()), multiplyDirection(invert(transformation), r.getRichtung()), r.gettMin(), r.gettMax());
+        Ray r2 = new Ray(multiplyPoint(transformationInvert, r.getX0()), multiplyDirection(transformationInvert, r.getRichtung()), r.gettMin(), r.gettMax());
         for(int j = 0; j < elemente.size(); j++) {
             Hit h = elemente.get(j).intersect(r2);
             if(h == null)
@@ -39,12 +43,11 @@ public class Group implements Shape {
                 treffer = h;
             }
         }
-        Hit treffer2 = null;
+        Hit trefferTransformiert = null;
         if(treffer != null){
-            treffer2 = new Hit(treffer.getT(), multiplyPoint(transformation, treffer.getTrefferPunkt()), multiplyDirection(transpose(invert(transformation)), treffer.getNormalenVektor()), treffer.getMaterial(), treffer.getKugel(), treffer.getuv());
-            //System.out.println(treffer2.getT());
+            trefferTransformiert = new Hit(treffer.getT(), multiplyPoint(transformation, treffer.getTrefferPunkt()), multiplyDirection(transformationInvertTransponse, treffer.getNormalenVektor()), treffer.getMaterial(), treffer.getKugel(), treffer.getuv());
         }
-        return treffer2;
+        return trefferTransformiert;
     }
 
 }
