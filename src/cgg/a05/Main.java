@@ -24,20 +24,21 @@ public class Main {
 
     //Licht und Kamera erstellen
     ArrayList<Lichtquelle> licht = new ArrayList<>();
-    licht.add(new Richtungslichtquelle(vec3(10,10,10), white));
-    Mat44 transformationKamera = multiply(move(vec3(0,550,-40)),rotate(vec3(1,0,0),-20));
+    licht.add(new Richtungslichtquelle(vec3(10,-10,10), white));
+    //Mat44 transformationKamera = multiply(move(vec3(0,550,-40)),rotate(vec3(1,0,0),-20));
+    Mat44 transformationKamera = multiply(move(vec3(0,0,0)),rotate(vec3(1,0,0),0));
     Lochkamera kamera = new Lochkamera(Math.PI/2, 400, 400, transformationKamera);
     //System.out.println(move(vec3(50,0,0)));
 
     //Szene mit Kugeln erstellen
     ArrayList<Kugel> k = new ArrayList<>(); //auskommentiert, da Konstruktor veraendert
     ArrayList<Kugel> k2 = new ArrayList<>();
-    k.add(new Kugel(vec3(0,-1001,-15), 1000, new PhongMaterial(gray, white, 1000.0)));
+    k.add(new Kugel(vec3(0,1001,-15), 1000, new PhongMaterial(gray, white, 1000.0)));
     TexturedPhongMaterial musterKugel = new TexturedPhongMaterial(new ImageTexture("data/sterne2.png"), new ConstantColor(white), new ConstantColor(color(1000.0)));
-    k.add(new Kugel(vec3(0,1.3,-4), 1.7, musterKugel));
-    k.add(new Kugel(vec3(8,1.3,-4), 1.7, musterKugel));
+    k.add(new Kugel(vec3(0,-1.3,-4), 1.7, musterKugel));
+    k.add(new Kugel(vec3(8,-1.3,-4), 1.7, musterKugel));
 
-    Mat44 transformationKugel = move(vec3(0,0,0));
+    Mat44 transformationKugel = move(vec3(-2,0,0));
     Group kugelScene = new Group(k, transformationKugel); //erstellt Szene mit Kugeln
 
     var image = new Image(width, height);

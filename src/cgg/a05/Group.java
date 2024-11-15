@@ -12,7 +12,7 @@ import cgg.a02.Kugel;
 import cgg.a02.Ray;
 import tools.Mat44;
 
-public class Group implements Shape{
+public class Group implements Shape {
     private ArrayList<Kugel> elemente;
     private Mat44 transformation;
 
@@ -41,7 +41,8 @@ public class Group implements Shape{
         }
         Hit treffer2 = null;
         if(treffer != null){
-            treffer2 = new Hit(treffer.getT(), multiplyPoint(transformation, treffer.getTrefferPunkt()), treffer.getNormalenVektor(), treffer.getMaterial(), treffer.getKugel(), treffer.getuv());
+            treffer2 = new Hit(treffer.getT(), multiplyPoint(transformation, treffer.getTrefferPunkt()), multiplyDirection(transpose(invert(transformation)), treffer.getNormalenVektor()), treffer.getMaterial(), treffer.getKugel(), treffer.getuv());
+            //System.out.println(treffer2.getT());
         }
         return treffer2;
     }
