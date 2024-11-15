@@ -18,6 +18,7 @@ public class Group implements Shape {
     private Mat44 transformationInvert;
     private Mat44 transformationInvertTransponse;
     private ArrayList<Group> gruppen;
+    private ArrayList<Hit> trefferKindknoten;
 
     public Group(ArrayList<Kugel> elemente, Mat44 transformation, Group... gruppen) {
         this.elemente = elemente;
@@ -29,6 +30,7 @@ public class Group implements Shape {
         for(int i=0; i < gruppen.length; i++) {
             this.gruppen.add(gruppen[i]);
         }
+        trefferKindknoten = new ArrayList<>();
     }
 
     /**
@@ -38,12 +40,17 @@ public class Group implements Shape {
      * @return Farbe des Pixels
      */
     public Hit intersect(Ray r) {
-        ArrayList<Hit> trefferKindknoten = new ArrayList<>();
+        
         Hit treffer = null; //nur fuer Initialisierung
         Ray r2 = new Ray(multiplyPoint(transformationInvert, r.getX0()), multiplyDirection(transformationInvert, r.getRichtung()), r.gettMin(), r.gettMax());
-        for(int j=0; j < gruppen.size(); j++) {
-            trefferKindknoten.add(gruppen.get(j).intersect(r2));
+        for(int j=0; j < gruppen.size();) {
+            if(gruppen.get(j).intersect(r2) != null) {
+                trefferKindknoten.add(gruppen.get(j).intersect(r2));
+                //gruppen.remove(j);
+                
+            }
         }
+        //gruppen = new ArrayList<>();
         
 
 
@@ -59,8 +66,9 @@ public class Group implements Shape {
         if(treffer != null){
             trefferTransformiert = new Hit(treffer.getT(), multiplyPoint(transformation, treffer.getTrefferPunkt()), multiplyDirection(transformationInvertTransponse, treffer.getNormalenVektor()), treffer.getMaterial(), treffer.getKugel(), treffer.getuv());
             
-            //trefferKindknoten.add(trefferTransformiert);
-            /*if(trefferKindknoten.size() > 1){
+            
+            if(trefferKindknoten.size() > 1){
+                trefferKindknoten.add(trefferTransformiert);
                 int index = trefferKindknoten.size() -1; //noch keine Zahl gespeichert
                 for(int l=0; l < trefferKindknoten.size(); l++) {
                     if(trefferKindknoten.get(index).getT() > trefferKindknoten.get(l).getT()){
@@ -68,9 +76,9 @@ public class Group implements Shape {
                     }
                 }
                 trefferTransformiert = trefferKindknoten.get(index);
-            }*/
+            }
         }
+        //trefferKindknoten = new ArrayList<>();
         return trefferTransformiert;
     }
-
 }

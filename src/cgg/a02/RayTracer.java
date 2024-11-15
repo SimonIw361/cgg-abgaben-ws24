@@ -4,6 +4,7 @@ import static tools.Color.black;
 
 import java.util.ArrayList;
 
+import cgg.a05.Group;
 import cgg.a05.Shape;
 import tools.*;
 import static tools.Functions.*;
