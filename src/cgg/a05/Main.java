@@ -9,6 +9,7 @@ import cgg.a04.StratifiedSampling;
 import cgg.a04.TexturedPhongMaterial;
 import tools.ImageTexture;
 import tools.Mat44;
+//import tools.Vec3;
 
 import java.util.ArrayList;
 
@@ -31,15 +32,22 @@ public class Main {
     //System.out.println(move(vec3(50,0,0)));
 
     //Szene mit Kugeln erstellen
-    ArrayList<Kugel> k = new ArrayList<>(); //auskommentiert, da Konstruktor veraendert
-    ArrayList<Kugel> k2 = new ArrayList<>();
+    ArrayList<Kugel> k = new ArrayList<>();
     k.add(new Kugel(vec3(0,1001,-15), 1000, new PhongMaterial(gray, white, 1000.0)));
     TexturedPhongMaterial musterKugel = new TexturedPhongMaterial(new ImageTexture("data/sterne2.png"), new ConstantColor(white), new ConstantColor(color(1000.0)));
-    k.add(new Kugel(vec3(0,-1.3,-4), 1.7, musterKugel));
-    k.add(new Kugel(vec3(8,-1.3,-4), 1.7, musterKugel));
+    //k.add(new Kugel(vec3(0,-1.3,-4), 1.7, musterKugel));
+    //k.add(new Kugel(vec3(8,-1.3,-4), 1.7, musterKugel));
 
-    Mat44 transformationKugel = move(vec3(-2,0,0));
-    Group kugelScene = new Group(k, transformationKugel); //erstellt Szene mit Kugeln
+    //Schneemann erstellen
+    ArrayList<Kugel> schneemann1 = new ArrayList<>();
+    schneemann1.add(new Kugel(vec3(0,-1.1,-4), 1.2, musterKugel));
+    schneemann1.add(new Kugel(vec3(0,-3.2,-4), 0.8, musterKugel));
+
+
+    Mat44 transformationKugel = move(vec3(-0,0,0));
+    Group hintergrund = new Group(k, move(vec3(-0,0,0)));
+    Group kugelScene = new Group(schneemann1, transformationKugel); //erstellt Szene mit Kugeln
+    
 
     var image = new Image(width, height);
     RayTracer rayTracer = new RayTracer(kamera, kugelScene, licht);
