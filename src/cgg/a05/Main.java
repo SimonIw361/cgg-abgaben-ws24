@@ -46,7 +46,7 @@ public class Main {
 
     Mat44 transformationKugel = move(vec3(-0,0,0));
     Group hintergrund = new Group(k, move(vec3(-0,0,0)));
-    Group kugelScene = new Group(schneemann1, transformationKugel, hintergrund); //erstellt Szene mit Kugeln
+    Group kugelScene = new Group(schneemann1, transformationKugel); //erstellt Szene mit Kugeln
     
 
     var image = new Image(width, height);
