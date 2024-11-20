@@ -48,7 +48,7 @@ public record MaterialSpiegel(Sampler kd, Sampler ks, Sampler ke) implements Mat
         return raySekundaer;
     }
 
-    public Color emission(Hit h) {
-        return multiply(0, kd.getColor(h.getuv()));
+    public Color albedo(Hit h) {
+        return color(1,1,0.8);
     }
 }

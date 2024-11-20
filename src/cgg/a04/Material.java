@@ -14,5 +14,5 @@ public interface Material {
 
     Ray berechneSekundaerstrahl(Ray r, Hit h); //berechnet zu einfallendem Primaerstrahl einen reflektierenden Sekundaerstrahl
 
-    Color emission(Hit h);
+    Color albedo(Hit h);
 }

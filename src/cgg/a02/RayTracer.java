@@ -1,6 +1,7 @@
 package cgg.a02;
 
 import static tools.Color.black;
+import static tools.Color.white;
 
 import java.util.ArrayList;
 
@@ -21,7 +22,7 @@ public record RayTracer(Lochkamera camera, Shape kugeln, ArrayList<Lichtquelle> 
         Hit treffer = kugeln.intersect(r);
 
         if(treffer == null) {
-           return black; //Standardhintergrundfarbe bei keinem Treffer
+           return white; //Standardhintergrundfarbe bei keinem Treffer
         }
         else {
             //return shade(treffer, r); //ohne rekursives Ray-Tracing
@@ -49,10 +50,10 @@ public record RayTracer(Lochkamera camera, Shape kugeln, ArrayList<Lichtquelle> 
         Ray sekundaerStrahl = hit.getMaterial().berechneSekundaerstrahl(ray, hit);
         Color global = black;
         if(sekundaerStrahl != null) {
-            global = multiply(color(1,1,0.8), recursiveShading(sekundaerStrahl, tiefe -1));
+            global = multiply(hit.getMaterial().albedo(hit), recursiveShading(sekundaerStrahl, tiefe -1));
         }
 
-        return add(hit.getMaterial().emission(hit), direct, global);
+        return clamp(add(direct, global));
     }
 
     /**

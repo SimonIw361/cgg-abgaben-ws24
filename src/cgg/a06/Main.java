@@ -1,7 +1,6 @@
 package cgg.a06;
 
-import static tools.Color.gray;
-import static tools.Color.white;
+import static tools.Color.*;
 import static tools.Functions.*;
 import cgg.a02.*;
 import cgg.a04.PhongMaterial;
@@ -35,11 +34,11 @@ public class Main {
     MaterialSpiegel spiegel = new MaterialSpiegel(new ConstantColor(white), new ConstantColor(white), new ConstantColor(color(1000.0)));
 
     //Gruppe mit zwei Schneemaennern mit unetrschiedlichen Texturen erstellen
-    Kugel schneeMuster1 = new Kugel(vec3(1,-1,-4), 1.2, sterne);
-    Kugel schneeMuster2 = new Kugel(vec3(1,-2.9,-4), 0.8, sterne);
+    Kugel schneeMuster1 = new Kugel(vec3(1,-1,-4), 1.2, new PhongMaterial(green, white, 1000));
+    Kugel schneeMuster2 = new Kugel(vec3(1,-2.9,-4), 0.8, new PhongMaterial(green, white, 1000));
     Group schneemannSterne = new Group(schneeMuster1, schneeMuster2);
-    Kugel schneeStreifen1 = new Kugel(vec3(-2,-1,-4), 1.2, streifen);
-    Kugel schneeStreifen2 = new Kugel(vec3(-2,-2.9,-4), 0.8, streifen);
+    Kugel schneeStreifen1 = new Kugel(vec3(-2,-1,-4), 1.2, new PhongMaterial(blue, white, 1000));
+    Kugel schneeStreifen2 = new Kugel(vec3(-2,-2.9,-4), 0.8, new PhongMaterial(blue, white, 1000));
     Group schneemannStreifen = new Group(schneeStreifen1, schneeStreifen2);
     Group zweiSchneemaenner = new Group(schneemannSterne, schneemannStreifen);
 
@@ -57,7 +56,7 @@ public class Main {
     Group groupSpiegel = new Group(new Kugel(vec3(0,-4,-15), 5, spiegel));
 
     //alle Kugeln in eine Gruppe machen
-    Kugel hinterKugel = new Kugel(vec3(0,1001,-30), 1000, new PhongMaterial(gray, white, 1000.0));
+    Kugel hinterKugel = new Kugel(vec3(0,1001,-30), 1000, new PhongMaterial(red, white, 1000.0));
     Group hintergrund = new Group(hinterKugel, schneemann1, groupSpiegel);
     Group welt = new Group(hintergrund);
     
@@ -65,6 +64,6 @@ public class Main {
     RayTracer rayTracer = new RayTracer(kamera, welt, licht);
     //image.sample(rayTracer); //setzt Pixelfarben, ohne StratifiedSampling
     image.sample(new StratifiedSampling(rayTracer)); //setzt Pixelfarben, mit StratifiedSampling
-    image.writePng("spiegel"); //erstellt Bild
+    image.writePng("a06-image"); //erstellt Bild
   }
 }
