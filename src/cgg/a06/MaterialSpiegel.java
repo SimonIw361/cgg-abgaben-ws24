@@ -1,5 +1,8 @@
 package cgg.a06;
 
+import static tools.Color.black;
+import static tools.Color.gray;
+import static tools.Color.white;
 import static tools.Functions.*;
 
 import cgg.a02.Hit;
@@ -16,7 +19,7 @@ public record MaterialSpiegel(Sampler kd, Sampler ks, Sampler ke) implements Mat
      * @return Farbe fuer Wert kd basierend nach Texturen u und v
      */
     public Color baseColor(Hit h) {
-        return kd.getColor(h.getuv());
+        return black;
     }
 
     /**
@@ -24,7 +27,7 @@ public record MaterialSpiegel(Sampler kd, Sampler ks, Sampler ke) implements Mat
      * @return Farbe fuer Wert ks basierend nach Texturen u und v
      */
     public Color specular(Hit h) {
-        return ks.getColor(h.getuv());
+        return white;
     }
 
     /**
@@ -39,9 +42,13 @@ public record MaterialSpiegel(Sampler kd, Sampler ks, Sampler ke) implements Mat
         Vec3 v = normalize(negate(ray.getRichtung()));
         Vec3 n = normalize(h.getNormalenVektor());
         //r = v - 2 * (v * n) * n
-        Vec3 r = normalize(subtract(v, multiply(2 * dot(v, n), n) )); //Spiegelung von s an n
+        Vec3 r = normalize(add(negate(v), multiply(2 * dot(v, n), n) )); //Spiegelung von s an n
 
-        Ray raySekundaer = new Ray(h.getTrefferPunkt(), r, 0.0001, 99999);
+        Ray raySekundaer = new Ray(h.getTrefferPunkt(), r, 0.001, 99999);
         return raySekundaer;
+    }
+
+    public Color emission(Hit h) {
+        return multiply(0, kd.getColor(h.getuv()));
     }
 }

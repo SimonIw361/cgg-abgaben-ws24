@@ -21,11 +21,11 @@ public record RayTracer(Lochkamera camera, Shape kugeln, ArrayList<Lichtquelle> 
         Hit treffer = kugeln.intersect(r);
 
         if(treffer == null) {
-            return black; //Standardhintergrundfarbe bei keinem Treffer
+           return black; //Standardhintergrundfarbe bei keinem Treffer
         }
         else {
             //return shade(treffer, r); //ohne rekursives Ray-Tracing
-            return recursiveShading(r, 0); //mit rekursivem Ray-Tracing
+            return recursiveShading(r, 10); //mit rekursivem Ray-Tracing
         }
     }
 
@@ -35,9 +35,24 @@ public record RayTracer(Lochkamera camera, Shape kugeln, ArrayList<Lichtquelle> 
      * @return die Farbe fuer diesen Punkt
      */
     public Color recursiveShading(Ray ray, int tiefe) {
+        if(ray == null || tiefe <= 0) {
+            return black;
+        }
 
+        Hit hit = kugeln.intersect(ray); 
+        if(hit == null) {
+            return black; //Standardhintergrundfarbe bei keinem Treffer
+        }
 
-        return black;
+        Color direct = shade(hit, ray); //Farbe aus Phong Modell ohne ambient
+        //weisse Farbe hier ist Albedo
+        Ray sekundaerStrahl = hit.getMaterial().berechneSekundaerstrahl(ray, hit);
+        Color global = black;
+        if(sekundaerStrahl != null) {
+            global = multiply(color(1,1,0.8), recursiveShading(sekundaerStrahl, tiefe -1));
+        }
+
+        return add(hit.getMaterial().emission(hit), direct, global);
     }
 
     /**
@@ -64,7 +79,7 @@ public record RayTracer(Lochkamera camera, Shape kugeln, ArrayList<Lichtquelle> 
             l = clamp(lichtquelle.get(i).intensitaet(hit.getTrefferPunkt())); //l ankommende Intensitaet im Punkt
             r = normalize(add(negate(s), multiply(2 * dot(s, n), n) )); //r Spiegelung von s an n
 
-            Color ambient = black; //multiply(multiply(kd, l), 0.1); //wird nicht mehr benoetigt, stattdessen rekursives Ray-Tracing
+            Color ambient = multiply(multiply(kd, l), 0.1); //wird nicht mehr benoetigt, stattdessen rekursives Ray-Tracing
             Color diffuse = clamp(multiply(kd, multiply(l, dot(n, s))));
             Color spiegelnd = black;
             if(dot(n, s) > 0 && dot(vec3(kd), vec3(l)) != 0){//&& dot(vec3(kd), s) != 0) { //wenn negativ ist weg zur Lichtquelle verdeckt (Winkel ist groesser 90)
@@ -86,7 +101,7 @@ public record RayTracer(Lochkamera camera, Shape kugeln, ArrayList<Lichtquelle> 
                 continue;
             }
 
-            ads = clamp(add(ambient, diffuse, spiegelnd)); //darf nicht groesser als 1 sein
+            ads = clamp(add(diffuse, spiegelnd)); //darf nicht groesser als 1 sein
             intensitaet = clamp(add(intensitaet, ads));
         }
         return intensitaet; //macht Farbe zwischen 0 und 1

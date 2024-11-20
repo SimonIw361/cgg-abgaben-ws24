@@ -1,5 +1,7 @@
 package cgg.a04;
 
+import static tools.Functions.*;
+
 import cgg.a02.Hit;
 import cgg.a02.Ray;
 import tools.Color;
@@ -33,5 +35,9 @@ public record TexturedPhongMaterial(Sampler kd, Sampler ks, Sampler ke) implemen
 
     public Ray berechneSekundaerstrahl(Ray r, Hit h) {
         return null;
+    }
+
+    public Color emission(Hit h) {
+        return multiply(0, kd.getColor(h.getuv()));
     }
 }

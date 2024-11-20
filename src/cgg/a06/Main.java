@@ -32,6 +32,7 @@ public class Main {
     //Texturen fuer Kugeln erstellen
     TexturedPhongMaterial sterne = new TexturedPhongMaterial(new ImageTexture("data/sterne2.png"), new ConstantColor(white), new ConstantColor(color(1000.0)));
     TexturedPhongMaterial streifen = new TexturedPhongMaterial(new ImageTexture("data/streifen.png"), new ConstantColor(white), new ConstantColor(color(1000.0)));
+    MaterialSpiegel spiegel = new MaterialSpiegel(new ConstantColor(white), new ConstantColor(white), new ConstantColor(color(1000.0)));
 
     //Gruppe mit zwei Schneemaennern mit unetrschiedlichen Texturen erstellen
     Kugel schneeMuster1 = new Kugel(vec3(1,-1,-4), 1.2, sterne);
@@ -53,15 +54,17 @@ public class Main {
     Group schneemann8 = new Group(multiply(move(vec3(3,0,-1.4)),scale(vec3(0.3))), zweiSchneemaenner);
     Group schneemann9 = new Group(multiply(move(vec3(-4,0,-30)),scale(vec3(4))), zweiSchneemaenner);
 
+    Group groupSpiegel = new Group(new Kugel(vec3(0,-4,-15), 5, spiegel));
+
     //alle Kugeln in eine Gruppe machen
     Kugel hinterKugel = new Kugel(vec3(0,1001,-30), 1000, new PhongMaterial(gray, white, 1000.0));
-    Group hintergrund = new Group(hinterKugel, schneemann1, schneemann2, schneemann3, schneemann4, schneemann5, schneemann6, schneemann7, schneemann8, schneemann9);
+    Group hintergrund = new Group(hinterKugel, schneemann1, groupSpiegel);
     Group welt = new Group(hintergrund);
     
     var image = new Image(width, height);
     RayTracer rayTracer = new RayTracer(kamera, welt, licht);
     //image.sample(rayTracer); //setzt Pixelfarben, ohne StratifiedSampling
     image.sample(new StratifiedSampling(rayTracer)); //setzt Pixelfarben, mit StratifiedSampling
-    image.writePng("a06-image"); //erstellt Bild
+    image.writePng("spiegel"); //erstellt Bild
   }
 }

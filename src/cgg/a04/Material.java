@@ -13,4 +13,6 @@ public interface Material {
     double shininess(Hit h); //ke
 
     Ray berechneSekundaerstrahl(Ray r, Hit h); //berechnet zu einfallendem Primaerstrahl einen reflektierenden Sekundaerstrahl
+
+    Color emission(Hit h);
 }
