@@ -8,17 +8,16 @@ import static tools.Functions.transpose;
 import java.util.ArrayList;
 
 import cgg.a02.Hit;
-import cgg.a02.Kugel;
 import cgg.a02.Ray;
 import tools.Mat44;
 
 public class Group implements Shape {
-    private ArrayList<Kugel> elemente;
+    private ArrayList<Shape> elemente;
     private Mat44 transformation;
     private Mat44 transformationInvert;
     private Mat44 transformationInvertTransponse;
 
-    public Group(ArrayList<Kugel> elemente, Mat44 transformation) {
+    public Group(ArrayList<Shape> elemente, Mat44 transformation) {
         this.elemente = elemente;
         this.transformation = transformation;
         //Matrizen berechnen, damit Berechnung nur einmal noetig ist
@@ -33,12 +32,9 @@ public class Group implements Shape {
      * @return Farbe des Pixels
      */
     public Hit intersect(Ray r) {
-        
         Hit treffer = null; //nur fuer Initialisierung
         Ray r2 = new Ray(multiplyPoint(transformationInvert, r.getX0()), multiplyDirection(transformationInvert, r.getRichtung()), r.gettMin(), r.gettMax());
         
-
-
         for(int j = 0; j < elemente.size(); j++) {
             Hit h = elemente.get(j).intersect(r2);
             if(h == null)

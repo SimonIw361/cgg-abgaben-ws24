@@ -29,6 +29,8 @@ public record RayTracer(Lochkamera camera, Shape kugeln, ArrayList<Lichtquelle> 
         }
     }
 
+    //TODO hier recursiveShading(Ray r, int tiefe) implementieren
+    //secRay vom Material erzeugen, dafuer Methode in Material ergaenzen
 
     /**
      * berechnet Schattierung fuer gegebenen Treffer mit Phong Methode
