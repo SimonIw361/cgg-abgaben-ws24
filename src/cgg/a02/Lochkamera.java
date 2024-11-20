@@ -7,13 +7,13 @@ public class Lochkamera {
     private double winkelOeffnung;
     private int width;
     private int height;
-    private Mat44 matrix;
+    private Mat44 transformation;
 
-    public Lochkamera(double winkelOeffnung, int width, int height, Mat44 matrix) {
+    public Lochkamera(double winkelOeffnung, int width, int height, Mat44 transformation) {
         this.winkelOeffnung = winkelOeffnung;
         this.width = width;
         this.height = height;
-        this.matrix = matrix;
+        this.transformation = transformation;
     }
 
     /**
@@ -30,9 +30,9 @@ public class Lochkamera {
         double yVec = y - (height/2);
         double zVec = -((width/2)/(Math.tan(winkelOeffnung/2)));
 
-        Vec3 punktTransformiert = multiplyPoint(matrix, Vec3.zero); //Transformation des Punktes, von Nullpunkt ausgehend
+        Vec3 punktTransformiert = multiplyPoint(transformation, Vec3.zero); //Transformation des Punktes, von Nullpunkt ausgehend
         Vec3 vec3= 	new Vec3(xVec, yVec, zVec);
-        Vec3 vec3transformiert = multiplyDirection(matrix, vec3); //Transformation der Richtung
+        Vec3 vec3transformiert = multiplyDirection(transformation, vec3); //Transformation der Richtung
         Ray ray = new Ray(punktTransformiert, normalize(vec3transformiert), 0, 100);
         return ray;
     }

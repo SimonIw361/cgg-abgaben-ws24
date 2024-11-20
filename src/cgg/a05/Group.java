@@ -1,6 +1,7 @@
 package cgg.a05;
 
 import static tools.Functions.invert;
+import static tools.Functions.move;
 import static tools.Functions.multiplyDirection;
 import static tools.Functions.multiplyPoint;
 import static tools.Functions.transpose;
@@ -10,6 +11,7 @@ import java.util.ArrayList;
 import cgg.a02.Hit;
 import cgg.a02.Ray;
 import tools.Mat44;
+import tools.Vec3;
 
 public class Group implements Shape {
     private ArrayList<Shape> elemente;
@@ -17,12 +19,28 @@ public class Group implements Shape {
     private Mat44 transformationInvert;
     private Mat44 transformationInvertTransponse;
 
-    public Group(ArrayList<Shape> elemente, Mat44 transformation) {
-        this.elemente = elemente;
+    public Group(Mat44 transformation, Shape... shapes) {
         this.transformation = transformation;
         //Matrizen berechnen, damit Berechnung nur einmal noetig ist
         this.transformationInvert = invert(this.transformation);
         this.transformationInvertTransponse = transpose(this.transformationInvert);
+
+        elemente = new ArrayList<>();
+        for(int i=0; i < shapes.length; i++) {
+            elemente.add(shapes[i]);
+        }
+    }
+
+    public Group(Shape... shapes) {
+        //es soll keine Transformation stattfinden
+        this.transformation = move(Vec3.zero);
+        this.transformationInvert = transformation;
+        this.transformationInvertTransponse = transformation;
+
+        elemente = new ArrayList<>();
+        for(int i=0; i < shapes.length; i++) {
+            elemente.add(shapes[i]);
+        }
     }
 
     /**
