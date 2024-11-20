@@ -1,6 +1,7 @@
 package cgg.a04;
 
 import cgg.a02.Hit;
+import cgg.a02.Ray;
 import tools.Color;
 
 public interface Material {
@@ -10,4 +11,6 @@ public interface Material {
     Color specular(Hit h); //ks
 
     double shininess(Hit h); //ke
+
+    Ray berechneSekundaerstrahl(Ray r, Hit h); //berechnet zu einfallendem Primaerstrahl einen reflektierenden Sekundaerstrahl
 }

@@ -1,6 +1,7 @@
 package cgg.a04;
 
 import cgg.a02.Hit;
+import cgg.a02.Ray;
 import tools.Color;
 
 public record PhongMaterial(Color kd, Color ks, double ke) implements Material {
@@ -29,5 +30,8 @@ public record PhongMaterial(Color kd, Color ks, double ke) implements Material {
         return ke;
     }
 
+    public Ray berechneSekundaerstrahl(Ray r, Hit h) {
+        return null;
+    }
 
 }

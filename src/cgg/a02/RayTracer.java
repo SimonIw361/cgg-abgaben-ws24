@@ -24,13 +24,21 @@ public record RayTracer(Lochkamera camera, Shape kugeln, ArrayList<Lichtquelle> 
             return black; //Standardhintergrundfarbe bei keinem Treffer
         }
         else {
-            //System.out.println(point);
-            return shade(treffer, r);
+            //return shade(treffer, r); //ohne rekursives Ray-Tracing
+            return recursiveShading(r, 0); //mit rekursivem Ray-Tracing
         }
     }
 
-    //TODO hier recursiveShading(Ray r, int tiefe) implementieren
-    //secRay vom Material erzeugen, dafuer Methode in Material ergaenzen
+    /**
+     * @param ray der aktuelle Strahl
+     * @param tiefe Anzahl der noch zu erzeugenden Sekundaerstrahlen
+     * @return die Farbe fuer diesen Punkt
+     */
+    public Color recursiveShading(Ray ray, int tiefe) {
+
+
+        return black;
+    }
 
     /**
      * berechnet Schattierung fuer gegebenen Treffer mit Phong Methode
@@ -56,7 +64,7 @@ public record RayTracer(Lochkamera camera, Shape kugeln, ArrayList<Lichtquelle> 
             l = clamp(lichtquelle.get(i).intensitaet(hit.getTrefferPunkt())); //l ankommende Intensitaet im Punkt
             r = normalize(add(negate(s), multiply(2 * dot(s, n), n) )); //r Spiegelung von s an n
 
-            Color ambient = multiply(multiply(kd, l), 0.1);
+            Color ambient = black; //multiply(multiply(kd, l), 0.1); //wird nicht mehr benoetigt, stattdessen rekursives Ray-Tracing
             Color diffuse = clamp(multiply(kd, multiply(l, dot(n, s))));
             Color spiegelnd = black;
             if(dot(n, s) > 0 && dot(vec3(kd), vec3(l)) != 0){//&& dot(vec3(kd), s) != 0) { //wenn negativ ist weg zur Lichtquelle verdeckt (Winkel ist groesser 90)
