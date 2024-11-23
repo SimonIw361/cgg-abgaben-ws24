@@ -42,7 +42,7 @@ public record RayTracer(Lochkamera camera, Shape kugeln, ArrayList<Lichtquelle> 
 
         Hit hit = kugeln.intersect(ray); 
         if(hit == null) {
-            return black; //Standardhintergrundfarbe bei keinem Treffer
+            return white; //Standardhintergrundfarbe bei keinem Treffer
         }
 
         Color direct = shade(hit, ray); //Farbe aus Phong Modell ohne ambient
@@ -52,8 +52,7 @@ public record RayTracer(Lochkamera camera, Shape kugeln, ArrayList<Lichtquelle> 
         if(sekundaerStrahl != null) {
             global = multiply(hit.getMaterial().albedo(hit), recursiveShading(sekundaerStrahl, tiefe -1));
         }
-
-        return clamp(add(direct, global));
+        return clamp(add(hit.getMaterial().emission(), direct, global));
     }
 
     /**
@@ -96,7 +95,8 @@ public record RayTracer(Lochkamera camera, Shape kugeln, ArrayList<Lichtquelle> 
                 raySchatten = new Ray(hit.getTrefferPunkt(), s, 0.0001, length(subtract(s, hit.getTrefferPunkt())));
             }
 
-            if(kugeln.intersect(raySchatten) != null && !kugeln.intersect(raySchatten).getKugel().equals(hit.getKugel())) { 
+            Hit trefferSchatten = kugeln.intersect(raySchatten);
+            if( trefferSchatten != null && !trefferSchatten.getKugel().equals(hit.getKugel())) { 
                 //nur wenn es Hit gibt und dieser nicht auf der gleichen Kugel ist continue
                 intensitaet= add(intensitaet, ambient); //damit nicht ganz schwarz leichter Lichtanteil (nur ambient)
                 continue;

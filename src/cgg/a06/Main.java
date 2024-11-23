@@ -25,7 +25,7 @@ public class Main {
     //Licht und Kamera erstellen
     ArrayList<Lichtquelle> licht = new ArrayList<>();
     licht.add(new Richtungslichtquelle(vec3(10,-10,10), white));
-    Mat44 transformationKamera = multiply(move(vec3(0,-6,0.6)),rotate(vec3(1,0,0),30));
+    Mat44 transformationKamera = multiply(move(vec3(0,-3,0.6)),rotate(vec3(1,0,0),30));
     Lochkamera kamera = new Lochkamera(Math.PI/2, 400, 400, transformationKamera);
 
     //Texturen fuer Kugeln erstellen
@@ -33,37 +33,39 @@ public class Main {
     TexturedPhongMaterial streifen = new TexturedPhongMaterial(new ImageTexture("data/streifen.png"), new ConstantColor(white), new ConstantColor(color(1000.0)));
     MaterialSpiegel spiegel = new MaterialSpiegel(new ConstantColor(white), new ConstantColor(white), new ConstantColor(color(1000.0)));
 
+    DiffusStreuung sterneD = new DiffusStreuung(new ImageTexture("data/sterne2.png"), new ConstantColor(white), new ConstantColor(color(1000.0)));
+
     //Gruppe mit zwei Schneemaennern mit unetrschiedlichen Texturen erstellen
-    Kugel schneeMuster1 = new Kugel(vec3(1,-1,-4), 1.2, new PhongMaterial(green, white, 1000));
-    Kugel schneeMuster2 = new Kugel(vec3(1,-2.9,-4), 0.8, new PhongMaterial(green, white, 1000));
+    Kugel schneeMuster1 = new Kugel(vec3(0.5,-0.1,-2), 1.2, sterneD);
+    Kugel schneeMuster2 = new Kugel(vec3(0.5,-2,-2), 0.8, new PhongMaterial(blue, white, 1000));
     Group schneemannSterne = new Group(schneeMuster1, schneeMuster2);
-    Kugel schneeStreifen1 = new Kugel(vec3(-2,-1,-4), 1.2, new PhongMaterial(blue, white, 1000));
-    Kugel schneeStreifen2 = new Kugel(vec3(-2,-2.9,-4), 0.8, new PhongMaterial(blue, white, 1000));
+    Kugel schneeStreifen1 = new Kugel(vec3(-1.5,-0.1,-4), 1.2, new PhongMaterial(white, white, 1000));
+    Kugel schneeStreifen2 = new Kugel(vec3(-1.5,-2,-4), 0.8, new PhongMaterial(white, white, 1000));
     Group schneemannStreifen = new Group(schneeStreifen1, schneeStreifen2);
     Group zweiSchneemaenner = new Group(schneemannSterne, schneemannStreifen);
 
     //die Gruppen von Schneemaenner immer wieder verschieben
     Group schneemann1 = new Group(zweiSchneemaenner);
-    Group schneemann2 = new Group(move(vec3(0,0,-10)), zweiSchneemaenner);
-    Group schneemann3 = new Group(multiply(move(vec3(0,0,-9)),rotate(vec3(0,1,0),80)), zweiSchneemaenner);
-    Group schneemann4 = new Group(multiply(move(vec3(2,0,-9)),rotate(vec3(0,1,0),-70)), zweiSchneemaenner);
-    Group schneemann5 = new Group(move(vec3(-12,0,-20)), zweiSchneemaenner);
-    Group schneemann6 = new Group(move(vec3(7,0,-27)), zweiSchneemaenner);
-    Group schneemann7 = new Group(multiply(move(vec3(18,0,-17)),rotate(vec3(0,1,0),80)), zweiSchneemaenner);
-    Group schneemann8 = new Group(multiply(move(vec3(3,0,-1.4)),scale(vec3(0.3))), zweiSchneemaenner);
-    Group schneemann9 = new Group(multiply(move(vec3(-4,0,-30)),scale(vec3(4))), zweiSchneemaenner);
+    // Group schneemann2 = new Group(move(vec3(0,0,-10)), zweiSchneemaenner);
+    // Group schneemann3 = new Group(multiply(move(vec3(0,0,-9)),rotate(vec3(0,1,0),80)), zweiSchneemaenner);
+    // Group schneemann4 = new Group(multiply(move(vec3(2,0,-9)),rotate(vec3(0,1,0),-70)), zweiSchneemaenner);
+    // Group schneemann5 = new Group(move(vec3(-12,0,-20)), zweiSchneemaenner);
+    // Group schneemann6 = new Group(move(vec3(7,0,-27)), zweiSchneemaenner);
+    // Group schneemann7 = new Group(multiply(move(vec3(18,0,-17)),rotate(vec3(0,1,0),80)), zweiSchneemaenner);
+    // Group schneemann8 = new Group(multiply(move(vec3(3,0,-1.4)),scale(vec3(0.3))), zweiSchneemaenner);
+    // Group schneemann9 = new Group(multiply(move(vec3(-4,0,-30)),scale(vec3(4))), zweiSchneemaenner);
 
     Group groupSpiegel = new Group(new Kugel(vec3(0,-4,-15), 5, spiegel));
 
     //alle Kugeln in eine Gruppe machen
-    Kugel hinterKugel = new Kugel(vec3(0,1001,-30), 1000, new PhongMaterial(red, white, 1000.0));
+    Kugel hinterKugel = new Kugel(vec3(0,1001,-30), 1000, new PhongMaterial(color(0.35), white, 1000.0));
     Group hintergrund = new Group(hinterKugel, schneemann1, groupSpiegel);
     Group welt = new Group(hintergrund);
     
     var image = new Image(width, height);
     RayTracer rayTracer = new RayTracer(kamera, welt, licht);
-    //image.sample(rayTracer); //setzt Pixelfarben, ohne StratifiedSampling
-    image.sample(new StratifiedSampling(rayTracer)); //setzt Pixelfarben, mit StratifiedSampling
+    image.sample(rayTracer); //setzt Pixelfarben, ohne StratifiedSampling
+    //image.sample(new StratifiedSampling(rayTracer)); //setzt Pixelfarben, mit StratifiedSampling
     image.writePng("a06-image"); //erstellt Bild
   }
 }

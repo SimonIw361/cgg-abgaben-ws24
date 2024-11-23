@@ -6,7 +6,6 @@ import cgg.a02.Hit;
 import cgg.a02.Ray;
 import tools.Color;
 import tools.Sampler;
-import tools.Vec2;
 import tools.Vec3;
 
 public record TexturedPhongMaterial(Sampler kd, Sampler ks, Sampler ke) implements Material {
@@ -41,13 +40,17 @@ public record TexturedPhongMaterial(Sampler kd, Sampler ks, Sampler ke) implemen
             zufaellig = vec3(2 * random() -1, 2 * random() -1, 2 * random() -1);
         }
 
-        Vec3 richtung = normalize(add(zufaellig, h.getNormalenVektor()));
+        Vec3 richtung = normalize(add(normalize(zufaellig), normalize(h.getNormalenVektor())));
         Vec3 ursprung = h.getTrefferPunkt();
         
         return new Ray(ursprung, richtung, 0.0001, 99999);
     }
 
     public Color albedo(Hit h) {
-        return color(1);
+        return multiply(0.9, baseColor(h));
+    }
+
+    public Color emission() {
+        return color(0,0,0);
     }
 }

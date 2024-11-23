@@ -1,7 +1,6 @@
 package cgg.a06;
 
 import static tools.Color.black;
-import static tools.Color.gray;
 import static tools.Color.white;
 import static tools.Functions.*;
 
@@ -49,6 +48,10 @@ public record MaterialSpiegel(Sampler kd, Sampler ks, Sampler ke) implements Mat
     }
 
     public Color albedo(Hit h) {
-        return color(1,1,0.8);
+        return color(1,1,0.78);
+    }
+
+    public Color emission() {
+        return color(0);
     }
 }
