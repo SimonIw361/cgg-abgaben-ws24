@@ -26,7 +26,7 @@ public record RayTracer(Lochkamera camera, Shape kugeln, ArrayList<Lichtquelle> 
         }
         else {
             //return shade(treffer, r); //ohne rekursives Ray-Tracing
-            return recursiveShading(r, 10); //mit rekursivem Ray-Tracing
+            return recursiveShading(r, 8); //mit rekursivem Ray-Tracing
         }
     }
 

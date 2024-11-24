@@ -43,6 +43,15 @@ public class Group implements Shape {
         }
     }
 
+    public Group(ArrayList<Shape> shapes) {
+        //es soll keine Transformation stattfinden
+        this.transformation = move(Vec3.zero);
+        this.transformationInvert = transformation;
+        this.transformationInvertTransponse = transformation;
+
+        elemente = shapes;
+    }
+
     /**
      * gibt die Farbe fuer ein bestimmtes Pixel zurueck
      * 
