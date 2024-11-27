@@ -43,7 +43,7 @@ public record MaterialSpiegel(Sampler kd, Sampler ks, Sampler ke) implements Mat
         //r = v - 2 * (v * n) * n
         Vec3 r = normalize(add(negate(v), multiply(2 * dot(v, n), n) )); //Spiegelung von s an n
 
-        Ray raySekundaer = new Ray(h.getTrefferPunkt(), r, 0.001, 99999);
+        Ray raySekundaer = new Ray(h.getTrefferPunkt(), r, 0.001, Double.MAX_VALUE);
         return raySekundaer;
     }
 

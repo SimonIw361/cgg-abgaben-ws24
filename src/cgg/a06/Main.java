@@ -3,9 +3,7 @@ package cgg.a06;
 import static tools.Color.*;
 import static tools.Functions.*;
 import cgg.a02.*;
-import cgg.a04.Material;
-import cgg.a04.PhongMaterial;
-import cgg.a04.StratifiedSampling;
+import cgg.a04.*;
 import cgg.a05.Group;
 import cgg.a05.Shape;
 import tools.ImageTexture;
@@ -23,77 +21,53 @@ public class Main {
   //gesamte Szene sieht noch nicht so gut aus, wie schoen noch mehr Kugeln hinzufuegen
   //Kugeln zu Vierergruppen machen, Gesicht wohin oder weg?
   //diese Vierergruppen zu Turm stapeln, Tuerme auf Bild verteilen
+  //ist es normal das Kugeln am Rand groesser aussehen
   public static void main(String[] args) {
-    int width = 400;
-    int height = 400;
+    int width = 800;
+    int height = 800;
     Random random = new Random();
 
     //Licht und Kamera erstellen
     ArrayList<Lichtquelle> licht = new ArrayList<>();
     licht.add(new Richtungslichtquelle(vec3(10,-10,10), white));
-    Mat44 transformationKamera = multiply(move(vec3(0,-6,0.6)),rotate(vec3(1,0,0),30));
+    //licht.add(new Punktlichtquelle(vec3(15, -11, 1.6), white));
+    Mat44 transformationKamera = multiply(move(vec3(0,-11,1.6)),rotate(vec3(1,0,0),30));
     Lochkamera kamera = new Lochkamera(Math.PI/2, 400, 400, transformationKamera);
 
     //Texturen/Materialien fuer Kugeln erstellen
-    ArrayList<Material> material = new ArrayList<>();
-    
-    DiffusStreuung sterne = new DiffusStreuung(new ImageTexture("data/sterne2.png"), new ConstantColor(white), new ConstantColor(color(1000.0)));
-    //material.add(sterne);
-    DiffusStreuung streifen = new DiffusStreuung(new ImageTexture("data/streifen.png"), new ConstantColor(white), new ConstantColor(color(1000.0)));
-    //material.add(streifen);
     DiffusStreuung blau = new DiffusStreuung(new ImageTexture("data/blau.png"), new ConstantColor(white), new ConstantColor(color(1000.0)));
-    material.add(blau);
     DiffusStreuung rot = new DiffusStreuung(new ImageTexture("data/rot.png"), new ConstantColor(white), new ConstantColor(color(1000.0)));
-    material.add(rot);
     DiffusStreuung gelb = new DiffusStreuung(new ImageTexture("data/gelb.png"), new ConstantColor(white), new ConstantColor(color(1000.0)));
-    material.add(gelb);
-    DiffusStreuung rot2 = new DiffusStreuung(new ImageTexture("data/rot2.png"), new ConstantColor(white), new ConstantColor(color(1000.0)));
-    material.add(rot2);
     DiffusStreuung orange = new DiffusStreuung(new ImageTexture("data/orange.png"), new ConstantColor(white), new ConstantColor(color(1000.0)));
-    material.add(orange);
-    DiffusStreuung grau = new DiffusStreuung(new ImageTexture("data/grau.png"), new ConstantColor(white), new ConstantColor(color(1000.0)));
-    material.add(grau);
-    DiffusStreuung rosa = new DiffusStreuung(new ImageTexture("data/rosa.png"), new ConstantColor(white), new ConstantColor(color(1000.0)));
-    material.add(rosa);
-    DiffusStreuung flieder = new DiffusStreuung(new ImageTexture("data/flieder.png"), new ConstantColor(white), new ConstantColor(color(1000.0)));
-    material.add(flieder);
+    DiffusStreuung schwarz = new DiffusStreuung(new ImageTexture("data/schwarz.png"), new ConstantColor(white), new ConstantColor(color(1000.0)));
     MaterialSpiegel spiegel = new MaterialSpiegel(new ConstantColor(white), new ConstantColor(white), new ConstantColor(color(1000.0)));
-    
-
-    //einige moegliche Transformationen erstellen
-    ArrayList<Mat44> bewegung = new ArrayList<>();
-    bewegung.add(move(vec3(1,0,-1)));
-    bewegung.add(move(vec3(-2.4,0,-1)));
-    bewegung.add(multiply(move(vec3(-5,-5,-7)),rotate(vec3(0,1,0),30)));
-    bewegung.add(move(vec3(1.7,0,-4)));
-    bewegung.add(multiply(move(vec3(-5,-5,-15)),rotate(vec3(0,0,1),56)));
-    bewegung.add(multiply(move(vec3(-4,0,-22)),scale(vec3(4))));
-    bewegung.add(multiply(move(vec3(1.5,0,-0.4)),scale(vec3(0.4))));
-    bewegung.add(move(vec3(-3.5,-2,-3.4)));
 
     ArrayList<Shape> gesichter = new ArrayList<>();
-    for(int i=0; i < 8; i++) {
-      //Array erstelln damit Material zufaellig genutzt werden kann
-      Material[] zufall = new Material[5];
-      for(int j = 0; j < 5; j++){
-        zufall[j] = material.get(random.nextInt(material.size()));
+
+    Kugel kopf = new Kugel(vec3(0,-0.2,-3), 1.4, rot);
+    Kugel kopf2 = new Kugel(vec3(0,-0.2,-3), 1.4, blau);
+    Kugel auge = new Kugel(vec3(0.42,-1.35,-2.29), 0.1, schwarz);
+    Kugel auge2 = new Kugel(vec3(-0.42,-1.35,-2.29), 0.1, schwarz);
+    Kugel nase = new Kugel(vec3(0,-1.04,-1.87), 0.1, orange);
+    Kugel mund1 = new Kugel(vec3(-0.09,-0.5,-1.7), 0.12, gelb);
+    Kugel mund2 = new Kugel(vec3(0.09,-0.5,-1.7), 0.12, gelb);
+    Kugel mund3 = new Kugel(vec3(-0.26,-0.58,-1.72), 0.11, gelb);
+    Kugel mund4 = new Kugel(vec3(0.26,-0.58,-1.72), 0.11, gelb);
+    Group augen = new Group(auge, auge2);
+    Group mundGesamt = new Group(mund1, mund2, mund3, mund4);
+    Group gesicht = new Group(kopf, augen, nase, mundGesamt);
+    Group gesicht2 = new Group(move(vec3(3,0,0)), kopf2, augen, nase, mundGesamt);
+    Group gruppe = new Group(gesicht, gesicht2);
+
+    for(int i=0; i < 5; i++){
+      for(int j=0; j < 1; j++){
+        Group g = new Group(move(vec3(8*i, 0, -4 *j)), gruppe);
+        gesichter.add(g);
       }
-
-      Kugel kopf = new Kugel(vec3(0,-0.2,-3), 1.4, zufall[0]);
-      Kugel auge = new Kugel(vec3(0.42,-1.35,-2.29), 0.1, zufall[1]);
-      Kugel auge2 = new Kugel(vec3(-0.42,-1.35,-2.29), 0.1, zufall[1]);
-      Kugel nase = new Kugel(vec3(0,-1.04,-1.87), 0.1, zufall[2]);
-      Kugel mund1 = new Kugel(vec3(-0.09,-0.5,-1.7), 0.12, zufall[3]);
-      Kugel mund2 = new Kugel(vec3(0.09,-0.5,-1.7), 0.12, zufall[3]);
-      Kugel mund3 = new Kugel(vec3(-0.26,-0.58,-1.72), 0.11, zufall[3]);
-      Kugel mund4 = new Kugel(vec3(0.26,-0.58,-1.72), 0.11, zufall[3]);
-      Group gesicht = new Group(bewegung.get(i),kopf, auge, auge2, nase, mund1, mund2, mund3, mund4);
-      gesichter.add(gesicht);
     }
+  
+    Group groupSpiegel = new Group(new Kugel(vec3(-11,-4,-10), 6, spiegel));
 
-    Group groupSpiegel = new Group(new Kugel(vec3(8,-4,-16), 5, spiegel));
-
-    //alle Kugeln in eine Gruppe machen
     Group alleGesichter = new Group(gesichter);
     Kugel hinterKugel = new Kugel(vec3(0,1001,-30), 1000, new PhongMaterial(color(0.35), white, 1000.0));
     Group hintergrund = new Group(hinterKugel, groupSpiegel, alleGesichter);
