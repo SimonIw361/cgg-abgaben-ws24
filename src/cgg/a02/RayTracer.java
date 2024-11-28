@@ -46,7 +46,6 @@ public record RayTracer(Lochkamera camera, Shape kugeln, ArrayList<Lichtquelle> 
         }
 
         Color direct = shade(hit, ray); //Farbe aus Phong Modell ohne ambient
-        //weisse Farbe hier ist Albedo
         Ray sekundaerStrahl = hit.getMaterial().berechneSekundaerstrahl(ray, hit);
         Color global = black;
         if(sekundaerStrahl != null) {
@@ -89,7 +88,7 @@ public record RayTracer(Lochkamera camera, Shape kugeln, ArrayList<Lichtquelle> 
             //Schattenberechnung
             Ray raySchatten = null;
             if(lichtquelle.get(i) instanceof Richtungslichtquelle) {
-                raySchatten = new Ray(hit.getTrefferPunkt(), s, 0.0001, 99999);
+                raySchatten = new Ray(hit.getTrefferPunkt(), s, 0.0001, Double.MAX_VALUE);
             }
             else if(lichtquelle.get(i) instanceof Punktlichtquelle) {
                 raySchatten = new Ray(hit.getTrefferPunkt(), s, 0.0001, length(subtract(s, hit.getTrefferPunkt())));

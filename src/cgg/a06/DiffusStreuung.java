@@ -45,7 +45,7 @@ public record DiffusStreuung(Sampler kd, Sampler ks, Sampler ke) implements Mate
         Vec3 richtung = normalize(add(normalize(zufaellig), normalize(h.getNormalenVektor())));
         Vec3 ursprung = h.getTrefferPunkt();
         
-        return new Ray(ursprung, richtung, 0.0001, 99999);
+        return new Ray(ursprung, richtung, 0.0001, Double.MAX_VALUE);
     }
 
     public Color albedo(Hit h) {
