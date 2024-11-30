@@ -95,7 +95,7 @@ public record RayTracer(Lochkamera camera, Shape kugeln, ArrayList<Lichtquelle> 
             }
 
             Hit trefferSchatten = kugeln.intersect(raySchatten);
-            if( trefferSchatten != null && !trefferSchatten.getKugel().equals(hit.getKugel())) { 
+            if( trefferSchatten != null){ //&& !trefferSchatten.getKugel().equals(hit.getKugel())) { 
                 //nur wenn es Hit gibt und dieser nicht auf der gleichen Kugel ist continue
                 intensitaet= add(intensitaet, ambient); //damit nicht ganz schwarz leichter Lichtanteil (nur ambient)
                 continue;
