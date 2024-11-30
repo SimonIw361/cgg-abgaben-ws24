@@ -9,7 +9,7 @@ import cgg.a05.Shape;
 import tools.*;
 import static tools.Functions.*;
 
-public record RayTracer(Lochkamera camera, Shape kugeln, ArrayList<Lichtquelle> lichtquelle) implements Sampler {
+public record RayTracer(Lochkamera camera, Shape kugeln, ArrayList<Lichtquelle> lichtquelle, Color emissionHintergrund) implements Sampler {
 
     /**
      * gibt die Farbe fuer ein bestimmtes Pixel zurueck
@@ -42,7 +42,7 @@ public record RayTracer(Lochkamera camera, Shape kugeln, ArrayList<Lichtquelle> 
 
         Hit hit = kugeln.intersect(ray); 
         if(hit == null) {
-            return white; //Standardhintergrundfarbe bei keinem Treffer
+            return emissionHintergrund; //Standardhintergrundfarbe bei keinem Treffer
         }
 
         Color direct = shade(hit, ray); //Farbe aus Phong Modell ohne ambient

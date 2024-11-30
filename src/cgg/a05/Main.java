@@ -58,7 +58,7 @@ public class Main {
     Group welt = new Group(hintergrund);
     
     var image = new Image(width, height);
-    RayTracer rayTracer = new RayTracer(kamera, welt, licht);
+    RayTracer rayTracer = new RayTracer(kamera, welt, licht, white);
     //image.sample(rayTracer); //setzt Pixelfarben, ohne StratifiedSampling
     image.sample(new StratifiedSampling(rayTracer)); //setzt Pixelfarben, mit StratifiedSampling
     image.writePng("a05-image"); //erstellt Bild

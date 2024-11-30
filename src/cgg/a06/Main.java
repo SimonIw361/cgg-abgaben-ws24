@@ -24,7 +24,7 @@ public class Main {
 
     //Licht und Kamera erstellen
     ArrayList<Lichtquelle> licht = new ArrayList<>();
-    licht.add(new Richtungslichtquelle(vec3(10,-10,10), white));
+    //licht.add(new Richtungslichtquelle(vec3(10,-10,10), white));
     Mat44 transformationKamera = multiply(move(vec3(0,-18,20.5)),rotate(vec3(1,0,0),22), rotate(vec3(0,1,0),-7));
     Lochkamera kamera = new Lochkamera(Math.PI/4, width, height, transformationKamera);
 
@@ -65,14 +65,14 @@ public class Main {
     Group groupSpiegel = new Group(new Kugel(vec3(-11,-4,-22), 6, spiegel));
 
     Group alleGesichter = new Group(gesichter);
-    Kugel hinterKugel = new Kugel(vec3(0,1001,-30), 1000, new PhongMaterial(color(0.35), white, 1000.0));
+    Kugel hinterKugel = new Kugel(vec3(0,1001,-30), 1000, new DiffusStreuung(new ConstantColor(color(0.35)), new ConstantColor(white), new ConstantColor(color(1000.0))));//new PhongMaterial(color(0.35), white, 1000.0));
     Group hintergrund = new Group(hinterKugel, groupSpiegel, alleGesichter);
     Group welt = new Group(hintergrund);
     
     Image image = new Image(width, height);
-    RayTracer rayTracer = new RayTracer(kamera, welt, licht);
-    image.sample(rayTracer); //setzt Pixelfarben, ohne StratifiedSampling
-    //image.sample(new StratifiedSampling(rayTracer)); //setzt Pixelfarben, mit StratifiedSampling
+    RayTracer rayTracer = new RayTracer(kamera, welt, licht, white);
+    //image.sample(rayTracer); //setzt Pixelfarben, ohne StratifiedSampling
+    image.sample(new StratifiedSampling(rayTracer)); //setzt Pixelfarben, mit StratifiedSampling
     image.writePng("a06-image"); //erstellt Bild
 
     //Berechnung der gebrauchten Zeit
