@@ -1,6 +1,10 @@
 
 package cgg;
 
+import static tools.Functions.vec2;
+
+import java.util.stream.Stream;
+
 import tools.*;
 
 public class Image implements tools.Image {
@@ -31,6 +35,18 @@ public class Image implements tools.Image {
                 //System.out.println(x + " " + y); //zum Debuggen
             }
         }
+    }
+
+    /**
+     * setzt die Pixelfarben fuer dieses Bild mit Multi Threading
+     * 
+     * @param sampler Szene die beschrieben wird, muss Sampler implementieren
+     */
+    public void sampleStream(Sampler sampler) {
+        Stream.iterate(0, y -> y != height, y -> y + 1)
+            .unordered().parallel()
+            .forEach(y -> Stream.iterate(0, x -> x != width, x -> x + 1)
+            .forEach(x -> setPixel(x, y, sampler.getColor(vec2(x,y)))));
     }
 
     /**
