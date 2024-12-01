@@ -5,16 +5,19 @@ import static tools.Functions.move;
 import static tools.Functions.multiplyDirection;
 import static tools.Functions.multiplyPoint;
 import static tools.Functions.transpose;
+import static tools.Functions.vec3;
 
 import java.util.ArrayList;
 
 import cgg.a02.Hit;
 import cgg.a02.Ray;
+import tools.BoundingBox;
 import tools.Mat44;
 import tools.Vec3;
 
 public class Group implements Shape {
     private ArrayList<Shape> elemente;
+    private BoundingBox box;
     private Mat44 transformation;
     private Mat44 transformationInvert;
     private Mat44 transformationInvertTransponse;
@@ -29,6 +32,11 @@ public class Group implements Shape {
         for(int i=0; i < shapes.length; i++) {
             elemente.add(shapes[i]);
         }
+        box = BoundingBox.empty;
+        for(int i= 0; i < elemente.size(); i++) {
+            box.extend(elemente.get(i).getBoundingBox());
+        }
+        box = box.transform(transformationInvert);
     }
 
     public Group(Shape... shapes) {
@@ -41,6 +49,11 @@ public class Group implements Shape {
         for(int i=0; i < shapes.length; i++) {
             elemente.add(shapes[i]);
         }
+        box = BoundingBox.empty;
+        for(int i= 0; i < elemente.size(); i++) {
+            box.extend(elemente.get(i).getBoundingBox());
+        }
+        box = box.transform(transformationInvert);
     }
 
     public Group(ArrayList<Shape> shapes) {
@@ -50,6 +63,11 @@ public class Group implements Shape {
         this.transformationInvertTransponse = transformation;
 
         elemente = shapes;
+        box = BoundingBox.empty;
+        for(int i= 0; i < elemente.size(); i++) {
+            box.extend(elemente.get(i).getBoundingBox());
+        }
+        box = box.transform(transformationInvert);
     }
 
     /**
@@ -62,6 +80,9 @@ public class Group implements Shape {
         Hit treffer = null; //nur fuer Initialisierung
         Ray r2 = new Ray(multiplyPoint(transformationInvert, r.getX0()), multiplyDirection(transformationInvert, r.getRichtung()), r.gettMin(), r.gettMax());
         
+        if(box.intersect(r2) == false) {
+            return null;
+        }
         for(int j = 0; j < elemente.size(); j++) {
             Hit h = elemente.get(j).intersect(r2);
             if(h == null)
@@ -76,5 +97,9 @@ public class Group implements Shape {
             trefferTransformiert = new Hit(treffer.getT(), multiplyPoint(transformation, treffer.getTrefferPunkt()), multiplyDirection(transformationInvertTransponse, treffer.getNormalenVektor()), treffer.getMaterial(), treffer.getKugel(), treffer.getuv());
         }
         return trefferTransformiert;
+    }
+
+    public BoundingBox getBoundingBox() {
+        return box;
     }
 }

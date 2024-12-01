@@ -96,4 +96,10 @@ public class Kugel implements Shape {
         }
         return false;
     }
+
+    @Override
+    public BoundingBox getBoundingBox() {
+        BoundingBox box = new BoundingBox(mittelpunkt, vec3(mittelpunkt.x() -radius, mittelpunkt.y(), mittelpunkt.z()));
+        return box;
+    }
 }

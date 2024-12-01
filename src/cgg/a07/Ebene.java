@@ -6,6 +6,7 @@ import cgg.a02.Hit;
 import cgg.a02.Ray;
 import cgg.a04.Material;
 import cgg.a05.Shape;
+import tools.BoundingBox;
 import tools.Vec3;
 
 public class Ebene implements Shape{
@@ -51,9 +52,6 @@ public class Ebene implements Shape{
             case "unbegrenzt":
                 break;
             case "kreisrund":
-                // if(length(vec2(tPunkt.x(), tPunkt.y())) > radius){
-                //     return null;
-                // }
                 if(length(tPunkt) > radius){
                     return null;
                 }
@@ -78,5 +76,22 @@ public class Ebene implements Shape{
 
         Hit treffer = new Hit(t, tPunkt, n, material, this, null);
         return treffer;
+    }
+
+    @Override
+    public BoundingBox getBoundingBox() {
+        BoundingBox box = null;
+        switch (art) {
+            case "unbegrenzt":
+                box = BoundingBox.everything;
+                break;
+            case "kreisrund":
+                box = new BoundingBox(vec3(0,0,0), vec3(radius, 0, 0));
+                break;
+            case "quadratisch":
+                box = new BoundingBox(vec3(0,0,0), vec3(kantenlaenge, 0, 0));
+                break;
+        }
+        return box;
     }
 }

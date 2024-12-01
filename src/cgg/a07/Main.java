@@ -36,8 +36,7 @@ public class Main {
     DiffusStreuung gruen = new DiffusStreuung(new ConstantColor(color(0,0.52,0)), new ConstantColor(white), new ConstantColor(color(1000.0)));
     MaterialSpiegel spiegelMat = new MaterialSpiegel(new ConstantColor(white), new ConstantColor(white), new ConstantColor(color(1000.0)));
 
-    //Array Liste mit allen Gruppen von Kugeln die in der Schleife erstellt werden
-    ArrayList<Shape> gesichter = new ArrayList<>();
+    
 
     Group wandVorne = new Group(multiply(move(vec3(0, 0, -10)), rotate(vec3(1,0,0), 90)), new Ebene("quadratisch", 3, blau));
     Group wandSeiteLinks = new Group(multiply(move(vec3(-1.5, 0, -11.5)), rotate(vec3(0,0,1), 90)), new Ebene("quadratisch", 3, blau));
@@ -54,16 +53,20 @@ public class Main {
     Group hausOben = new Group(dachLinks, dachRechts);
     Group haus = new Group(hausUnten, hausOben);
 
-    for(int i=0; i < 1; i++){
-      for(int j=0; j < 1; j++){
+    //Array Liste mit allen Gruppen von Kugeln die in der Schleife erstellt werden
+    ArrayList<Shape> haeuser = new ArrayList<>();
+    for(int i=0; i < 9; i++){
+      for(int j=0; j < 10; j++){
+        Group g = new Group(move(vec3(-9 + 5*i, 0, -7.6 *j)), haus);
+        haeuser.add(g);
       }
     }
   
-    Group spiegel = new Group(multiply(move(vec3(-7, -2, -10)), rotate(vec3(0,1,0), -20), rotate(vec3(0,0,1), 90)), new Ebene("kreisrund", 3, spiegelMat));
+    //Group spiegel = new Group(multiply(move(vec3(-11, -2, -30)), rotate(vec3(0,1,0), -10), rotate(vec3(0,0,1), 90)), new Ebene("kreisrund", 15, spiegelMat));
     Group boden = new Group(move(vec3(0, 1.5, 0)), new Ebene("unbegrenzt", 0, gruen));
 
-    Group alleGesichter = new Group(gesichter);
-    Group szene = new Group(spiegel, haus);
+    Group alleHaeuser = new Group(haeuser);
+    Group szene = new Group(alleHaeuser);
     Group welt = new Group(szene, boden);
     
     Image image = new Image(width, height);

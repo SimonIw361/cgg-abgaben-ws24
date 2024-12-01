@@ -6,6 +6,8 @@ package tools;
 
 import static tools.Functions.*;
 
+import cgg.a02.Ray;
+
 /**
  * Represents a bounding box in 3D space defined by two points: minimum and maximum.
  */
@@ -282,6 +284,15 @@ public record BoundingBox(Vec3 min, Vec3 max) {
         tmax = Math.min(tmax, Math.max(tz1, tz2));
 
         return (tmax >= tmin && tMin <= tmin && tmin <= tMax);
+    }
+
+    /**
+     * gleiches intersect nur mit Ray als Parameter
+     * @param r Ray
+     * @return true if the ray intersects the bounding box, false otherwise.
+     */
+    public boolean intersect(Ray r) {
+        return intersect(r.getX0(), r.getRichtung(),r.gettMin(), r.gettMax());
     }
 
     /**
