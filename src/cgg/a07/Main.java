@@ -18,6 +18,8 @@ import cgg.a01.ConstantColor;
 public class Main {
 
   public static void main(String[] args) {
+    Group x = new Group(move(1,0,1 ),new Ebene("quadratisch", 3, null));
+    Group x2 = new Group(move(-1, 0,-1), x);
     long startZeit = System.currentTimeMillis();
     int width = 900;
     int height = 900;
@@ -51,28 +53,31 @@ public class Main {
     
     Group hausUnten = new Group(wandVorne, wandSeiteLinks, wandSeiteRechts, wandHinten, fensterUnten1, fensterUnten2, fensterUnten3, fensterUnten4);
     Group hausOben = new Group(dachLinks, dachRechts);
+    System.out.println("Haus:");
     Group haus = new Group(hausUnten, hausOben);
 
-    //Array Liste mit allen Gruppen von Kugeln die in der Schleife erstellt werden
+    // //Array Liste mit allen Gruppen von Kugeln die in der Schleife erstellt werden
+    // //TODO in Vierergruppen sortieren und diese verdoppeln, anderes Verfahren!!
     ArrayList<Shape> haeuser = new ArrayList<>();
-    for(int i=0; i < 9; i++){
-      for(int j=0; j < 10; j++){
+    for(int i=0; i < 0; i++){
+      for(int j=0; j < 0; j++){
         Group g = new Group(move(vec3(-9 + 5*i, 0, -7.6 *j)), haus);
         haeuser.add(g);
       }
     }
   
-    //Group spiegel = new Group(multiply(move(vec3(-11, -2, -30)), rotate(vec3(0,1,0), -10), rotate(vec3(0,0,1), 90)), new Ebene("kreisrund", 15, spiegelMat));
-    Group boden = new Group(move(vec3(0, 1.5, 0)), new Ebene("unbegrenzt", 0, gruen));
+    // //Group spiegel = new Group(multiply(move(vec3(-11, -2, -30)), rotate(vec3(0,1,0), -10), rotate(vec3(0,0,1), 90)), new Ebene("kreisrund", 15, spiegelMat));
+    Group boden = new Group(move(vec3(15, 1.5, -15)), new Ebene("quadratisch", 35, gruen));
 
-    Group alleHaeuser = new Group(haeuser);
+    Group alleHaeuser = new Group(haeuser);//fillPlane(haus, 1));
     Group szene = new Group(alleHaeuser);
-    Group welt = new Group(szene, boden);
+    System.out.println("Welt:");
+    Group welt = new Group(boden, haus);
     
     Image image = new Image(width, height);
     RayTracer rayTracer = new RayTracer(kamera, welt, licht, white);
-    //image.sampleStream(rayTracer); //setzt Pixelfarben, ohne StratifiedSampling
-    image.sampleStream(new StratifiedSampling(rayTracer)); //setzt Pixelfarben, mit StratifiedSampling
+    image.sampleStream(rayTracer); //setzt Pixelfarben, ohne StratifiedSampling
+    //image.sampleStream(new StratifiedSampling(rayTracer)); //setzt Pixelfarben, mit StratifiedSampling
     image.writePng("a07-image"); //erstellt Bild
 
     //Berechnung der gebrauchten Zeit
@@ -80,5 +85,25 @@ public class Main {
     long dauer = endZeit - startZeit;
     long dauerMin = (dauer/1000)/60;
     System.out.println("Zeit fuer die Berechnung des Bildes: " + dauerMin + " min");
+  }
+
+  private static Shape fillPlane(Shape s, int n) {
+    int gap = 5;
+    if(n == 0) {
+      return s;
+    }
+
+    Shape p1 = fillPlane(s, n -1);
+    Shape p2 = fillPlane(s, n -1);
+    Shape p3 = fillPlane(s, n -1);
+    Shape p4 = fillPlane(s, n -1);
+    double size = 5;//p1.getBoundingBox().size().x()/6 + gap;
+
+    Group g1 = new Group(move(-size/2, 0, -size/2), p1);
+    Group g2 = new Group(move(size/2, 0, -size/2), p2);
+    Group g3 = new Group(move(-size/2, 0, size/2), p3);
+    Group g4 = new Group(move(size/2, 0, size/2), p4);
+
+    return new Group(g1, g2, g3, g4);
   }
 }

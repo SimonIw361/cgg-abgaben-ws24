@@ -18,6 +18,7 @@ import tools.Vec3;
 public class Group implements Shape {
     private ArrayList<Shape> elemente;
     private BoundingBox box;
+    private BoundingBox boxTransformiert;
     private Mat44 transformation;
     private Mat44 transformationInvert;
     private Mat44 transformationInvertTransponse;
@@ -34,26 +35,14 @@ public class Group implements Shape {
         }
         box = BoundingBox.empty;
         for(int i= 0; i < elemente.size(); i++) {
-            box.extend(elemente.get(i).getBoundingBox());
+            box = box.extend(elemente.get(i).getBoundingBox());
         }
-        box = box.transform(transformationInvert);
+        boxTransformiert = box.transform(transformation);
+        System.out.println(box.toString());
     }
 
     public Group(Shape... shapes) {
-        //es soll keine Transformation stattfinden
-        this.transformation = move(Vec3.zero);
-        this.transformationInvert = transformation;
-        this.transformationInvertTransponse = transformation;
-
-        elemente = new ArrayList<>();
-        for(int i=0; i < shapes.length; i++) {
-            elemente.add(shapes[i]);
-        }
-        box = BoundingBox.empty;
-        for(int i= 0; i < elemente.size(); i++) {
-            box.extend(elemente.get(i).getBoundingBox());
-        }
-        box = box.transform(transformationInvert);
+        this(move(Vec3.zero), shapes);
     }
 
     public Group(ArrayList<Shape> shapes) {
@@ -65,9 +54,10 @@ public class Group implements Shape {
         elemente = shapes;
         box = BoundingBox.empty;
         for(int i= 0; i < elemente.size(); i++) {
-            box.extend(elemente.get(i).getBoundingBox());
+            box = box.extend(elemente.get(i).getBoundingBox());
         }
-        box = box.transform(transformationInvert);
+        boxTransformiert = box.transform(transformation);
+        System.out.println(box.toString());
     }
 
     /**
@@ -80,7 +70,7 @@ public class Group implements Shape {
         Hit treffer = null; //nur fuer Initialisierung
         Ray r2 = new Ray(multiplyPoint(transformationInvert, r.getX0()), multiplyDirection(transformationInvert, r.getRichtung()), r.gettMin(), r.gettMax());
         
-        if(box.intersect(r2) == false) {
+        if(boxTransformiert.intersect(r2) == false) {
             return null;
         }
         for(int j = 0; j < elemente.size(); j++) {
@@ -100,6 +90,7 @@ public class Group implements Shape {
     }
 
     public BoundingBox getBoundingBox() {
-        return box;
+        //box = box.transform(transformationInvert);
+        return boxTransformiert;
     }
 }
