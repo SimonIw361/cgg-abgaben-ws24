@@ -37,12 +37,19 @@ public class Group implements Shape {
         for(int i= 0; i < elemente.size(); i++) {
             box = box.extend(elemente.get(i).getBoundingBox());
         }
-        boxTransformiert = box.transform(transformation);
-        System.out.println(box.toString());
+        if(!transformationInvert.equals(Mat44.identity)){
+            boxTransformiert = box.transform(transformationInvert);
+        }
+        else {
+            boxTransformiert = box;
+        }
+        //System.out.println(box.toString());
     }
 
     public Group(Shape... shapes) {
         this(move(Vec3.zero), shapes);
+        System.out.println(box.equals(boxTransformiert));
+        System.out.println(box.toString() + " " + boxTransformiert + transformation);
     }
 
     public Group(ArrayList<Shape> shapes) {
@@ -56,8 +63,9 @@ public class Group implements Shape {
         for(int i= 0; i < elemente.size(); i++) {
             box = box.extend(elemente.get(i).getBoundingBox());
         }
-        boxTransformiert = box.transform(transformation);
-        System.out.println(box.toString());
+        boxTransformiert = box;//.transform(transformation);
+        System.out.println(box.equals(boxTransformiert));
+        System.out.println(box.toString() + " " + boxTransformiert + transformation);
     }
 
     /**
@@ -72,6 +80,9 @@ public class Group implements Shape {
         
         if(boxTransformiert.intersect(r2) == false) {
             return null;
+        }
+        if(box.intersect(r) == false) {
+            //return null;
         }
         for(int j = 0; j < elemente.size(); j++) {
             Hit h = elemente.get(j).intersect(r2);
@@ -91,6 +102,7 @@ public class Group implements Shape {
 
     public BoundingBox getBoundingBox() {
         //box = box.transform(transformationInvert);
-        return boxTransformiert;
+        //return boxTransformiert;
+        return box;
     }
 }

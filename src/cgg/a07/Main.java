@@ -67,7 +67,7 @@ public class Main {
     }
   
     // //Group spiegel = new Group(multiply(move(vec3(-11, -2, -30)), rotate(vec3(0,1,0), -10), rotate(vec3(0,0,1), 90)), new Ebene("kreisrund", 15, spiegelMat));
-    Group boden = new Group(move(vec3(15, 1.5, -15)), new Ebene("quadratisch", 35, gruen));
+    Group boden = new Group(move(vec3(15, 1.5, -15)), new Ebene("quadratisch", 30, gruen));
 
     Group alleHaeuser = new Group(haeuser);//fillPlane(haus, 1));
     Group szene = new Group(alleHaeuser);
