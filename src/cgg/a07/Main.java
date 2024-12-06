@@ -38,8 +38,8 @@ public class Main {
     DiffusStreuung gruen = new DiffusStreuung(new ConstantColor(color(0,0.52,0)), new ConstantColor(white), new ConstantColor(color(1000.0)));
     MaterialSpiegel spiegelMat = new MaterialSpiegel(new ConstantColor(white), new ConstantColor(white), new ConstantColor(color(1000.0)));
 
-    
-
+    System.out.println("Ebene:");
+    Group ebene = new Group(move(vec3(2, 0, 0)), new Ebene("quadratisch", 3, blau));
     Group wandVorne = new Group(multiply(move(vec3(0, 0, -10)), rotate(vec3(1,0,0), 90)), new Ebene("quadratisch", 3, blau));
     Group wandSeiteLinks = new Group(multiply(move(vec3(-1.5, 0, -11.5)), rotate(vec3(0,0,1), 90)), new Ebene("quadratisch", 3, blau));
     Group wandSeiteRechts = new Group(multiply(move(vec3(1.5, 0, -11.5)), rotate(vec3(0,0,1), -90)), new Ebene("quadratisch", 3, blau));
@@ -72,7 +72,7 @@ public class Main {
     Group alleHaeuser = new Group(haeuser);//fillPlane(haus, 1));
     Group szene = new Group(alleHaeuser);
     System.out.println("Welt:");
-    Group welt = new Group(boden, haus);
+    Group welt = new Group(boden, haus, ebene);
     
     Image image = new Image(width, height);
     RayTracer rayTracer = new RayTracer(kamera, welt, licht, white);

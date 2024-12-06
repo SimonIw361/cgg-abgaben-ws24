@@ -35,15 +35,10 @@ public class Group implements Shape {
         }
         box = BoundingBox.empty;
         for(int i= 0; i < elemente.size(); i++) {
-            box = box.extend(elemente.get(i).getBoundingBox());
+            box = box.extend(elemente.get(i).getBoundingBox().transform(transformation));
         }
-        if(!transformationInvert.equals(Mat44.identity)){
-            boxTransformiert = box.transform(transformationInvert);
-        }
-        else {
-            boxTransformiert = box;
-        }
-        //System.out.println(box.toString());
+        boxTransformiert = box;//.transform(transformationInvert);
+        System.out.println(box.toString());
     }
 
     public Group(Shape... shapes) {
@@ -61,7 +56,7 @@ public class Group implements Shape {
         elemente = shapes;
         box = BoundingBox.empty;
         for(int i= 0; i < elemente.size(); i++) {
-            box = box.extend(elemente.get(i).getBoundingBox());
+            box = box.extend(elemente.get(i).getBoundingBox().transform(transformation));
         }
         boxTransformiert = box;//.transform(transformation);
         System.out.println(box.equals(boxTransformiert));
@@ -78,7 +73,7 @@ public class Group implements Shape {
         Hit treffer = null; //nur fuer Initialisierung
         Ray r2 = new Ray(multiplyPoint(transformationInvert, r.getX0()), multiplyDirection(transformationInvert, r.getRichtung()), r.gettMin(), r.gettMax());
         
-        if(boxTransformiert.intersect(r2) == false) {
+        if(boxTransformiert.intersect(r) == false) {
             return null;
         }
         if(box.intersect(r) == false) {
