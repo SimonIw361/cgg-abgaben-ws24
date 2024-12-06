@@ -5,7 +5,6 @@ import static tools.Functions.move;
 import static tools.Functions.multiplyDirection;
 import static tools.Functions.multiplyPoint;
 import static tools.Functions.transpose;
-import static tools.Functions.vec3;
 
 import java.util.ArrayList;
 
@@ -18,7 +17,6 @@ import tools.Vec3;
 public class Group implements Shape {
     private ArrayList<Shape> elemente;
     private BoundingBox box;
-    private BoundingBox boxTransformiert;
     private Mat44 transformation;
     private Mat44 transformationInvert;
     private Mat44 transformationInvertTransponse;
@@ -35,16 +33,13 @@ public class Group implements Shape {
         }
         box = BoundingBox.empty;
         for(int i= 0; i < elemente.size(); i++) {
-            box = box.extend(elemente.get(i).getBoundingBox().transform(transformation));
+            BoundingBox b = elemente.get(i).getBoundingBox().transform(transformation);
+            box = box.extend(b);
         }
-        boxTransformiert = box;//.transform(transformationInvert);
-        System.out.println(box.toString());
     }
 
     public Group(Shape... shapes) {
         this(move(Vec3.zero), shapes);
-        System.out.println(box.equals(boxTransformiert));
-        System.out.println(box.toString() + " " + boxTransformiert + transformation);
     }
 
     public Group(ArrayList<Shape> shapes) {
@@ -56,11 +51,9 @@ public class Group implements Shape {
         elemente = shapes;
         box = BoundingBox.empty;
         for(int i= 0; i < elemente.size(); i++) {
-            box = box.extend(elemente.get(i).getBoundingBox().transform(transformation));
+            BoundingBox b = elemente.get(i).getBoundingBox();
+            box = box.extend(b);
         }
-        boxTransformiert = box;//.transform(transformation);
-        System.out.println(box.equals(boxTransformiert));
-        System.out.println(box.toString() + " " + boxTransformiert + transformation);
     }
 
     /**
@@ -73,13 +66,12 @@ public class Group implements Shape {
         Hit treffer = null; //nur fuer Initialisierung
         Ray r2 = new Ray(multiplyPoint(transformationInvert, r.getX0()), multiplyDirection(transformationInvert, r.getRichtung()), r.gettMin(), r.gettMax());
         
-        if(boxTransformiert.intersect(r) == false) {
+        //BoundingBox ist schon in transformiert, deshalb hier mir r schneiden
+        if(box.intersect(r) == false) {
             return null;
         }
-        if(box.intersect(r) == false) {
-            //return null;
-        }
         for(int j = 0; j < elemente.size(); j++) {
+            //Elemente sind nicht transformiert, deshalb hier mit r2 schneiden
             Hit h = elemente.get(j).intersect(r2);
             if(h == null)
                 continue;
@@ -96,8 +88,6 @@ public class Group implements Shape {
     }
 
     public BoundingBox getBoundingBox() {
-        //box = box.transform(transformationInvert);
-        //return boxTransformiert;
         return box;
     }
 }

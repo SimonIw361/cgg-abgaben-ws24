@@ -33,7 +33,7 @@ public class Lochkamera {
         Vec3 punktTransformiert = multiplyPoint(transformation, Vec3.zero); //Transformation des Punktes, von Nullpunkt ausgehend
         Vec3 vec3= 	new Vec3(xVec, yVec, zVec);
         Vec3 vec3transformiert = multiplyDirection(transformation, vec3); //Transformation der Richtung
-        Ray ray = new Ray(punktTransformiert, normalize(vec3transformiert), 0, 100);
+        Ray ray = new Ray(punktTransformiert, normalize(vec3transformiert), 0, Double.MAX_VALUE);
         return ray;
     }
 
