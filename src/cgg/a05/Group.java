@@ -68,7 +68,7 @@ public class Group implements Shape {
         
         //BoundingBox ist schon in transformiert, deshalb hier mir r schneiden
         if(box.intersect(r) == false) {
-            return null;
+            return null; //darf nicht auskommentiert sein eigentlich
         }
         for(int j = 0; j < elemente.size(); j++) {
             //Elemente sind nicht transformiert, deshalb hier mit r2 schneiden

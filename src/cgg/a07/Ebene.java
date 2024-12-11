@@ -84,10 +84,10 @@ public class Ebene implements Shape{
                 box = BoundingBox.everything;
                 break;
             case "kreisrund":
-                box = new BoundingBox(vec3(0,0,0), vec3(radius, 0, radius)).extend(vec3(-radius, 0, -radius));
+                box = BoundingBox.around(vec3(0,0,0), vec3(radius, 0, radius),vec3(-radius, 0, -radius));
                 break;
             case "quadratisch":
-                box = new BoundingBox(vec3(-kantenlaenge/2, 0, -kantenlaenge/2), vec3(kantenlaenge/2, 0, kantenlaenge/2));
+                box = BoundingBox.around(vec3(-kantenlaenge/2, 0, -kantenlaenge/2), vec3(kantenlaenge/2, 0, kantenlaenge/2));
                 break;
         }
         return box;

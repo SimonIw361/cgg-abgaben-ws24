@@ -99,7 +99,7 @@ public class Kugel implements Shape {
 
     @Override
     public BoundingBox getBoundingBox() {
-        BoundingBox box = new BoundingBox(mittelpunkt, vec3(mittelpunkt.x() -radius, mittelpunkt.y(), mittelpunkt.z()));
+        BoundingBox box = BoundingBox.around(mittelpunkt, vec3(mittelpunkt.x() -radius, mittelpunkt.y(), mittelpunkt.z()));
         box = box.extend(vec3(mittelpunkt.x(), mittelpunkt.y() -radius, mittelpunkt.z()));
         box = box.extend(vec3(mittelpunkt.x(), mittelpunkt.y(), mittelpunkt.z()-radius));
         return box;
