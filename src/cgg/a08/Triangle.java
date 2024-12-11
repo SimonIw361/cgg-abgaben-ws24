@@ -12,12 +12,12 @@ import tools.Vec3;
 import tools.Vertex;
 
 public class Triangle implements Shape {
-    Vertex v0;
-    Vertex v1;
-    Vertex v2;
-    BoundingBox box;
-    Vec3 normalenVektor;
-    Material material;
+    private Vertex v0;
+    private Vertex v1;
+    private Vertex v2;
+    private BoundingBox box;
+    private Vec3 normalenVektor;
+    private Material material;
 
     public Triangle(Vertex v0, Vertex v1, Vertex v2, Material m) {
         this.v0 = v0;

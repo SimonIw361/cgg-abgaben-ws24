@@ -13,8 +13,14 @@ import cgg.a07.Ebene;
 import tools.ImageTexture;
 import tools.Mat44;
 import tools.Vertex;
+import tools.Wavefront;
+import tools.Wavefront.MeshData;
+import tools.Wavefront.TriangleData;
 
 import java.util.ArrayList;
+import java.util.List;
+import java.util.concurrent.TransferQueue;
+
 import cgg.Image;
 import cgg.a01.ConstantColor;
 
@@ -60,13 +66,25 @@ public class Main {
 
     //Group boden = new Group(move(0,2,0),new Ebene("unbegrenzt", 0, gruen));
 
+    List<MeshData> liste = Wavefront.loadMeshData("data/Huerde/Hurdle.obj");
+    List<TriangleData> trData = new ArrayList<>();
+    for(int i=0; i < liste.size(); i++) {
+        trData.addAll(liste.get(i).triangles());
+    }
+    List<Triangle> tr = new ArrayList<>();
+    for(int i=0; i < trData.size(); i++) {
+        tr.add(new Triangle(trData.get(i).v0(), trData.get(i).v1(), trData.get(i).v2(), blau));
+    }
+
+    TriangleMesh trMesh = new TriangleMesh(tr, blau);
+
     //Group alleHaeuser = new Group(fillPlane(vierHaueser, 5));
     Vertex v1 = new Vertex(vec3(1,-3,-10), vec3(0,0,1), vec2(0,0));
     Vertex v2 = new Vertex(vec3(6,-6,-10), vec3(0,0,1), vec2(1,1));
     Vertex v3 = new Vertex(vec3(10,-3,-10), vec3(0,0,1), vec2(0,1 ));
     TexturedPhongMaterial sterne = new TexturedPhongMaterial(new ImageTexture("data/sterne2.png"), new ConstantColor(white), new ConstantColor(color(1000.0)));
     Triangle dreieck = new Triangle(v1, v2, v3, sterne);
-    Group welt = new Group(dreieck);
+    Group welt = new Group(dreieck, trMesh);
     
     Image image = new Image(width, height);
     RayTracer rayTracer = new RayTracer(kamera, welt, licht, white);
