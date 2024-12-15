@@ -9,7 +9,6 @@ import cgg.a05.Group;
 import cgg.a05.Shape;
 import cgg.a06.DiffusStreuung;
 import cgg.a06.MaterialSpiegel;
-import cgg.a07.Ebene;
 import tools.ImageTexture;
 import tools.Mat44;
 import tools.Vertex;
@@ -19,7 +18,6 @@ import tools.Wavefront.TriangleData;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.TransferQueue;
 
 import cgg.Image;
 import cgg.a01.ConstantColor;
@@ -36,7 +34,8 @@ public class Main {
     licht.add(new Richtungslichtquelle(vec3(10,-10,10), white));
     //licht.add(new Richtungslichtquelle(vec3(-10,-10,10), white));
     Mat44 transformationKamera = multiply(move(vec3(0,-20,15)),rotate(vec3(1,0,0),22), rotate(vec3(0,1,0),-7));
-    Lochkamera kamera = new Lochkamera(Math.PI/4, width, height, transformationKamera);
+    Mat44 transformationKamera2 = move(vec3(5, 0, 20));
+    Lochkamera kamera = new Lochkamera(Math.PI/4, width, height, transformationKamera2);
 
     //Farben fuer Materialien erstellen
     DiffusStreuung blau = new DiffusStreuung(new ConstantColor(blue), new ConstantColor(white), new ConstantColor(color(1000.0)));
@@ -45,28 +44,7 @@ public class Main {
     DiffusStreuung gruen = new DiffusStreuung(new ConstantColor(color(0,0.52,0)), new ConstantColor(white), new ConstantColor(color(1000.0)));
     MaterialSpiegel spiegelMat = new MaterialSpiegel(new ConstantColor(white), new ConstantColor(white), new ConstantColor(color(1000.0)));
 
-    /*Group wandVorne = new Group(multiply(move(vec3(0, 0, -10)), rotate(vec3(1,0,0), 90)), new Ebene("quadratisch", 3, blau));
-    Group wandSeiteLinks = new Group(multiply(move(vec3(-1.5, 0, -11.5)), rotate(vec3(0,0,1), 90)), new Ebene("quadratisch", 3, blau));
-    Group wandSeiteRechts = new Group(multiply(move(vec3(1.5, 0, -11.5)), rotate(vec3(0,0,1), -90)), new Ebene("quadratisch", 3, blau));
-    Group wandHinten = new Group(multiply(move(vec3(0, 0, -13)), rotate(vec3(1,0,0), 90)), new Ebene("quadratisch", 3, blau));
-    Group dachLinks = new Group(multiply(move(vec3(-1.06, -1.93, -11.5)), rotate(vec3(0,0,1), -45)), new Ebene("quadratisch", 3, rot));
-    Group dachRechts = new Group(multiply(move(vec3(1.06, -1.93, -11.5)), rotate(vec3(0,0,1), 45)), new Ebene("quadratisch", 3, rot));
-    Group fensterUnten1 = new Group(multiply(move(vec3(-0.75, -0.62, -9.99)), rotate(vec3(1,0,0), 90)), new Ebene("quadratisch", 0.8, gelb));
-    Group fensterUnten2 = new Group(multiply(move(vec3(0.75, 0.62, -9.99)), rotate(vec3(1,0,0), 90)), new Ebene("quadratisch", 0.8, gelb));
-    Group fensterUnten3 = new Group(multiply(move(vec3(-0.75, 0.62, -9.99)), rotate(vec3(1,0,0), 90)), new Ebene("quadratisch", 0.8, spiegelMat));
-    Group fensterUnten4 = new Group(multiply(move(vec3(0.75, -0.62, -9.99)), rotate(vec3(1,0,0), 90)), new Ebene("quadratisch", 0.8, spiegelMat));
-    
-    Group hausUnten = new Group(wandVorne, wandSeiteLinks, wandSeiteRechts, wandHinten, fensterUnten1, fensterUnten2, fensterUnten3, fensterUnten4);
-    Group hausOben = new Group(dachLinks, dachRechts);
-    Group haus = new Group(hausUnten, hausOben);
-    Group haus1 = new Group(move(+5, 0,0),haus);
-    Group haus2 = new Group(move(0, 0,-5),haus);
-    Group haus3 = new Group(move(+5, 0,-5),haus);
-    Group vierHaueser = new Group(haus, haus1, haus2, haus3);*/
-
-    //Group boden = new Group(move(0,2,0),new Ebene("unbegrenzt", 0, gruen));
-
-    List<MeshData> liste = Wavefront.loadMeshData("data/Huerde/Hurdle.obj");
+    List<MeshData> liste = Wavefront.loadMeshData("data/wilson-football/fb_low.obj");
     List<TriangleData> trData = new ArrayList<>();
     for(int i=0; i < liste.size(); i++) {
         trData.addAll(liste.get(i).triangles());
@@ -78,13 +56,17 @@ public class Main {
 
     TriangleMesh trMesh = new TriangleMesh(tr, blau);
 
-    //Group alleHaeuser = new Group(fillPlane(vierHaueser, 5));
+    //ein einzelnes Dreieck, zum ausprobieren
     Vertex v1 = new Vertex(vec3(1,-3,-10), vec3(0,0,1), vec2(0,0));
     Vertex v2 = new Vertex(vec3(6,-6,-10), vec3(0,0,1), vec2(1,1));
     Vertex v3 = new Vertex(vec3(10,-3,-10), vec3(0,0,1), vec2(0,1 ));
     TexturedPhongMaterial sterne = new TexturedPhongMaterial(new ImageTexture("data/sterne2.png"), new ConstantColor(white), new ConstantColor(color(1000.0)));
     Triangle dreieck = new Triangle(v1, v2, v3, sterne);
-    Group welt = new Group(dreieck, trMesh);
+
+    Group ball = new Group(move(9, 0,-1), trMesh);
+    System.out.println(tr.get(0));
+    //Group hurdle = new Group(scale(vec3(5)), dreieck); //Huerde nochmal ausprobieren
+    Group welt = new Group(ball);
     
     Image image = new Image(width, height);
     RayTracer rayTracer = new RayTracer(kamera, welt, licht, white);

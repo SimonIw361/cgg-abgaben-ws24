@@ -30,7 +30,7 @@ public class Triangle implements Shape {
 
     public Hit intersect(Ray ray) {
         if(!box.intersect(ray)) {
-            //return null;
+            return null;
         }
 
         //Schnittpunkt mit kompletter Ebene des Dreiecks berechnen
@@ -65,6 +65,11 @@ public class Triangle implements Shape {
         Vec3 kreuzprodukt = cross(subtract(a, c),subtract(b, c));
         double flaeche = length(kreuzprodukt)/2;
         return flaeche;
+    }
+
+    public String toString(){
+        String info = "Triangle[v0=" + v0.toString() + " v1=" + v1.toString() + " v2=" + v2.toString() + /* " Material: " + material + */"]";
+        return info;
     }
 
 }

@@ -18,22 +18,33 @@ public class KdTree implements Shape{
         this.left = left;
         this.right = right;
         if(left == null && right == null) {
-            box = BoundingBox.empty;
+            box = new BoundingBox();
+            for(int i=0; i < t.size(); i++){
+                box = box.extend(t.get(i).getBoundingBox());
+            }
         }
         else if(left == null) {
-            box = BoundingBox.around(right.box);
+            box = new BoundingBox();
+            box = box.extend(right.box);
         }
         else if(right == null) {
-            box = BoundingBox.around(left.box);
+            box = new BoundingBox();
+            box = box.extend(left.box);
         } 
         else {
-            box = BoundingBox.around(left.box, right.box);
+            box = new BoundingBox();
+            box = box.extend(left.box);
+            box = box.extend(right.box);
         }
         
     }
 
     @Override
     public Hit intersect(Ray ray) {
+        if(!box.intersect(ray)){
+            return null;
+        }
+
         if(triangles == null) {
             Hit h1 = left.intersect(ray);
             Hit h2 = right.intersect(ray);

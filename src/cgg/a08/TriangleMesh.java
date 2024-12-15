@@ -16,6 +16,7 @@ public class TriangleMesh implements Shape {
     BoundingBox box;
 
     public TriangleMesh(List<Triangle> tris, Material m) {
+        box = new BoundingBox();
         this.material = m;
         triangleTree = construct(tris);
     }
@@ -25,9 +26,9 @@ public class TriangleMesh implements Shape {
             return new KdTree(null, null, liste);
         }
 
-        box = BoundingBox.empty;
+        
         for (int i = 0; i < liste.size(); i++) {
-            box = BoundingBox.around(box, liste.get(i).getBoundingBox());
+            box = box.extend(liste.get(i).getBoundingBox());
         }
 
         int trennen = split(liste);
