@@ -34,7 +34,7 @@ public class Main {
     licht.add(new Richtungslichtquelle(vec3(10,-10,10), white));
     //licht.add(new Richtungslichtquelle(vec3(-10,-10,10), white));
     Mat44 transformationKamera = multiply(move(vec3(0,-20,15)),rotate(vec3(1,0,0),22), rotate(vec3(0,1,0),-7));
-    Mat44 transformationKamera2 = move(vec3(5, 0, 20));
+    Mat44 transformationKamera2 = move(vec3(9, 0, 27));
     Lochkamera kamera = new Lochkamera(Math.PI/4, width, height, transformationKamera2);
 
     //Farben fuer Materialien erstellen
@@ -44,24 +44,31 @@ public class Main {
     DiffusStreuung gruen = new DiffusStreuung(new ConstantColor(color(0,0.52,0)), new ConstantColor(white), new ConstantColor(color(1000.0)));
     MaterialSpiegel spiegelMat = new MaterialSpiegel(new ConstantColor(white), new ConstantColor(white), new ConstantColor(color(1000.0)));
 
-    List<MeshData> liste = Wavefront.loadMeshData("data/wilson-football/fb_low.obj");
+    List<MeshData> liste = Wavefront.loadMeshData("data/wilson-football/fb_low.obj"); //Football
+    TexturedPhongMaterial bild = new TexturedPhongMaterial(new ImageTexture("data/wilson-football/fb_low_lambert2SG_Roughness.png"), new ConstantColor(white), new ConstantColor(color(1000.0)));
+    //List<MeshData> liste = Wavefront.loadMeshData("data/Gondel/model.obj"); //Gondel
+    //List<MeshData> liste = Wavefront.loadMeshData("data/Haus/source/low-poly-home.obj"); //Haus
+    //List<MeshData> liste = Wavefront.loadMeshData("data/Baum/Canstar Christmas Tree.obj"); //Weihnachtsbaum
+    
     List<TriangleData> trData = new ArrayList<>();
     for(int i=0; i < liste.size(); i++) {
         trData.addAll(liste.get(i).triangles());
     }
     List<Triangle> tr = new ArrayList<>();
     for(int i=0; i < trData.size(); i++) {
-        tr.add(new Triangle(trData.get(i).v0(), trData.get(i).v1(), trData.get(i).v2(), blau));
+        tr.add(new Triangle(trData.get(i).v0(), trData.get(i).v1(), trData.get(i).v2(), bild));
     }
+    System.out.println("Anzahl Dreiecke in Liste Main: " + tr.size());
 
     TriangleMesh trMesh = new TriangleMesh(tr, blau);
+
 
     //ein einzelnes Dreieck, zum ausprobieren
     Vertex v1 = new Vertex(vec3(1,-3,-10), vec3(0,0,1), vec2(0,0));
     Vertex v2 = new Vertex(vec3(6,-6,-10), vec3(0,0,1), vec2(1,1));
     Vertex v3 = new Vertex(vec3(10,-3,-10), vec3(0,0,1), vec2(0,1 ));
-    TexturedPhongMaterial sterne = new TexturedPhongMaterial(new ImageTexture("data/sterne2.png"), new ConstantColor(white), new ConstantColor(color(1000.0)));
-    Triangle dreieck = new Triangle(v1, v2, v3, sterne);
+    //TexturedPhongMaterial sterne = new TexturedPhongMaterial(new ImageTexture("data/sterne2.png"), new ConstantColor(white), new ConstantColor(color(1000.0)));
+    //Triangle dreieck = new Triangle(v1, v2, v3, sterne);
 
     Group ball = new Group(move(9, 0,-1), trMesh);
     System.out.println(tr.get(0));

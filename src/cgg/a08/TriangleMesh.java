@@ -14,18 +14,23 @@ public class TriangleMesh implements Shape {
     KdTree triangleTree;
     Material material;
     BoundingBox box;
+    int anzahl;
 
     public TriangleMesh(List<Triangle> tris, Material m) {
         box = new BoundingBox();
         this.material = m;
         triangleTree = construct(tris);
+
+        //Ueberpruefung der Dreiecke im Baum (zum debuggen)
+        anzahl = 0;
+        gibAnzahlDreieckeKdTree(triangleTree);
+        System.out.println("Anzahl Dreiecke in KdTree von TriangleMesh: " + anzahl);
     }
 
     private KdTree construct(List<Triangle> liste) {
         if (liste.size() < 3) {
             return new KdTree(null, null, liste);
         }
-
         
         for (int i = 0; i < liste.size(); i++) {
             box = box.extend(liste.get(i).getBoundingBox());
@@ -33,7 +38,7 @@ public class TriangleMesh implements Shape {
 
         int trennen = split(liste);
 
-        KdTree links = construct(liste.subList(0, trennen - 1));
+        KdTree links = construct(liste.subList(0, trennen));
         KdTree rechts = construct(liste.subList(trennen, liste.size()));
 
         KdTree tree = new KdTree(links, rechts, null);
@@ -104,6 +109,22 @@ public class TriangleMesh implements Shape {
     @Override
     public BoundingBox getBoundingBox() {
         return box;
+    }
+
+    private void gibAnzahlDreieckeKdTree(KdTree baum) {
+        //int anzahl = 0;
+        if(baum.getRightKdTree() != null) {
+            gibAnzahlDreieckeKdTree(baum.getRightKdTree());
+        }
+        if(baum.getLeftKdTree() != null) {
+            gibAnzahlDreieckeKdTree(baum.getLeftKdTree());
+        }
+        
+        if(baum.getDreiecke() != null){
+            //System.out.println(baum.getDreiecke().size());
+            anzahl = anzahl + baum.getDreiecke().size();
+            return;
+        }
     }
 
 }

@@ -89,5 +89,9 @@ public class KdTree implements Shape{
         return right;
     }
 
+    public List<Triangle> getDreiecke() {
+        return triangles;
+    }
+
 
 }
