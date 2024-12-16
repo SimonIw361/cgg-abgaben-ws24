@@ -64,7 +64,7 @@ public class Hit {
      * 
      * @return gibt das Objekt (Kugel) zurueck auf welcher der Treffer liegt
      */
-    public Shape getKugel()  {
+    public Shape getShape()  {
         return objekt;
     }
 

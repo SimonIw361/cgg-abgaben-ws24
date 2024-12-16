@@ -7,8 +7,6 @@ import cgg.a04.StratifiedSampling;
 import cgg.a04.TexturedPhongMaterial;
 import cgg.a05.Group;
 import cgg.a05.Shape;
-import cgg.a06.DiffusStreuung;
-import cgg.a06.MaterialSpiegel;
 import tools.ImageTexture;
 import tools.Mat44;
 import tools.Vertex;
@@ -24,85 +22,96 @@ import cgg.a01.ConstantColor;
 
 public class Main {
 
+  //TODO Textur fuer Dreiecksnetze geht noch nicht richtig
   public static void main(String[] args) {
     long startZeit = System.currentTimeMillis();
     int width = 900;
     int height = 900;
 
-    //Licht und Kamera erstellen
+    // Licht und Kamera erstellen
     ArrayList<Lichtquelle> licht = new ArrayList<>();
-    licht.add(new Richtungslichtquelle(vec3(10,-10,10), white));
-    //licht.add(new Richtungslichtquelle(vec3(-10,-10,10), white));
-    Mat44 transformationKamera = multiply(move(vec3(0,-20,15)),rotate(vec3(1,0,0),22), rotate(vec3(0,1,0),-7));
-    Mat44 transformationKamera2 = move(vec3(9, 0, 27));
-    Lochkamera kamera = new Lochkamera(Math.PI/4, width, height, transformationKamera2);
-
-    //Farben fuer Materialien erstellen
-    DiffusStreuung blau = new DiffusStreuung(new ConstantColor(blue), new ConstantColor(white), new ConstantColor(color(1000.0)));
-    DiffusStreuung rot = new DiffusStreuung(new ConstantColor(red), new ConstantColor(white), new ConstantColor(color(1000.0)));
-    DiffusStreuung gelb = new DiffusStreuung(new ConstantColor(yellow), new ConstantColor(white), new ConstantColor(color(1000.0)));
-    DiffusStreuung gruen = new DiffusStreuung(new ConstantColor(color(0,0.52,0)), new ConstantColor(white), new ConstantColor(color(1000.0)));
-    MaterialSpiegel spiegelMat = new MaterialSpiegel(new ConstantColor(white), new ConstantColor(white), new ConstantColor(color(1000.0)));
+    licht.add(new Richtungslichtquelle(vec3(10, -10, 10), white));
+    // licht.add(new Richtungslichtquelle(vec3(-10,-10,10), white));
+    Mat44 transformationKamera = multiply(move(vec3(0, -20, 15)), rotate(vec3(1, 0, 0), 22), rotate(vec3(0, 1, 0), -7));
+    Mat44 transformationKamera2 = move(vec3(0));
+    Lochkamera kamera = new Lochkamera(Math.PI / 4, width, height, transformationKamera2);
 
     List<MeshData> liste = Wavefront.loadMeshData("data/wilson-football/fb_low.obj"); //Football
     TexturedPhongMaterial bild = new TexturedPhongMaterial(new ImageTexture("data/wilson-football/fb_low_lambert2SG_Roughness.png"), new ConstantColor(white), new ConstantColor(color(1000.0)));
-    //List<MeshData> liste = Wavefront.loadMeshData("data/Gondel/model.obj"); //Gondel
-    //List<MeshData> liste = Wavefront.loadMeshData("data/Haus/source/low-poly-home.obj"); //Haus
-    //List<MeshData> liste = Wavefront.loadMeshData("data/Baum/Canstar Christmas Tree.obj"); //Weihnachtsbaum
+    //List<MeshData> liste = Wavefront.loadMeshData("data/Gondel/model.obj"); // Gondel
+    // List<MeshData> liste = Wavefront.loadMeshData("data/Haus/source/low-poly-home.obj"); //Haus
+    // List<MeshData> liste = Wavefront.loadMeshData("data/Baum/Canstar Christmas Tree.obj"); //Weihnachtsbaum
     
+    //ab hier Ball erstellen
     List<TriangleData> trData = new ArrayList<>();
     for(int i=0; i < liste.size(); i++) {
         trData.addAll(liste.get(i).triangles());
     }
     List<Triangle> tr = new ArrayList<>();
     for(int i=0; i < trData.size(); i++) {
-        tr.add(new Triangle(trData.get(i).v0(), trData.get(i).v1(), trData.get(i).v2(), bild));
+        tr.add(new Triangle(trData.get(i).v0(), trData.get(i).v1(), trData.get(i).v2()));
     }
-    System.out.println("Anzahl Dreiecke in Liste Main: " + tr.size());
 
-    TriangleMesh trMesh = new TriangleMesh(tr, blau);
+    TriangleMesh trMesh = new TriangleMesh(tr, bild);
+    Group ball = new Group(move(20, 0,-80), trMesh);
+    //bis hier
 
+    Group huerde = huerdeErstellen();
+    Group welt = new Group(huerde, ball);
 
-    //ein einzelnes Dreieck, zum ausprobieren
-    Vertex v1 = new Vertex(vec3(1,-3,-10), vec3(0,0,1), vec2(0,0));
-    Vertex v2 = new Vertex(vec3(6,-6,-10), vec3(0,0,1), vec2(1,1));
-    Vertex v3 = new Vertex(vec3(10,-3,-10), vec3(0,0,1), vec2(0,1 ));
-    //TexturedPhongMaterial sterne = new TexturedPhongMaterial(new ImageTexture("data/sterne2.png"), new ConstantColor(white), new ConstantColor(color(1000.0)));
-    //Triangle dreieck = new Triangle(v1, v2, v3, sterne);
-
-    Group ball = new Group(move(9, 0,-1), trMesh);
-    System.out.println(tr.get(0));
-    //Group hurdle = new Group(scale(vec3(5)), dreieck); //Huerde nochmal ausprobieren
-    Group welt = new Group(ball);
-    
     Image image = new Image(width, height);
     RayTracer rayTracer = new RayTracer(kamera, welt, licht, white);
-    //image.sampleStream(rayTracer); //setzt Pixelfarben, ohne StratifiedSampling
-    image.sampleStream(new StratifiedSampling(rayTracer)); //setzt Pixelfarben, mit StratifiedSampling
-    image.writePng("a08-image"); //erstellt Bild
+    // image.sampleStream(rayTracer); //setzt Pixelfarben, ohne StratifiedSampling
+    image.sampleStream(new StratifiedSampling(rayTracer)); // setzt Pixelfarben, mit StratifiedSampling
+    image.writePng("a08-image"); // erstellt Bild
 
-    //Berechnung der gebrauchten Zeit
+    // Berechnung der gebrauchten Zeit
     long endZeit = System.currentTimeMillis();
-    long dauer = (endZeit - startZeit)/1000;
+    long dauer = (endZeit - startZeit) / 1000;
     System.out.println("Zeit fuer die Berechnung des Bildes: " + dauer + " s");
   }
 
+  private static Group huerdeErstellen(){
+    List<MeshData> liste = Wavefront.loadMeshData("data/Huerde/Hurdle.obj"); //Huerde
+
+    List<Triangle> tr = new ArrayList<>();
+    //Dreiecke sind in 9 Gruppen sortiert die unterschiedliche Farbe haben
+    for (int i = 0; i < liste.size(); i++) {
+      List<TriangleData> data = liste.get(i).triangles();
+      //Dreiecke neu erstellen und jeweilige Farbe auch hinzufuegen
+      for(int j=0; j < data.size(); j++){
+        Vertex v0 = new Vertex(data.get(j).v0().position(), data.get(j).v0().normal(), data.get(j).v0().uv(), liste.get(i).material().kd());
+        Vertex v1 = new Vertex(data.get(j).v1().position(), data.get(j).v1().normal(), data.get(j).v1().uv(), liste.get(i).material().kd());
+        Vertex v2 = new Vertex(data.get(j).v2().position(), data.get(j).v2().normal(), data.get(j).v2().uv(), liste.get(i).material().kd());
+        Triangle d = new Triangle(v0, v1, v2);
+        tr.add(d);
+      }
+    }
+
+    //als Material kann nur null uebergeben werden, weil jedes Dreieck ueber Vertex eigene Farbe hat
+    TriangleMesh trMesh = new TriangleMesh(tr, null);
+
+    Group huerde = new Group(multiply(scale(vec3(0.1)),rotate(vec3(0,0,1), 180),move(1007622, 31365, -2378453)), trMesh);
+    return huerde;
+  }
+
+
   private static Shape fillPlane(Shape s, int n) {
     double gap = 2.7;
-    if(n == 0) {
+    if (n == 0) {
       return s;
     }
 
-    Shape p1 = fillPlane(s, n -1);
-    Shape p2 = fillPlane(s, n -1);
-    Shape p3 = fillPlane(s, n -1);
-    Shape p4 = fillPlane(s, n -1);
+    Shape p1 = fillPlane(s, n - 1);
+    Shape p2 = fillPlane(s, n - 1);
+    Shape p3 = fillPlane(s, n - 1);
+    Shape p4 = fillPlane(s, n - 1);
     double size = p1.getBoundingBox().size().x() + gap;
 
-    Group g1 = new Group(move(-size/2, 0, -size/2), p1);
-    Group g2 = new Group(move(size/2, 0, -size/2), p2);
-    Group g3 = new Group(move(-size/2, 0, size/2), p3);
-    Group g4 = new Group(move(size/2, 0, size/2), p4);
+    Group g1 = new Group(move(-size / 2, 0, -size / 2), p1);
+    Group g2 = new Group(move(size / 2, 0, -size / 2), p2);
+    Group g3 = new Group(move(-size / 2, 0, size / 2), p3);
+    Group g4 = new Group(move(size / 2, 0, size / 2), p4);
 
     return new Group(g1, g2, g3, g4);
   }

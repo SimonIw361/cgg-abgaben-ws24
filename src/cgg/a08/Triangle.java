@@ -1,10 +1,13 @@
 package cgg.a08;
 
+import static tools.Color.magenta;
 import static tools.Functions.*;
 
 import cgg.a02.Hit;
 import cgg.a02.Ray;
 import cgg.a04.Material;
+import cgg.a04.PhongMaterial;
+import cgg.a04.TexturedPhongMaterial;
 import cgg.a05.Shape;
 import tools.BoundingBox;
 import tools.Vec2;
@@ -17,15 +20,13 @@ public class Triangle implements Shape {
     private Vertex v2;
     private BoundingBox box;
     private Vec3 normalenVektor;
-    private Material material;
 
-    public Triangle(Vertex v0, Vertex v1, Vertex v2, Material m) {
+    public Triangle(Vertex v0, Vertex v1, Vertex v2) {
         this.v0 = v0;
         this.v1 = v1;
         this.v2 = v2;
         box = BoundingBox.around(v0.position(), v1.position(), v2.position());
         normalenVektor = normalize(cross(subtract(v2.position(), v0.position()),subtract(v1.position(), v0.position())));
-        this.material = m;
     }
 
     public Hit intersect(Ray ray) {
@@ -48,9 +49,13 @@ public class Triangle implements Shape {
         Vec3 uvw = vec3(u,v,w);
         Vec3 interNormale = interplolate(v0.normal(), v1.normal(), v2.normal(), uvw);
         Vec2 interTextur = interplolate(v0.uv(), v1.uv(), v2.uv(), uvw);
+        PhongMaterial farbe = null;
+        if(v0.color() != magenta) { //wenn Farbe von dreieck geaendert wurde, diese Farbe als Material nehmen (magenta ist default Farbe bei Dreieck)
+            farbe = new PhongMaterial(v0.color(), v0.color(), 1000);
+        }
 
         if(almostEqual(u+v+w, 1) && u <= 1 && u >= 0 && v <= 1 && v >= 0 && w <= 1 && w >= 0){
-            return new Hit(t, ray.gibStrahlPunkt(t), interNormale, material, this, interTextur);
+            return new Hit(t, ray.gibStrahlPunkt(t), interNormale, farbe, this, interTextur); //Material fuer Dreieck wird in triangleMesh gesetzt
         }
         else {
             return null; //kein Treffer
