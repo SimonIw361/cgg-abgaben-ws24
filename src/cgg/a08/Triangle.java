@@ -5,9 +5,7 @@ import static tools.Functions.*;
 
 import cgg.a02.Hit;
 import cgg.a02.Ray;
-import cgg.a04.Material;
 import cgg.a04.PhongMaterial;
-import cgg.a04.TexturedPhongMaterial;
 import cgg.a05.Shape;
 import tools.BoundingBox;
 import tools.Vec2;
@@ -47,14 +45,18 @@ public class Triangle implements Shape {
         double v = flaeche20P/flaeche012;
         double w = flaeche01P/flaeche012;
         Vec3 uvw = vec3(u,v,w);
-        Vec3 interNormale = interplolate(v0.normal(), v1.normal(), v2.normal(), uvw);
+        Vec3 interNormale = normalize(interplolate(v0.normal(), v1.normal(), v2.normal(), uvw));
         Vec2 interTextur = interplolate(v0.uv(), v1.uv(), v2.uv(), uvw);
+        //System.out.println(interTextur);
         PhongMaterial farbe = null;
         if(v0.color() != magenta) { //wenn Farbe von dreieck geaendert wurde, diese Farbe als Material nehmen (magenta ist default Farbe bei Dreieck)
             farbe = new PhongMaterial(v0.color(), v0.color(), 1000);
         }
 
-        if(almostEqual(u+v+w, 1) && u <= 1 && u >= 0 && v <= 1 && v >= 0 && w <= 1 && w >= 0){
+        if(almostEqual(u+v+w, 1.0) && u <= 1 && u >= 0 && v <= 1 && v >= 0 && w <= 1 && w >= 0){
+            //System.out.println("v0: " + v0.uv() + " v1: " + v1.uv() + "v2: " +v2.uv());
+            //System.out.println(interTextur);
+            //System.out.println("Baryzentrische Gewichte: u=" + u + ", v=" + v + ", w=" + w);
             return new Hit(t, ray.gibStrahlPunkt(t), interNormale, farbe, this, interTextur); //Material fuer Dreieck wird in triangleMesh gesetzt
         }
         else {
@@ -67,7 +69,8 @@ public class Triangle implements Shape {
     }
 
     private double berechneFlaeche(Vec3 a, Vec3 b, Vec3 c){
-        Vec3 kreuzprodukt = cross(subtract(a, c),subtract(b, c));
+        //Vec3 kreuzprodukt = cross(subtract(a, c),subtract(b, c));
+        Vec3 kreuzprodukt = cross(subtract(b, a),subtract(c, a));
         double flaeche = length(kreuzprodukt)/2;
         return flaeche;
     }

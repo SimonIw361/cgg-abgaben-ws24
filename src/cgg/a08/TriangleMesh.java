@@ -37,12 +37,10 @@ public class TriangleMesh implements Shape {
         }
 
         int trennen = split(liste);
-
         KdTree links = construct(liste.subList(0, trennen));
         KdTree rechts = construct(liste.subList(trennen, liste.size()));
 
         KdTree tree = new KdTree(links, rechts, null);
-
         return tree;
     }
 
@@ -82,7 +80,6 @@ public class TriangleMesh implements Shape {
         });
 
         return liste.size() / 2;
-
     }
 
     @Override
@@ -102,8 +99,7 @@ public class TriangleMesh implements Shape {
         Hit h2 = triangleTree.getRightKdTree().intersect(ray);
         Hit h2m = null;
         if (h2 != null && h2.getMaterial() == null) {
-            h2m = new Hit(h2.getT(), h2.getTrefferPunkt(), h2.getNormalenVektor(), material, h2.getShape(),
-                    h2.getuv());
+            h2m = new Hit(h2.getT(), h2.getTrefferPunkt(), h2.getNormalenVektor(), material, h2.getShape(), h2.getuv());
         }
         else {
             h2m = h2;

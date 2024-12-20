@@ -36,11 +36,13 @@ public class Main {
     Mat44 transformationKamera2 = move(vec3(0));
     Lochkamera kamera = new Lochkamera(Math.PI / 4, width, height, transformationKamera2);
 
-    List<MeshData> liste = Wavefront.loadMeshData("data/wilson-football/fb_low.obj"); //Football
-    TexturedPhongMaterial bild = new TexturedPhongMaterial(new ImageTexture("data/wilson-football/fb_low_lambert2SG_Roughness.png"), new ConstantColor(white), new ConstantColor(color(1000.0)));
+    //List<MeshData> liste = Wavefront.loadMeshData("data/wilson-football/fb_low.obj"); //Football
+    //TexturedPhongMaterial bild = new TexturedPhongMaterial(new ImageTexture("data/wilson-football/fb_low_lambert2SG_Roughness.png"), new ConstantColor(white), new ConstantColor(color(1000.0)));
     //List<MeshData> liste = Wavefront.loadMeshData("data/Gondel/model.obj"); // Gondel
     // List<MeshData> liste = Wavefront.loadMeshData("data/Haus/source/low-poly-home.obj"); //Haus
     // List<MeshData> liste = Wavefront.loadMeshData("data/Baum/Canstar Christmas Tree.obj"); //Weihnachtsbaum
+    List<MeshData> liste = Wavefront.loadMeshData("data/Flugzeug2/Airplane_2.obj"); //Flugzeug
+    TexturedPhongMaterial bild = new TexturedPhongMaterial(new ImageTexture("data/Flugzeug2/None_albedo.jpeg"), new ConstantColor(white), new ConstantColor(color(1000.0)));
     
     //ab hier Ball erstellen
     List<TriangleData> trData = new ArrayList<>();
@@ -50,10 +52,11 @@ public class Main {
     List<Triangle> tr = new ArrayList<>();
     for(int i=0; i < trData.size(); i++) {
         tr.add(new Triangle(trData.get(i).v0(), trData.get(i).v1(), trData.get(i).v2()));
+        //System.out.println("v0: " + trData.get(i).v0().uv() + " v1: " + trData.get(i).v1().uv() + "v2: " + trData.get(i).v2().uv());
     }
 
     TriangleMesh trMesh = new TriangleMesh(tr, bild);
-    Group ball = new Group(move(20, 0,-80), trMesh);
+    Group ball = new Group(multiply(move(0, 0,-8), rotate(vec3(0,1,0), -40),rotate(vec3(0,0,1), 180)), trMesh);
     //bis hier
 
     Group huerde = huerdeErstellen();
