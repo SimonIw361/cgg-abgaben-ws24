@@ -11,6 +11,7 @@ import tools.ImageTexture;
 import tools.Mat44;
 import tools.Vertex;
 import tools.Wavefront;
+import tools.Wavefront.MaterialData;
 import tools.Wavefront.MeshData;
 import tools.Wavefront.TriangleData;
 
@@ -36,18 +37,18 @@ public class Main {
     Mat44 transformationKamera2 = move(vec3(0));
     Lochkamera kamera = new Lochkamera(Math.PI / 4, width, height, transformationKamera2);
 
-    //List<MeshData> liste = Wavefront.loadMeshData("data/wilson-football/fb_low.obj"); //Football
-    //TexturedPhongMaterial bild = new TexturedPhongMaterial(new ImageTexture("data/wilson-football/fb_low_lambert2SG_Roughness.png"), new ConstantColor(white), new ConstantColor(color(1000.0)));
     //List<MeshData> liste = Wavefront.loadMeshData("data/Gondel/model.obj"); // Gondel
     // List<MeshData> liste = Wavefront.loadMeshData("data/Haus/source/low-poly-home.obj"); //Haus
     // List<MeshData> liste = Wavefront.loadMeshData("data/Baum/Canstar Christmas Tree.obj"); //Weihnachtsbaum
-    List<MeshData> liste = Wavefront.loadMeshData("data/Flugzeug2/Airplane_2.obj"); //Flugzeug
-    TexturedPhongMaterial bild = new TexturedPhongMaterial(new ImageTexture("data/Flugzeug2/None_albedo.jpeg"), new ConstantColor(white), new ConstantColor(color(1000.0)));
+    List<MeshData> liste = Wavefront.loadMeshData("data/Flughafen/airport-track-curve/Airport_trackCurve1.obj");
+    TexturedPhongMaterial bild = new TexturedPhongMaterial(new ImageTexture("data/Flughafen/airport-track-curve/Texture/Texture_airport256b.png"), new ConstantColor(white), new ConstantColor(color(1000.0)));
     
     //ab hier Ball erstellen
     List<TriangleData> trData = new ArrayList<>();
+    List<MaterialData> ma = new ArrayList<>();
     for(int i=0; i < liste.size(); i++) {
         trData.addAll(liste.get(i).triangles());
+        //ma.add(liste.get(i).material());
     }
     List<Triangle> tr = new ArrayList<>();
     for(int i=0; i < trData.size(); i++) {
@@ -56,16 +57,18 @@ public class Main {
     }
 
     TriangleMesh trMesh = new TriangleMesh(tr, bild);
-    Group ball = new Group(multiply(move(0, 0,-8), rotate(vec3(0,1,0), -40),rotate(vec3(0,0,1), 180)), trMesh);
+    Group objekt = new Group(multiply(move(3, 80,-420), rotate(vec3(1,0,0), -180)), trMesh);
     //bis hier
 
-    Group huerde = huerdeErstellen();
-    Group welt = new Group(huerde, ball);
+    Group huerde = huerdenErstellen();
+    Group flugzeug = flugzeugeErstellen();
+    Group ball = ballErstellen();
+    Group welt = new Group(huerde, objekt, flugzeug);
 
     Image image = new Image(width, height);
     RayTracer rayTracer = new RayTracer(kamera, welt, licht, white);
-    // image.sampleStream(rayTracer); //setzt Pixelfarben, ohne StratifiedSampling
-    image.sampleStream(new StratifiedSampling(rayTracer)); // setzt Pixelfarben, mit StratifiedSampling
+    image.sampleStream(rayTracer); //setzt Pixelfarben, ohne StratifiedSampling
+    //image.sampleStream(new StratifiedSampling(rayTracer)); // setzt Pixelfarben, mit StratifiedSampling
     image.writePng("a08-image"); // erstellt Bild
 
     // Berechnung der gebrauchten Zeit
@@ -74,7 +77,7 @@ public class Main {
     System.out.println("Zeit fuer die Berechnung des Bildes: " + dauer + " s");
   }
 
-  private static Group huerdeErstellen(){
+  private static Group huerdenErstellen(){
     List<MeshData> liste = Wavefront.loadMeshData("data/Huerde/Hurdle.obj"); //Huerde
 
     List<Triangle> tr = new ArrayList<>();
@@ -98,24 +101,41 @@ public class Main {
     return huerde;
   }
 
-
-  private static Shape fillPlane(Shape s, int n) {
-    double gap = 2.7;
-    if (n == 0) {
-      return s;
+  public static Group flugzeugeErstellen()  {
+    List<MeshData> liste = Wavefront.loadMeshData("data/Flugzeug2/Airplane_2.obj"); //Flugzeug
+    TexturedPhongMaterial bild = new TexturedPhongMaterial(new ImageTexture("data/Flugzeug2/None_albedo.jpeg"), new ConstantColor(white), new ConstantColor(color(1000.0)));
+    
+    List<TriangleData> trData = new ArrayList<>();
+    for(int i=0; i < liste.size(); i++) {
+        trData.addAll(liste.get(i).triangles());
+    }
+    List<Triangle> tr = new ArrayList<>();
+    for(int i=0; i < trData.size(); i++) {
+        tr.add(new Triangle(trData.get(i).v0(), trData.get(i).v1(), trData.get(i).v2()));
+        //System.out.println("v0: " + trData.get(i).v0().uv() + " v1: " + trData.get(i).v1().uv() + "v2: " + trData.get(i).v2().uv());
     }
 
-    Shape p1 = fillPlane(s, n - 1);
-    Shape p2 = fillPlane(s, n - 1);
-    Shape p3 = fillPlane(s, n - 1);
-    Shape p4 = fillPlane(s, n - 1);
-    double size = p1.getBoundingBox().size().x() + gap;
+    TriangleMesh trMesh = new TriangleMesh(tr, bild);
+    Group flugzeug = new Group(multiply(move(0, 0,-8), rotate(vec3(0,1,0), -40),rotate(vec3(0,0,1), 180)), trMesh);
 
-    Group g1 = new Group(move(-size / 2, 0, -size / 2), p1);
-    Group g2 = new Group(move(size / 2, 0, -size / 2), p2);
-    Group g3 = new Group(move(-size / 2, 0, size / 2), p3);
-    Group g4 = new Group(move(size / 2, 0, size / 2), p4);
+    return flugzeug;
+  }
 
-    return new Group(g1, g2, g3, g4);
+  public static Group ballErstellen() {
+    List<MeshData> liste = Wavefront.loadMeshData("data/wilson-football/fb_low.obj"); //Football
+    TexturedPhongMaterial bild = new TexturedPhongMaterial(new ImageTexture("data/wilson-football/fb_low_lambert2SG_BaseColor.png"), new ConstantColor(white), new ConstantColor(color(1000.0)));
+    
+    List<TriangleData> trData = new ArrayList<>();
+    for(int i=0; i < liste.size(); i++) {
+        trData.addAll(liste.get(i).triangles());
+    }
+    List<Triangle> tr = new ArrayList<>();
+    for(int i=0; i < trData.size(); i++) {
+        tr.add(new Triangle(trData.get(i).v0(), trData.get(i).v1(), trData.get(i).v2()));
+        //System.out.println("v0: " + trData.get(i).v0().uv() + " v1: " + trData.get(i).v1().uv() + "v2: " + trData.get(i).v2().uv());
+    }
+    TriangleMesh trMesh = new TriangleMesh(tr, bild);
+    Group ball = new Group(move(3, 0,-27), trMesh);
+    return ball;
   }
 }

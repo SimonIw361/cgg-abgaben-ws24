@@ -24,7 +24,7 @@ public class Triangle implements Shape {
         this.v1 = v1;
         this.v2 = v2;
         box = BoundingBox.around(v0.position(), v1.position(), v2.position());
-        normalenVektor = normalize(cross(subtract(v2.position(), v0.position()),subtract(v1.position(), v0.position())));
+        normalenVektor = normalize(cross(subtract(v1.position(), v0.position()),subtract(v2.position(), v0.position())));
     }
 
     public Hit intersect(Ray ray) {
@@ -47,6 +47,7 @@ public class Triangle implements Shape {
         Vec3 uvw = vec3(u,v,w);
         Vec3 interNormale = normalize(interplolate(v0.normal(), v1.normal(), v2.normal(), uvw));
         Vec2 interTextur = interplolate(v0.uv(), v1.uv(), v2.uv(), uvw);
+        //interTextur = add(interTextur, vec2(0.1,-0.1));
         //System.out.println(interTextur);
         PhongMaterial farbe = null;
         if(v0.color() != magenta) { //wenn Farbe von dreieck geaendert wurde, diese Farbe als Material nehmen (magenta ist default Farbe bei Dreieck)
@@ -57,7 +58,8 @@ public class Triangle implements Shape {
             //System.out.println("v0: " + v0.uv() + " v1: " + v1.uv() + "v2: " +v2.uv());
             //System.out.println(interTextur);
             //System.out.println("Baryzentrische Gewichte: u=" + u + ", v=" + v + ", w=" + w);
-            return new Hit(t, ray.gibStrahlPunkt(t), interNormale, farbe, this, interTextur); //Material fuer Dreieck wird in triangleMesh gesetzt
+            Hit h =  new Hit(t, ray.gibStrahlPunkt(t), interNormale, farbe, this, interTextur); //Material fuer Dreieck wird in triangleMesh gesetzt
+            return h;
         }
         else {
             return null; //kein Treffer

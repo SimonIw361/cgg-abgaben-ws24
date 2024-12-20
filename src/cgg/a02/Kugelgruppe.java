@@ -2,7 +2,10 @@ package cgg.a02;
 
 import java.util.ArrayList;
 
-public class Kugelgruppe {
+import cgg.a05.Shape;
+import tools.BoundingBox;
+
+public class Kugelgruppe implements Shape{
     private ArrayList<Kugel> kugeln;
 
     public Kugelgruppe(ArrayList<Kugel> kugeln) {
@@ -27,5 +30,11 @@ public class Kugelgruppe {
             }
         }
         return treffer;
+    }
+
+    @Override
+    public BoundingBox getBoundingBox() {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'getBoundingBox'");
     }
 }

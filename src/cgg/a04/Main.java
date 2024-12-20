@@ -5,6 +5,7 @@ import static tools.Color.white;
 import static tools.Functions.*;
 import cgg.a02.*;
 import tools.ImageTexture;
+import tools.Vec3;
 
 import java.util.ArrayList;
 
@@ -21,7 +22,7 @@ public class Main {
     //Licht und Kamera erstellen
     ArrayList<Lichtquelle> licht = new ArrayList<>();
     licht.add(new Richtungslichtquelle(vec3(10,-10,10), white));
-    //Lochkamera kamera = new Lochkamera(Math.PI/2, 400, 400); auskommentiert wegen Aenderung
+    Lochkamera kamera = new Lochkamera(Math.PI/2, 400, 400, move(Vec3.zero)); //auskommentiert wegen Aenderung
 
     //Szene mit Kugeln erstellen
     ArrayList<Kugel> k = new ArrayList<>(); //auskommentiert, da Konstruktor veraendert
@@ -29,13 +30,13 @@ public class Main {
     TexturedPhongMaterial musterKugel = new TexturedPhongMaterial(new ImageTexture("data/sterne2.png"), new ConstantColor(white), new ConstantColor(color(1000.0)));
     k.add(new Kugel(vec3(0,-1.3,-4), 1.7, musterKugel));
 
-    //Kugelgruppe kugelScene = new Kugelgruppe(k); //erstellt Szene mit Kugeln
+    Kugelgruppe kugelScene = new Kugelgruppe(k); //erstellt Szene mit Kugeln
 
     var image = new Image(width, height);
-    //RayTracer rayTracer = new RayTracer(kamera, kugelScene, licht); //auskommentiert wegen Aenderung
+    RayTracer rayTracer = new RayTracer(kamera, kugelScene, licht, white); //auskommentiert wegen Aenderung
     //image.sample(rayTracer); //setzt Pixelfarben, ohne StratifiedSampling //auskommentiert wegen Aenderung
-    //image.sample(new StratifiedSampling(rayTracer)); //setzt Pixelfarben, mit StratifiedSampling
-    image.writePng("a04-image"); //erstellt Bild
+    image.sample(new StratifiedSampling(rayTracer)); //setzt Pixelfarben, mit StratifiedSampling
+    image.writePng("test"); //erstellt Bild
   }
 }
 

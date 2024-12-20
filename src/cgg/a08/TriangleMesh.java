@@ -91,6 +91,7 @@ public class TriangleMesh implements Shape {
         Hit h1m = null;
         if (h1 != null && h1.getMaterial() == null) { //wenn Farbe uebergeben wurde wird diese genommen, sonst die Textur von TriangleMesh
             h1m = new Hit(h1.getT(), h1.getTrefferPunkt(), h1.getNormalenVektor(), material, h1.getShape(), h1.getuv()); //Textur nehmen
+            //System.out.println(h1.getuv());
         }
         else{
             h1m = h1; //Farbe von Dreieck nehmen
@@ -100,6 +101,7 @@ public class TriangleMesh implements Shape {
         Hit h2m = null;
         if (h2 != null && h2.getMaterial() == null) {
             h2m = new Hit(h2.getT(), h2.getTrefferPunkt(), h2.getNormalenVektor(), material, h2.getShape(), h2.getuv());
+            //System.out.println(h2.getuv());
         }
         else {
             h2m = h2;

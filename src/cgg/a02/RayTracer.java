@@ -26,7 +26,9 @@ public record RayTracer(Lochkamera camera, Shape kugeln, ArrayList<Lichtquelle> 
         }
         else {
             //return shade(treffer, r); //ohne rekursives Ray-Tracing
-            return recursiveShading(r, 8); //mit rekursivem Ray-Tracing
+            Color farbe =  recursiveShading(r, 8); //mit rekursivem Ray-Tracing
+            //System.out.println(farbe);
+            return farbe;
         }
     }
 
@@ -51,6 +53,7 @@ public record RayTracer(Lochkamera camera, Shape kugeln, ArrayList<Lichtquelle> 
         if(sekundaerStrahl != null) {
             global = multiply(hit.getMaterial().albedo(hit), recursiveShading(sekundaerStrahl, tiefe -1));
         }
+        //System.out.println(direct);
         return clamp(add(hit.getMaterial().emission(), direct, global));
     }
 
