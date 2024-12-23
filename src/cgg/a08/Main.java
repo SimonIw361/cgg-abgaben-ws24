@@ -7,10 +7,8 @@ import cgg.a04.StratifiedSampling;
 import cgg.a04.TexturedPhongMaterial;
 import cgg.a05.Group;
 import cgg.a05.Shape;
-import tools.Color;
 import tools.ImageTexture;
 import tools.Mat44;
-import tools.Vec2;
 import tools.Vertex;
 import tools.Wavefront;
 import tools.Wavefront.MaterialData;
@@ -144,17 +142,7 @@ public class Main {
     }
     List<Triangle> tr = new ArrayList<>();
     for (int i = 0; i < trData.size(); i++) {
-      //Vec2 interTextur = interplolate(trData.get(i).v0().uv(), trData.get(i).v1().uv(), trData.get(i).v2().uv(), uvw);
-      Color f1 = bild.baseColor(new Hit(0, null, null, null, null, trData.get(i).v0().uv()));
-      Color f2 = bild.baseColor(new Hit(0, null, null, null, null, trData.get(i).v1().uv()));
-      Color f3 = bild.baseColor(new Hit(0, null, null, null, null, trData.get(i).v2().uv()));
-      Vertex v0 = new Vertex(trData.get(i).v0().position(), trData.get(i).v0().normal(), trData.get(i).v0().uv(),
-            f1);
-        Vertex v1 = new Vertex(trData.get(i).v1().position(), trData.get(i).v1().normal(), trData.get(i).v1().uv(),
-            f2);
-        Vertex v2 = new Vertex(trData.get(i).v2().position(), trData.get(i).v2().normal(), trData.get(i).v2().uv(),
-            f3);
-      tr.add(new Triangle(v0, v1, v2));
+      tr.add(new Triangle(trData.get(i).v0(), trData.get(i).v1(), trData.get(i).v2()));
       // System.out.println("v0: " + trData.get(i).v0().uv() + " v1: " +
       // trData.get(i).v1().uv() + "v2: " + trData.get(i).v2().uv());
     }
