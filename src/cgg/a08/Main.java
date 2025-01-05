@@ -3,10 +3,8 @@ package cgg.a08;
 import static tools.Color.*;
 import static tools.Functions.*;
 import cgg.a02.*;
-import cgg.a04.StratifiedSampling;
-import cgg.a04.TexturedPhongMaterial;
+import cgg.a04.*;
 import cgg.a05.Group;
-import cgg.a05.Shape;
 import tools.ImageTexture;
 import tools.Mat44;
 import tools.Vertex;
@@ -27,6 +25,7 @@ public class Main {
   // tauschen von u und v bei Texturkoordintane aendet hier nichts
   // das ist glaube ich falsch, direkte Angabe von u und v auch nicht moeglich,
   // wie ist referenz zu bild!?
+  // Tiere runterladen, muesste funktionieren
   public static void main(String[] args) {
     long startZeit = System.currentTimeMillis();
     int width = 900;
@@ -40,58 +39,18 @@ public class Main {
     Mat44 transformationKamera2 = move(vec3(0));
     Lochkamera kamera = new Lochkamera(Math.PI / 4, width, height, transformationKamera2);
 
-    // List<MeshData> liste = Wavefront.loadMeshData("data/Gondel/model.obj"); //
-    // Gondel
-    // List<MeshData> liste =
-    // Wavefront.loadMeshData("data/Haus/source/low-poly-home.obj"); //Haus
-    // List<MeshData> liste = Wavefront.loadMeshData("data/Baum/Canstar Christmas
-    // Tree.obj"); //Weihnachtsbaum
-    List<MeshData> liste = Wavefront.loadMeshData("data/Flughafen/airport-track-curve/Airport_trackCurve1.obj");
-    TexturedPhongMaterial bild = new TexturedPhongMaterial(
-        new ImageTexture("data/Flughafen/airport-track-curve/Texture/Texture_airport256b.png"),
-        new ConstantColor(white), new ConstantColor(color(1000.0)));
-    TexturedPhongMaterial sterne = new TexturedPhongMaterial(new ImageTexture("data/sterne2.png"),
-        new ConstantColor(white), new ConstantColor(color(1000.0)));
-
-    // ab hier Ball erstellen
-    List<TriangleData> trData = new ArrayList<>();
-    List<MaterialData> ma = new ArrayList<>();
-    for (int i = 0; i < liste.size(); i++) {
-      MaterialData m = liste.get(i).material();
-      //if(liste.get(i).materialName().equals("AIRPORT")){
-        trData.addAll(liste.get(i).triangles());
-      //}
-      
-      System.out.println(liste.get(i).materialName());
-      ma.add(liste.get(i).material());
-    }
-    List<Triangle> tr = new ArrayList<>();
-    for (int i = 0; i < trData.size(); i++) {
-      tr.add(new Triangle(trData.get(i).v0(), trData.get(i).v1(),
-       trData.get(i).v2()));
-      // Vertex v0 = new Vertex(trData.get(i).v0().position(), trData.get(i).v0().normal(), vec2(0.5, 0.5));
-      // Vertex v1 = new Vertex(trData.get(i).v1().position(), trData.get(i).v1().normal(), vec2(0.5, 0.5));
-      // Vertex v2 = new Vertex(trData.get(i).v2().position(), trData.get(i).v2().normal(), vec2(0.5, 0.5));
-      // tr.add(new Triangle(v0, v1, v2));
-      // System.out.println(
-      //     "v0: " + trData.get(i).v0().uv() + " v1: " + trData.get(i).v1().uv() + "v2: " + trData.get(i).v2().uv());
-    }
-
-    TriangleMesh trMesh = new TriangleMesh(tr, bild);
-    //Group objekt = new Group(multiply(move(3, 80, -420), rotate(vec3(1, 0, 0), -180)), trMesh);
-    // bis hier
     
     Group flugzeug = flugzeugeErstellen();
-    Group huerde = huerdenErstellen();
-    
+    //Group huerde = huerdenErstellen();
     Group ball = ballErstellen();
-    Group welt = new Group(huerde, flugzeug, ball);
+    Group megaPhone = megaPhoneErstellen();
+    Group welt = new Group(flugzeug, ball, megaPhone);
+    
 
     Image image = new Image(width, height);
     RayTracer rayTracer = new RayTracer(kamera, welt, licht, white);
     image.sampleStream(rayTracer); // setzt Pixelfarben, ohne StratifiedSampling
-    // image.sampleStream(new StratifiedSampling(rayTracer)); // setzt Pixelfarben,
-    // mit StratifiedSampling
+    // image.sampleStream(new StratifiedSampling(rayTracer)); // setzt Pixelfarben, mit StratifiedSampling
     image.writePng("a08-image"); // erstellt Bild
 
     // Berechnung der gebrauchten Zeit
@@ -123,7 +82,6 @@ public class Main {
     // als Material kann nur null uebergeben werden, weil jedes Dreieck ueber Vertex
     // eigene Farbe hat
     TriangleMesh trMesh = new TriangleMesh(tr, null);
-
     Group huerde = new Group(multiply(scale(vec3(0.1)), rotate(vec3(0, 0, 1), 180), move(1007622, 31365, -2378453)),
         trMesh);
     return huerde;
@@ -148,7 +106,7 @@ public class Main {
     }
 
     TriangleMesh trMesh = new TriangleMesh(tr, bild);
-    Group flugzeug = new Group(multiply(move(0, 0, -8), rotate(vec3(0, 1, 0), -40), rotate(vec3(0, 0, 1), 180)),
+    Group flugzeug = new Group(multiply(move(0, 2, -8), rotate(vec3(0, 1, 0), -40), rotate(vec3(0, 0, 1), 180)),
         trMesh);
 
     return flugzeug;
@@ -159,8 +117,6 @@ public class Main {
     TexturedPhongMaterial bild = new TexturedPhongMaterial(
         new ImageTexture("data/wilson-football/fb_low_lambert2SG_BaseColor.png"), new ConstantColor(white),
         new ConstantColor(color(1000.0)));
-    TexturedPhongMaterial sterne = new TexturedPhongMaterial(new ImageTexture("data/sterne2.png"),
-        new ConstantColor(white), new ConstantColor(color(1000.0)));
 
     List<TriangleData> trData = new ArrayList<>();
     for (int i = 0; i < liste.size(); i++) {
@@ -172,8 +128,54 @@ public class Main {
       // System.out.println("v0: " + trData.get(i).v0().uv() + " v1: " +
       // trData.get(i).v1().uv() + "v2: " + trData.get(i).v2().uv());
     }
-    TriangleMesh trMesh = new TriangleMesh(tr, sterne);
-    Group ball = new Group(move(3, 0, -27), trMesh);
+    TriangleMesh trMesh = new TriangleMesh(tr, bild);
+    Group ball = new Group(move(5, 0, -27), trMesh);
     return ball;
+  }
+
+  private static Group strasseErstellen(){
+    List<MeshData> liste = Wavefront.loadMeshData("data/Flughafen/airport-track-curve/Airport_trackCurve1.obj");
+    TexturedPhongMaterial bild = new TexturedPhongMaterial(
+        new ImageTexture("data/Flughafen/airport-track-curve/Texture/Texture_airport256b.png"),
+        new ConstantColor(white), new ConstantColor(color(1000.0)));
+    
+    List<TriangleData> trData = new ArrayList<>();
+    List<MaterialData> ma = new ArrayList<>();
+    for (int i = 0; i < liste.size(); i++) {
+      trData.addAll(liste.get(i).triangles());
+      ma.add(liste.get(i).material());
+    }
+    List<Triangle> tr = new ArrayList<>();
+    for (int i = 0; i < trData.size(); i++) {
+      tr.add(new Triangle(trData.get(i).v0(), trData.get(i).v1(),
+       trData.get(i).v2()));
+    }
+
+    TriangleMesh trMesh = new TriangleMesh(tr, bild);
+    Group objekt = new Group(multiply(move(3, 80, -420), rotate(vec3(1, 0, 0), -180)), trMesh);
+    return objekt;
+  }
+
+  private static Group megaPhoneErstellen(){
+    List<MeshData> liste = Wavefront.loadMeshData("data/megaphone-texturing-exercise/MegaPhone.obj");
+    TexturedPhongMaterial bild = new TexturedPhongMaterial(
+        new ImageTexture("data/megaphone-texturing-exercise/textures/MegaPhone_basecolor.png"),
+        new ConstantColor(white), new ConstantColor(color(1000.0)));
+    
+    List<TriangleData> trData = new ArrayList<>();
+    List<MaterialData> ma = new ArrayList<>();
+    for (int i = 0; i < liste.size(); i++) {
+      trData.addAll(liste.get(i).triangles());
+      ma.add(liste.get(i).material());
+    }
+    List<Triangle> tr = new ArrayList<>();
+    for (int i = 0; i < trData.size(); i++) {
+      tr.add(new Triangle(trData.get(i).v0(), trData.get(i).v1(),
+       trData.get(i).v2()));
+    }
+
+    TriangleMesh trMesh = new TriangleMesh(tr, bild);
+    Group objekt = new Group(multiply(move(-1, 0.3, -6), rotate(vec3(0, 1, 0), 50), rotate(vec3(1, 0, 0), -180)), trMesh);
+    return objekt;
   }
 }

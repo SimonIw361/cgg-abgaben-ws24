@@ -1,8 +1,6 @@
 package cgg.a08;
 
-import static tools.Color.green;
-import static tools.Color.magenta;
-import static tools.Color.red;
+import static tools.Color.*;
 import static tools.Functions.*;
 
 import cgg.a02.Hit;
@@ -36,6 +34,7 @@ public class Triangle implements Shape {
 
         //Schnittpunkt mit kompletter Ebene des Dreiecks berechnen
         double t = dot(subtract(v0.position(),ray.getX0()), normalenVektor)/dot(ray.getRichtung(), normalenVektor);
+        //double t = dot(subtract(v1.position(),ray.getX0()), v1.normal())/dot(ray.getRichtung(), v1.normal());
         Vec3 p = ray.gibStrahlPunkt(t);
 
         double flaeche012 = berechneFlaeche(v0.position(), v1.position(), v2.position());
@@ -49,7 +48,7 @@ public class Triangle implements Shape {
         Vec3 uvw = vec3(u,v,w);
         Vec3 interNormale = normalize(interplolate(v0.normal(), v1.normal(), v2.normal(), uvw));
         Vec2 interTextur = interplolate(v0.uv(), v1.uv(), v2.uv(), uvw);
-        //interTextur = add(interTextur, vec2(0.1,-0.1));
+        //interTextur = add(interTextur, vec2(0.,-0.3));
         
         PhongMaterial farbe = null;
         if(v0.color() != magenta) { //wenn Farbe von dreieck geaendert wurde, diese Farbe als Material nehmen (magenta ist default Farbe bei Dreieck)
