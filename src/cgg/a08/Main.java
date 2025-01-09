@@ -6,9 +6,11 @@ import cgg.a02.*;
 import cgg.a04.*;
 import cgg.a05.Group;
 import cgg.a05.Shape;
+import tools.ImageTexture;
 import tools.Mat44;
 import tools.Vertex;
 import tools.Wavefront;
+import tools.Wavefront.MaterialData;
 import tools.Wavefront.MeshData;
 import tools.Wavefront.TriangleData;
 
@@ -16,6 +18,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import cgg.Image;
+import cgg.a01.ConstantColor;
 
 public class Main {
 
@@ -24,7 +27,6 @@ public class Main {
     int width = 900;
     int height = 900;
 
-    // Licht und Kamera erstellen
     ArrayList<Lichtquelle> licht = new ArrayList<>();
     licht.add(new Richtungslichtquelle(vec3(10, -10, 10), white));
     // licht.add(new Richtungslichtquelle(vec3(-10,-10,10), white));
@@ -34,15 +36,15 @@ public class Main {
     Lochkamera kamera = new Lochkamera(Math.PI / 4, width, height, transformationKameraHuerden);
 
     Group huerde = huerdenErstellen();
-    Group welt = new Group(huerde);
+    Group ball = ballErstellen();
+    Group welt = new Group(huerde, ball);
     
     Image image = new Image(width, height);
     RayTracer rayTracer = new RayTracer(kamera, welt, licht, white);
     //image.sampleStream(rayTracer); // setzt Pixelfarben, ohne StratifiedSampling
-     image.sampleStream(new StratifiedSampling(rayTracer)); // setzt Pixelfarben, mit StratifiedSampling
+    image.sampleStream(new StratifiedSampling(rayTracer)); // setzt Pixelfarben, mit StratifiedSampling
     image.writePng("a08-image"); // erstellt Bild
 
-    // Berechnung der gebrauchten Zeit
     long endZeit = System.currentTimeMillis();
     long dauer = (endZeit - startZeit) / 1000;
     System.out.println("Zeit fuer die Berechnung des Bildes: " + dauer + " s");
@@ -68,10 +70,9 @@ public class Main {
       }
     }
 
-    // als Material kann nur null uebergeben werden, weil jedes Dreieck ueber Vertex
-    // eigene Farbe hat
+    // als Material kann nur null uebergeben werden, weil jedes Dreieck ueber Vertex eigene Farbe hat
     TriangleMesh trMesh = new TriangleMesh(tr, null);
-    Group huerde = new Group(multiply(scale(vec3(0.01)), move(0,100000,0),rotate(vec3(0, -1, 0),-15), rotate(vec3(0, 0, 1), 180), move(1007622, 31365, -2378453)),
+    Group huerde = new Group(multiply(scale(vec3(0.01)), move(-6000,100000,-644000),rotate(vec3(0, -1, 0),-15), rotate(vec3(0, 0, 1), 180), move(1007622, 31365, -2378453)),
         trMesh);
     
     ArrayList<Shape> g = new ArrayList<>();
@@ -85,6 +86,35 @@ public class Main {
     Group alleHuerden = new Group(g);
 
     return alleHuerden;
+  }
+
+  private static Group ballErstellen(){
+    List<MeshData> liste = Wavefront.loadMeshData("data/Football/AmFootballBall.obj");
+    TexturedPhongMaterial bild = new TexturedPhongMaterial(
+        new ImageTexture("data/sterne2.png"),
+        new ConstantColor(white), new ConstantColor(color(1000.0)));
+    
+    List<TriangleData> trData = new ArrayList<>();
+    List<MaterialData> ma = new ArrayList<>();
+    for (int i = 0; i < liste.size(); i++) {
+      trData.addAll(liste.get(i).triangles());
+      ma.add(liste.get(i).material());
+    }
+    List<Triangle> tr = new ArrayList<>();
+    for (int i = 0; i < trData.size(); i++) {
+      tr.add(new Triangle(trData.get(i).v0(), trData.get(i).v1(),
+       trData.get(i).v2()));
+    }
+
+    Mat44 rot1 = multiply(move(-2, -6991, -12), rotate(vec3(0, -1, 0), -50));
+    Mat44 rot2 = multiply(move(3, -6991, -12), rotate(vec3(0, -1, 0), -30));
+
+    TriangleMesh trMesh = new TriangleMesh(tr, bild);
+    Group ball1 = new Group(rot1, trMesh);
+    Group ball2 = new Group(rot2, trMesh);
+    Group baelle = new Group(ball1, ball2);
+    
+    return baelle;
   }
 
   /*private static Group haiErstellen() {
@@ -107,8 +137,7 @@ public class Main {
       }
     }
 
-    // als Material kann nur null uebergeben werden, weil jedes Dreieck ueber Vertex
-    // eigene Farbe hat
+    // als Material kann nur null uebergeben werden, weil jedes Dreieck ueber Vertex eigene Farbe hat
     TriangleMesh trMesh = new TriangleMesh(tr, null);
     Group huerde = new Group(multiply(move(vec3(0,0,-15)), rotate(vec3(0,0,1), 180)),trMesh);
     return huerde;

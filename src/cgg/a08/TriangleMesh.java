@@ -24,7 +24,7 @@ public class TriangleMesh implements Shape {
         // Ueberpruefung der Dreiecke im Baum (zum debuggen)
         anzahl = 0;
         gibAnzahlDreieckeKdTree(triangleTree);
-        System.out.println("Anzahl Dreiecke in KdTree von TriangleMesh: " + anzahl);
+        //System.out.println("Anzahl Dreiecke in KdTree von TriangleMesh: " + anzahl);
     }
 
     private KdTree construct(List<Triangle> liste) {
