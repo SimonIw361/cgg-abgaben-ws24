@@ -31,7 +31,7 @@ public class Main {
     licht.add(new Richtungslichtquelle(vec3(10, -10, 10), white));
     // licht.add(new Richtungslichtquelle(vec3(-10,-10,10), white));
     //Mat44 transformationKamera = multiply(move(vec3(0, -20, 15)), rotate(vec3(1, 0, 0), 22), rotate(vec3(0, 1, 0), -7));
-    Mat44 transformationKameraNormal = move(vec3(0));
+    //Mat44 transformationKameraNormal = move(vec3(0));
     Mat44 transformationKameraHuerden = multiply(move(0,-7000,0), rotate(vec3(1,0,0), 21));
     Lochkamera kamera = new Lochkamera(Math.PI / 4, width, height, transformationKameraHuerden);
 

@@ -3,7 +3,7 @@ package cgg.a07;
 import static tools.Color.*;
 import static tools.Functions.*;
 import cgg.a02.*;
-import cgg.a04.StratifiedSampling;
+//import cgg.a04.StratifiedSampling;
 import cgg.a05.Group;
 import cgg.a05.Shape;
 import cgg.a06.DiffusStreuung;

@@ -47,11 +47,16 @@ public class Video implements Animation.SpaceTime {
         Group panda2 = new Group(multiply(move(vec3(10,4,-14)), rotate(vec3(0,1,0), 90),rotate(vec3(1,0,0), 90), rotate(vec3(0,0,1), 180)), tierErstellen("data/Tiere/Origami_Panda/Origami_Panda.obj"));
         Group pandas = new Group(panda1, panda2);
 
+        Group vogel1 = new Group(multiply(launchVogel1(t, 4), move(vec3(6,-5,-80)), rotate(vec3(0,0,1), 180)), tierErstellen("data/Tiere/Origami_Bird/Origami_Bird.obj"));
+        Group vogel2 = new Group(multiply(launchVogel2(t, 5), move(vec3(-7.2,-2.1,-8)), rotate(vec3(0,1,0), 90), rotate(vec3(0,0,1), 180)), tierErstellen("data/Tiere/Origami_Bird/Origami_Bird.obj"));
+        Group vogel3 = new Group(multiply(launchVogel3(t, 2), move(vec3(7,-3,-8)), rotate(vec3(0,1,0), -90), rotate(vec3(0,0,1), 180)), tierErstellen("data/Tiere/Origami_Bird/Origami_Bird.obj"));
+        Group voegel = new Group(vogel1, vogel2, vogel3);
+
         PhongMaterial gruen = new PhongMaterial(color(0,0.52,0), white, 1000.0);
         PhongMaterial blau = new PhongMaterial(color(0.15,0.56,0.98), white, 1000.0);
         Group gras = new Group(move(0,5,0), new Ebene("unbegrenzt", 0, gruen));
-        Group himmel = new Group(multiply(move(0,0,-300), rotate(vec3(1,0,0), 90)), new Ebene("quadratisch", 300, blau));
-        Group hintergrund = new Group(gras, himmel, schweine, pandas);
+        Group himmel = new Group(multiply(move(0,0,-300), rotate(vec3(1,0,0), 90)), new Ebene("quadratisch", 370, blau));
+        Group hintergrund = new Group(gras, himmel, schweine, pandas, voegel);
 
         Group welt = new Group(hintergrund);
         Mat44 transformationKameraNormal = multiply(launchKamera(t,1),move(vec3(0,0,7)));
@@ -61,6 +66,27 @@ public class Video implements Animation.SpaceTime {
         licht.add(new Richtungslichtquelle(vec3(10, -10, 10), white));
 
         return new Animation.Fixture(image, welt, kamera, licht);
+    }
+
+    public static Mat44 launchVogel1(double t, double thrust) {
+        t = Math.min(t, 7);
+        return move(0,0, 0.5 * t* t*thrust);
+    }
+
+    public static Mat44 launchVogel2(double t, double thrust) {
+        if(t < 5) {
+            t = 0;
+        }
+        else {
+            t = t -5;
+            t = Math.min(t, 8);
+        }
+        return move(0.5 * t* t*thrust,0, 0);
+    }
+
+    public static Mat44 launchVogel3(double t, double thrust) {
+        t = Math.min(t, 8);
+        return move(-0.5 * t* t*thrust,0, 0);
     }
 
     public static Mat44 launchPanda1(double t, double thrust) {
