@@ -34,8 +34,9 @@ public class ImageWriter {
         }
 
         try {
-            new ProcessBuilder(open, "images/" + name + ".png").start().waitFor();
-            new ProcessBuilder(open, "images/" + name + ".exr").start().waitFor();
+            //Ordner hier geaendert
+            new ProcessBuilder(open, "images/video09/" + name + ".png").start().waitFor();
+            new ProcessBuilder(open, "images/video09/" + name + ".exr").start().waitFor();
         } catch (Exception e) {
         }
     }
@@ -44,9 +45,10 @@ public class ImageWriter {
     // created.
     public static boolean writeHdr(String basename, double[] data, int width,
             int height) {
-        var pfmName = "images/" + basename + ".pfm";
-        var exrName = "images/" + basename + ".exr";
-        new File("images").mkdirs();
+                //hier auch Ordner hinzugefuegt
+        var pfmName = "images/video09/" + basename + ".pfm";
+        var exrName = "images/video09/" + basename + ".exr";
+        new File("images/video09").mkdirs();
         var file = new File(pfmName);
         try {
             // Writes out a PFM binary file ...
@@ -81,7 +83,8 @@ public class ImageWriter {
     // Writes the provided image data to disk as 16-bit sRGB PNG.
     public static void writePng(String basename, double[] data, int width,
             int height) {
-        var filename = "images/" + basename + ".png";
+                //Ordnername geandert
+        var filename = "images/video09/" + basename + ".png";
         new File("images").mkdirs();
         try {
             // setup an sRGB image with 16-bit components of the right size.

@@ -6,6 +6,7 @@ import static tools.Color.white;
 import java.util.ArrayList;
 
 import cgg.a05.Shape;
+import cgg.a09.Lichtquellen;
 import tools.*;
 import static tools.Functions.*;
 
