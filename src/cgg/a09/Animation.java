@@ -31,7 +31,8 @@ public class Animation {
         for(double t = start; t <= stop; t += frameTime){
             Fixture fixture = scene.generateSnapshot(t);
             RayTracer raytracer = new RayTracer(fixture.kamera(), fixture.scene(), fixture.lights(), white);
-            fixture.image().sampleStream(new StratifiedSampling(raytracer));
+            //fixture.image().sampleStream(new StratifiedSampling(raytracer)); //mit RayTracing
+            fixture.image().sampleStream(raytracer); //ohne RayTracing
             String filename = String.format("%sframe-%04d", dir, frameNumber++);
             fixture.image().writeHdr(filename);
         }
@@ -40,7 +41,7 @@ public class Animation {
     }
 
     private static void videoErstellen(int fps, String dir) {
-    String[] ffmpeg = {"ffmpeg", "-y", "-loglevel", "panic", "-r", Integer.valueOf(fps).toString(), "-start_number", "0", "-i", String.format("%sframe-%04d", dir),
+    String[] ffmpeg = {"ffmpeg", "-y", "-loglevel", "panic", "-r", Integer.valueOf(fps).toString(), "-start_number", "0", "-i", "video09frame-%04d.png",
                         "-pix_fmt", "yuv420p", "-vcodec", "libx264", "-crf", "16", "-preset", "veryslow", "video.mp4"};
     try{
         new ProcessBuilder(ffmpeg)

@@ -148,8 +148,8 @@ public class Wavefront {
         objects.put(name, new ObjectData(name, meshes));
         meshCount += meshes.size();
       }
-      System.out.format("%s: %d materials, %d meshes, %d triangles\n",
-          filename, materialCount, meshCount, triangleCount);
+      //System.out.format("%s: %d materials, %d meshes, %d triangles\n",
+      //    filename, materialCount, meshCount, triangleCount);
 
     } catch (Exception e) {
       System.err.println("ERROR: cannot load " + filename + ": " + e);

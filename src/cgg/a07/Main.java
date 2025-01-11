@@ -60,8 +60,8 @@ public class Main {
     
     Image image = new Image(width, height);
     RayTracer rayTracer = new RayTracer(kamera, welt, licht, white);
-    //image.sampleStream(rayTracer); //setzt Pixelfarben, ohne StratifiedSampling
-    image.sampleStream(new StratifiedSampling(rayTracer)); //setzt Pixelfarben, mit StratifiedSampling
+    image.sampleStream(rayTracer); //setzt Pixelfarben, ohne StratifiedSampling
+    //image.sampleStream(new StratifiedSampling(rayTracer)); //setzt Pixelfarben, mit StratifiedSampling
     image.writePng("a07-image"); //erstellt Bild
 
     //Berechnung der gebrauchten Zeit
