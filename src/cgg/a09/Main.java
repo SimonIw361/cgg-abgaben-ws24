@@ -5,10 +5,10 @@ public class Main {
   public static void main(String[] args) throws Exception{
     long startZeit = System.currentTimeMillis();
 
-    Video hai = new Video();
+    Video video = new Video();
 
     int ssmpl = 2;
-    Animation.render(0.0, 10.0, 5, hai, ssmpl, "video09");
+    Animation.render(0.0, 17, 8, video, ssmpl, "video09");
 
     long endZeit = System.currentTimeMillis();
     long dauer = (endZeit - startZeit) / 1000;

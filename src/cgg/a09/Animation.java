@@ -42,7 +42,7 @@ public class Animation {
 
     private static void videoErstellen(int fps, String dir) {
     String[] ffmpeg = {"ffmpeg", "-y", "-loglevel", "panic", "-r", Integer.valueOf(fps).toString(), "-start_number", "0", "-i", "video09frame-%04d.png",
-                        "-pix_fmt", "yuv420p", "-vcodec", "libx264", "-crf", "16", "-preset", "veryslow", "video.mp4"};
+                        "-pix_fmt", "yuv420p", "-vcodec", "libx264", "-crf", "16", "-preset", "veryslow", "cgg-competition-ws-24-102573.mp4"};
     try{
         new ProcessBuilder(ffmpeg)
             .directory(new File("images/" +dir))
