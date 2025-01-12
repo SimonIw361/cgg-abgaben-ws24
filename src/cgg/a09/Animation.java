@@ -31,8 +31,8 @@ public class Animation {
         for(double t = start; t <= stop; t += frameTime){
             Fixture fixture = scene.generateSnapshot(t);
             RayTracer raytracer = new RayTracer(fixture.kamera(), fixture.scene(), fixture.lights(), white);
-            //fixture.image().sampleStream(new StratifiedSampling(raytracer)); //mit RayTracing
-            fixture.image().sampleStream(raytracer); //ohne RayTracing
+            //fixture.image().sampleStream(new StratifiedSampling(raytracer)); //mit StratifiedSampling
+            fixture.image().sampleStream(raytracer); //ohne Stratified Sampling
             String filename = String.format("%sframe-%04d", dir, frameNumber++);
             fixture.image().writeHdr(filename);
         }

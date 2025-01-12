@@ -17,7 +17,7 @@ import cgg.a02.Lochkamera;
 import cgg.a02.Richtungslichtquelle;
 import cgg.a04.PhongMaterial;
 import cgg.a05.Group;
-import cgg.a06.DiffusStreuung;
+import cgg.a06.MaterialSpiegel;
 import cgg.a07.Ebene;
 import cgg.a08.Triangle;
 import cgg.a08.TriangleMesh;
@@ -59,14 +59,16 @@ public class Video implements Animation.SpaceTime {
         Group penguin5 = new Group(multiply(move(vec3(-35,5,-68)), rotate(vec3(0,1,0), 45),rotate(vec3(0,0,1), 180)), tierErstellen("data/Tiere/Origami_Penguin/Origami_Penguin.obj"));
         Group pinguine = new Group(launchPinguinGruppe(t, 1.4), penguin1, penguin2, penguin3, penguin4, penguin5);
 
-        Group hai = new Group(multiply(launchHai(t,5),move(vec3(19.7,-126.7,-65)), rotate(vec3(0,0,1), 180)), tierErstellen("data/Tiere/Origami_Shark/Origami_Shark.obj"));
+        Group hai = new Group(multiply(launchHai(t,5.5),move(vec3(19.7,-126.7,-155)), rotate(vec3(0,0,1), 180)), tierErstellen("data/Tiere/Origami_Shark/Origami_Shark.obj"));
         Group tiereAmBoden = new Group(schweine, pandas, pinguine);
 
         PhongMaterial gruen = new PhongMaterial(color(0,0.52,0), white, 1000.0);
         PhongMaterial blau = new PhongMaterial(color(0.15,0.56,0.98), white, 1000.0);
         Group gras = new Group(move(0,5,0), new Ebene("unbegrenzt", 0, gruen));
         Group himmel = new Group(multiply(move(0,0,-300), rotate(vec3(1,0,0), 90)), new Ebene("quadratisch", 530, blau));
-        Group hintergrund = new Group(gras, himmel, voegel, hai, tiereAmBoden);
+        MaterialSpiegel matSpiegel = new MaterialSpiegel(new ConstantColor(white), new ConstantColor(white), new ConstantColor(color(1000.0)));
+        Group spiegel = new Group(multiply(move(-8,2,-80), rotate(vec3(1,0,0), 90)), new Ebene("quadratisch", 13, matSpiegel));
+        Group hintergrund = new Group(gras, himmel, voegel, hai, tiereAmBoden, spiegel);
 
         Group welt = new Group(hintergrund);
         Mat44 transformationKameraNormal = multiply(launchKamera2(t,1),launchKamera(t,1),move(vec3(0,0,7)));
@@ -79,13 +81,13 @@ public class Video implements Animation.SpaceTime {
     }
 
     public static Mat44 launchHai(double t, double thrust) {
-        if(t < 10) {
+        if(t < 7.1) {
             t = 0;
         }
         else {
-            t = t -10;
+            t = t -7.1;
         }
-        t = Math.min(t, 5);
+        t = Math.min(t, 8);
         return move(0,0, 0.5 * t* t*thrust);
     }
 

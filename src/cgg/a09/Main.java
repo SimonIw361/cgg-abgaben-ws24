@@ -8,7 +8,7 @@ public class Main {
     Video video = new Video();
 
     int ssmpl = 2;
-    Animation.render(0.0, 17, 8, video, ssmpl, "video09");
+    Animation.render(0.0, 15.3, 8, video, ssmpl, "video09");
 
     long endZeit = System.currentTimeMillis();
     long dauer = (endZeit - startZeit) / 1000;
