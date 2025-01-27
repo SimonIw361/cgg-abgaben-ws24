@@ -8,7 +8,8 @@ public class Main {
     Video video = new Video();
 
     int ssmpl = 2;
-    Animation.render(0.0, 15.3, 8, video, ssmpl, "video09");
+    //nochmal mit 30 fps rendern, dann kann abgegeben werden
+    Animation.render(0.0, 15.3, 8, video, ssmpl, "video09"); 
 
     long endZeit = System.currentTimeMillis();
     long dauer = (endZeit - startZeit) / 1000;
