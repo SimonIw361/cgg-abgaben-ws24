@@ -1,8 +1,5 @@
 # Computergrafik Grundlagen (Winter 2024)
 
-Projekttemplate für die Abgaben der Übungsaufgaben. Siehe:
+Projekt mit allen Abgaben fuer das Modul Computergrafik Grundlagen
 
-- https://tramberend.bht-berlin.de/course/cgg
-
-
-
+- in Java programmiert
